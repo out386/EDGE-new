@@ -28,9 +28,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 
 import com.edge2.R;
 import com.edge2.utils.Logger;
+import com.edge2.views.carousel.EventsAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +47,7 @@ public class EventsFragment extends Fragment {
     public static final String TAG = "main";
 
     private Slider banner;
+    private LinearLayout rootLayout;
     private EventsViewModel viewModel;
 
     @Override
@@ -53,11 +56,13 @@ public class EventsFragment extends Fragment {
         Logger.log("EventsFragment", "onCreateView: ");
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         banner = rootView.findViewById(R.id.top_banner);
+        rootLayout = rootView.findViewById(R.id.root_layout);
         banner.setScreenWidth(getScreenWidth());
         setupObservers();
 
         return rootView;
     }
+
 
     private void setupObservers() {
         viewModel = ViewModelProviders.of(this)
@@ -90,6 +95,13 @@ public class EventsFragment extends Fragment {
             return size.x;
         }
         return -1;
+    }
+
+    private class OnItemClickedListener implements EventsAdapter.OnItemClickListener {
+        @Override
+        public void onItemClicked(EventNameModel item) {
+            Logger.log("EventsListItem", "Clicked: " + item.getName());
+        }
     }
 
 }

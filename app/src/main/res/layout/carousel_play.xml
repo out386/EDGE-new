@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingTop="30dp"
+    android:paddingBottom="30dp">
+
+    <ImageView
+        android:id="@+id/carousel_hero_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/carousel_recycler"
+        android:layout_alignParentTop="true"
+        android:scaleType="centerCrop" />
+
+    <View
+        android:id="@+id/carousel_hero_bg_gradient"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@id/carousel_hero_bg"
+        android:layout_alignParentTop="true"
+        tools:background="@drawable/dark_gradient" />
+
+
+    <RelativeLayout
+        android:id="@+id/carousel_hero_layout"
+        android:layout_width="@dimen/carousel_hero_width"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/carousel_recycler"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:gravity="center_vertical"
+        tools:ignore="RtlHardcoded">
+
+
+        <ImageView
+            android:id="@+id/carousel_hero_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:padding="20dp"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/carousel_sample" />
+
+        <TextView
+            android:id="@+id/carousel_hero_caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/carousel_hero_image"
+            android:layout_centerHorizontal="true"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
+            android:textColor="@color/whiteText"
+            android:textSize="18sp"
+            tools:text="Some large text" />
+
+
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@id/carousel_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:layout_marginLeft="@dimen/carousel_hero_width"
+        tools:listitem="@layout/carousel_play_image_item"
+        tools:orientation="horizontal" />
+
+</RelativeLayout>

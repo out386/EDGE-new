@@ -4,21 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".events.EventsFragment"
     android:clipToPadding="false"
-    android:paddingBottom="20dp">
+    android:paddingBottom="20dp"
+    tools:context=".events.EventsFragment">
 
     <LinearLayout
+        android:id="@+id/root_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:paddingTop="10dp"
-        android:paddingBottom="20dp"
-        android:elevation="7dp">
+        android:paddingBottom="20dp">
 
         <ir.apend.slider.ui.Slider
             android:id="@+id/top_banner"
             android:layout_width="match_parent"
             android:layout_height="200dp"
+            android:elevation="6dp"
             app:animateIndicators="true"
             app:defaultIndicators="circle"
             app:indicatorSize="8dp"

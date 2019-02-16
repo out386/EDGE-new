@@ -1,2 +1,3 @@
-include ':app', ':apendIrSlider'
+include ':app', ':apendIrSlider', ':gravitysnaphelper'
 project(':apendIrSlider').projectDir = new File('slider/slider')
+project(':gravitysnaphelper').projectDir = new File('RecyclerViewSnap/gravitysnaphelper')

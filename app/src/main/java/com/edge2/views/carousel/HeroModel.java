@@ -1,4 +1,4 @@
-package com.edge2.events;
+package com.edge2.views.carousel;
 
 /*
  * Copyright (C) 2019 Ritayan Chakraborty <ritayanout@gmail.com>
@@ -20,30 +20,26 @@ package com.edge2.events;
  *
  */
 
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-
-import java.util.Map;
-
-public class EventNameModel {
+public class HeroModel {
     private String name;
-    private String img;
+    private String icon;
+    private String backgroundImg;
 
-    EventNameModel(QueryDocumentSnapshot documentSnapshot) {
-        Map<String, Object> data = documentSnapshot.getData();
-        name = (String) data.get("name");
-        img = (String) data.get("img");
-    }
-
-    public EventNameModel(String name, String img) {
+    public HeroModel(String name, String icon, String backgroundImg) {
         this.name = name;
-        this.img = img;
+        this.icon = icon;
+        this.backgroundImg = backgroundImg;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getImg() {
-        return img;
+    public String getIcon() {
+        return icon;
+    }
+
+    public String getBackgroundImg() {
+        return backgroundImg;
     }
 }
