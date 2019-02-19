@@ -32,7 +32,9 @@ import android.widget.LinearLayout;
 
 import com.edge2.R;
 import com.edge2.utils.Logger;
+import com.edge2.views.carousel.CarouselPlay;
 import com.edge2.views.carousel.EventsAdapter;
+import com.edge2.views.carousel.HeroModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,8 +61,25 @@ public class EventsFragment extends Fragment {
         rootLayout = rootView.findViewById(R.id.root_layout);
         banner.setScreenWidth(getScreenWidth());
         setupObservers();
-
+prototype();
         return rootView;
+    }
+
+    private void prototype() {
+    for(int j=0;j<5;j++) {
+        CarouselPlay carousel = new CarouselPlay(getContext(),
+                new HeroModel("Some Event Name",
+                        "https://firebasestorage.googleapis.com/v0/b/edge-new-a7306.appspot.com/o/ic_launcher_round.png?alt=media&token=896c4d4f-d926-4bc9-9a4f-882fad02fbd9",
+                        "https://firebasestorage.googleapis.com/v0/b/edge-new-a7306.appspot.com/o/pexels-photo-426893.jpeg?alt=media&token=fbaeb486-be72-435a-8ea5-a9bd2762ee84"));
+        rootLayout.addView(carousel);
+
+        List<EventNameModel> protolist = new ArrayList<>(10);
+        for (int i = 0; i < 10; i++) {
+            protolist.add(new EventNameModel("Big event name " + i,
+                    "https://firebasestorage.googleapis.com/v0/b/edge-new-a7306.appspot.com/o/blitzkrieg.png?alt=media&token=9fe726d3-90bf-4acc-b035-51a846e0141e"));
+        }
+        carousel.addItems(protolist, new OnItemClickedListener());
+    }
     }
 
 
