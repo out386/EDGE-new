@@ -75,6 +75,8 @@ public class CarouselPlay extends RelativeLayout {
         setLayoutParams(params);
 
         recycler = findViewById(R.id.carousel_recycler);
+        recycler.setHasFixedSize(true);
+        recycler.setNestedScrollingEnabled(false);
         heroLayout = findViewById(R.id.carousel_hero_layout);
         heroImage = findViewById(R.id.carousel_hero_image);
         heroBg = findViewById(R.id.carousel_hero_bg);

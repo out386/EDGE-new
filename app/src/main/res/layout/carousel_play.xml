@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:paddingTop="30dp"
-    android:paddingBottom="30dp">
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp">
 
     <ImageView
         android:id="@+id/carousel_hero_bg"
@@ -14,15 +14,6 @@
         android:layout_alignBottom="@+id/carousel_recycler"
         android:layout_alignParentTop="true"
         android:scaleType="centerCrop" />
-
-    <View
-        android:id="@+id/carousel_hero_bg_gradient"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignBottom="@id/carousel_hero_bg"
-        android:layout_alignParentTop="true"
-        tools:background="@drawable/dark_gradient" />
-
 
     <RelativeLayout
         android:id="@+id/carousel_hero_layout"
@@ -62,8 +53,17 @@
 
     </RelativeLayout>
 
+
+    <View
+        android:id="@+id/carousel_hero_bg_gradient"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@id/carousel_hero_bg"
+        android:layout_alignParentTop="true"
+        tools:background="@drawable/dark_gradient" />
+
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@id/carousel_recycler"
+        android:id="@+id/carousel_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

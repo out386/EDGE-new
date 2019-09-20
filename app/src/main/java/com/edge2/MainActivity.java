@@ -35,9 +35,8 @@ public class MainActivity extends AppCompatActivity {
 
     private String currentFragment;
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener =
+    private BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener =
             item -> {
-
                 switch (item.getItemId()) {
                     case R.id.navigation_home:
                         if (currentFragment == null
@@ -56,8 +55,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        BottomNavigationView navigation = findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        //BottomNavigationView navigation = findViewById(R.id.navigation);
+        //navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         currentFragment = EventsFragment.TAG;
         Fragment fragment = new EventsFragment();
