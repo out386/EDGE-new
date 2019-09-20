@@ -28,39 +28,44 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.edge2.R;
-import com.edge2.events.EventNameModel;
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
-
-import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class CarouselPlay extends RelativeLayout {
 
     private RecyclerView recycler;
     private LinearLayoutManager layoutManager;
     private RecyclerView.Adapter recyclerAdapter;
-    private HeroModel heroModel;
+    private EventModel eventModel;
     private RelativeLayout heroLayout;
     private ImageView heroImage;
     private ImageView heroBg;
     private View heroBgGradient;
     private TextView heroCaption;
+    private Context context;
 
-    public CarouselPlay(Context context, HeroModel heroModel) {
+    public CarouselPlay(Context context) {
         super(context);
-        this.heroModel = heroModel;
-        setupViews(context);
+        this.context = context;
+        setupViews();
     }
 
-    private void setupViews(Context context) {
+    public void addItems(EventModel eventModel) {
+        recyclerAdapter = new SubeventAdapter(eventModel.getSubevents(), eventModel.getListener());
+        recycler.setAdapter(recyclerAdapter);
+        this.eventModel = eventModel;
+        setupHero();
+    }
+
+    private void setupViews() {
         LayoutInflater inflater = LayoutInflater.from(context);
         inflater.inflate(R.layout.carousel_play, this, true);
 
@@ -76,16 +81,15 @@ public class CarouselPlay extends RelativeLayout {
         heroBgGradient = findViewById(R.id.carousel_hero_bg_gradient);
         heroCaption = findViewById(R.id.carousel_hero_caption);
 
-        setupRecycler(context);
-        setupHero(context);
+        setupRecycler();
     }
 
-    private void setupHero(Context context) {
+    private void setupHero() {
         Glide.with(context)
-                .load(heroModel.getIcon())
+                .load(eventModel.getIcon())
                 .into(heroImage);
         Glide.with(context)
-                .load(heroModel.getBackgroundImg())
+                .load(eventModel.getBackgroundImg())
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override
                     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
@@ -100,13 +104,13 @@ public class CarouselPlay extends RelativeLayout {
                 })
                 .into(heroBg);
 
-        heroCaption.setText(heroModel.getName());
+        heroCaption.setText(eventModel.getName());
 
         recycler.addOnScrollListener(new HeroRecyclerListener(
                 context.getResources().getDimensionPixelSize(R.dimen.carousel_hero_width)));
     }
 
-    private void setupRecycler(Context context) {
+    private void setupRecycler() {
         layoutManager = new LinearLayoutManager(
                 context, RecyclerView.HORIZONTAL, false);
         recycler.setLayoutManager(layoutManager);
@@ -129,11 +133,6 @@ public class CarouselPlay extends RelativeLayout {
                 return false;
             }
         });
-    }
-
-    public void addItems(List<EventNameModel> items, EventsAdapter.OnItemClickListener listener) {
-        recyclerAdapter = new EventsAdapter(items, listener);
-        recycler.setAdapter(recyclerAdapter);
     }
 
     /**

@@ -1,4 +1,4 @@
-package com.edge2.events;
+package com.edge2.views.carousel;
 
 /*
  * Copyright (C) 2019 Ritayan Chakraborty <ritayanout@gmail.com>
@@ -20,30 +20,41 @@ package com.edge2.events;
  *
  */
 
-import com.google.firebase.firestore.QueryDocumentSnapshot;
+import java.util.List;
 
-import java.util.Map;
-
-public class EventNameModel {
+public class EventModel {
     private String name;
-    private String img;
+    private String icon;
+    private String backgroundImg;
+    private List<SubeventNameModel> subevents;
+    private SubeventAdapter.OnItemClickListener listener;
 
-    EventNameModel(QueryDocumentSnapshot documentSnapshot) {
-        Map<String, Object> data = documentSnapshot.getData();
-        name = (String) data.get("name");
-        img = (String) data.get("img");
-    }
-
-    public EventNameModel(String name, String img) {
+    public EventModel(String name, String icon, String backgroundImg,
+                      List<SubeventNameModel> subevents, SubeventAdapter.OnItemClickListener listener) {
         this.name = name;
-        this.img = img;
+        this.icon = icon;
+        this.backgroundImg = backgroundImg;
+        this.subevents = subevents;
+        this.listener = listener;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getImg() {
-        return img;
+    String getIcon() {
+        return icon;
+    }
+
+    String getBackgroundImg() {
+        return backgroundImg;
+    }
+
+    List<SubeventNameModel> getSubevents() {
+        return subevents;
+    }
+
+    SubeventAdapter.OnItemClickListener getListener() {
+        return listener;
     }
 }

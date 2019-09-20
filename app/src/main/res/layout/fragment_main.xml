@@ -1,33 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipToPadding="false"
-    android:paddingBottom="20dp"
     android:paddingTop="?attr/actionBarSize"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".events.EventsFragment">
+    tools:context=".allevents.EventsFragment"
+    android:paddingBottom="20dp"
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/root_layout"
+    <ir.apend.slider.ui.Slider
+        android:id="@+id/top_banner"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        app:animateIndicators="true"
+        app:defaultIndicators="circle"
+        app:indicatorSize="8dp"
+        app:intervalSecond="5"
+        app:loopSlides="true" />
+
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingTop="10dp"
-        android:paddingBottom="20dp">
+        android:id="@+id/main_recycler" />
 
-        <ir.apend.slider.ui.Slider
-            android:id="@+id/top_banner"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            app:animateIndicators="true"
-            app:defaultIndicators="circle"
-            app:indicatorSize="8dp"
-            app:intervalSecond="5"
-            app:loopSlides="true" />
-
-    </LinearLayout>
-
-</androidx.core.widget.NestedScrollView>
+</LinearLayout>

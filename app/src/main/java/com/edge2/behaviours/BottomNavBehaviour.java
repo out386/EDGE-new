@@ -23,15 +23,14 @@ package com.edge2.behaviours;
 import android.content.Context;
 import android.os.SystemClock;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
-
-import com.edge2.utils.Logger;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.ViewCompat;
+
+import com.edge2.utils.Logger;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class BottomNavBehaviour extends CoordinatorLayout.Behavior<BottomNavigationView> {
     private static final float SLOP_FACTOR = 20f;

@@ -21,20 +21,18 @@ package com.edge2.behaviours;
  */
 
 import android.content.Context;
-import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 
-import com.edge2.R;
-import com.edge2.utils.Logger;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.ViewCompat;
-import androidx.core.widget.NestedScrollView;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.edge2.R;
 
 public class AppBarBehaviour extends CoordinatorLayout.Behavior<RelativeLayout> {
     private static final float SLOP_FACTOR = 20f;
@@ -60,29 +58,29 @@ public class AppBarBehaviour extends CoordinatorLayout.Behavior<RelativeLayout> 
     public void onNestedScroll(@NonNull CoordinatorLayout coordinatorLayout, @NonNull RelativeLayout child, @NonNull View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed, int type) {
         super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed, type);
 
-        NestedScrollView scrollView = (NestedScrollView) target;
+        RecyclerView recyclerView = (RecyclerView) target;
 
-        int offset = scrollView.getScrollY();
-        Log.i("meh2", "onStopNestedScroll: " + offset +","+toolbar.getHeight());
+        int offset = recyclerView.getScrollY();
+        Log.i("meh2", "onStopNestedScroll: " + offset + "," + toolbar.getHeight());
     }
 
     @Override
     public void onNestedPreScroll(@NonNull CoordinatorLayout coordinatorLayout, @NonNull RelativeLayout child, @NonNull View target, int dx, int dy, @NonNull int[] consumed, int type) {
         this.dy += dy;
-        NestedScrollView scrollView = (NestedScrollView) target;
+        RecyclerView recyclerView = (RecyclerView) target;
 
-        int offset = scrollView.getScrollY();
-        Log.i("meh", "onStopNestedScroll: " + offset +","+toolbar.getHeight());
+        int offset = recyclerView.getScrollY();
+        Log.i("meh", "onStopNestedScroll: " + offset + "," + toolbar.getHeight());
         toolbar.setTranslationY(Math.max(-toolbar.getHeight(), Math.min(0, toolbar.getTranslationY() - dy)));
     }
 
     @Override
     public void onStopNestedScroll(@NonNull CoordinatorLayout coordinatorLayout, @NonNull RelativeLayout child, @NonNull View target, int type) {
         super.onStopNestedScroll(coordinatorLayout, child, target, type);
-        NestedScrollView scrollView = (NestedScrollView) target;
+        RecyclerView recyclerView = (RecyclerView) target;
 
-        int offset = scrollView.getScrollY();
-        Log.i("meh", "onStopNestedScroll: " + offset +","+toolbar.getHeight());
+        int offset = recyclerView.getScrollY();
+        Log.i("meh", "onStopNestedScroll: " + offset + "," + toolbar.getHeight());
 
         if (dy < -slop || dy > 0 && dy < slop)
             toolbar.animate()

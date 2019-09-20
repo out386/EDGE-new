@@ -26,39 +26,19 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.edge2.R;
-import com.edge2.events.EventNameModel;
-
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private List<EventNameModel> items;
+import com.bumptech.glide.Glide;
+import com.edge2.R;
+
+import java.util.List;
+
+public class SubeventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private List<SubeventNameModel> items;
     private OnItemClickListener listener;
 
-    class EventsViewHolder extends RecyclerView.ViewHolder {
-        private TextView caption;
-        private ImageView image;
-        private View root;
-
-        EventsViewHolder(View v) {
-            super(v);
-            caption = v.findViewById(R.id.carousel_caption);
-            image = v.findViewById(R.id.carousel_image);
-            root = v;
-        }
-    }
-
-    class BlankViewHolder extends RecyclerView.ViewHolder {
-        BlankViewHolder(View v) {
-            super(v);
-        }
-    }
-
-    EventsAdapter(List<EventNameModel> items, OnItemClickListener listener) {
+    SubeventAdapter(List<SubeventNameModel> items, OnItemClickListener listener) {
         this.items = items;
         this.listener = listener;
     }
@@ -88,7 +68,7 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof EventsViewHolder) {
             EventsViewHolder vh = (EventsViewHolder) holder;
-            EventNameModel item = items.get(position);
+            SubeventNameModel item = items.get(position);
 
             Glide.with(vh.image.getContext())
                     .load(item.getImg())
@@ -107,6 +87,25 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     public interface OnItemClickListener {
-        void onItemClicked(EventNameModel item);
+        void onItemClicked(SubeventNameModel item);
+    }
+
+    class EventsViewHolder extends RecyclerView.ViewHolder {
+        private TextView caption;
+        private ImageView image;
+        private View root;
+
+        EventsViewHolder(View v) {
+            super(v);
+            caption = v.findViewById(R.id.carousel_caption);
+            image = v.findViewById(R.id.carousel_image);
+            root = v;
+        }
+    }
+
+    class BlankViewHolder extends RecyclerView.ViewHolder {
+        BlankViewHolder(View v) {
+            super(v);
+        }
     }
 }

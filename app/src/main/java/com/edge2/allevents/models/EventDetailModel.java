@@ -1,4 +1,4 @@
-package com.edge2.events;
+package com.edge2.allevents.models;
 
 /*
  * Copyright (C) 2019 Ritayan Chakraborty <ritayanout@gmail.com>
@@ -20,17 +20,12 @@ package com.edge2.events;
  *
  */
 
-import java.util.List;
+import java.util.Map;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModel;
+public class EventDetailModel {
+    private String name;
+    private String img;
+    private String desc;
+    private Map<String, Long> contacts;
 
-class EventsViewModel extends ViewModel {
-    private EventsRepo bannerData;
-
-    LiveData<List<EventNameModel>> getBanner() {
-        if (bannerData == null)
-            bannerData = new EventsRepo("banner");
-        return bannerData.loadBanner();
-    }
 }

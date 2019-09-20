@@ -22,14 +22,14 @@ package com.edge2;
 
 import android.os.Bundle;
 
-import com.edge2.events.EventsFragment;
-import com.edge2.utils.Logger;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import com.edge2.allevents.EventsFragment;
+import com.edge2.utils.Logger;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 

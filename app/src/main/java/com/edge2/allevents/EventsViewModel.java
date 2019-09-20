@@ -1,4 +1,4 @@
-package com.edge2.views.carousel;
+package com.edge2.allevents;
 
 /*
  * Copyright (C) 2019 Ritayan Chakraborty <ritayanout@gmail.com>
@@ -20,26 +20,19 @@ package com.edge2.views.carousel;
  *
  */
 
-public class HeroModel {
-    private String name;
-    private String icon;
-    private String backgroundImg;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModel;
 
-    public HeroModel(String name, String icon, String backgroundImg) {
-        this.name = name;
-        this.icon = icon;
-        this.backgroundImg = backgroundImg;
-    }
+import com.edge2.views.carousel.SubeventNameModel;
 
-    public String getName() {
-        return name;
-    }
+import java.util.List;
 
-    public String getIcon() {
-        return icon;
-    }
+class EventsViewModel extends ViewModel {
+    private EventsRepo bannerData;
 
-    public String getBackgroundImg() {
-        return backgroundImg;
+    LiveData<List<SubeventNameModel>> getBanner() {
+        if (bannerData == null)
+            bannerData = new EventsRepo("banner");
+        return bannerData.loadBanner();
     }
 }
