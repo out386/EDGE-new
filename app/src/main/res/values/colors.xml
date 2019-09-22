@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
-    <color name="windowBackground">#EFEFEF</color>
-    <color name="bottomNav">#FFFFFF</color>
+    <color name="colorPrimary">#FFFFFF</color>
+    <color name="colorPrimaryDark">#FFFFFF</color>
+    <color name="colorAccent">#F44336</color>
+    <color name="windowBackground">#FFFFFF</color>
     <color name="carouselHeroBgOverlayStart">#56000000</color>
     <color name="carouselHeroBgOverlayEnd">#FF222222</color>
-    <color name="whiteText">#FFFFFF</color>
+    <color name="whiteTextHeader">#FFFFFF</color>
+    <color name="toolbarText2">#585858</color>
+    <color name="textHeader">#050505</color>
+    <color name="textSub">#727272</color>
 </resources>

@@ -28,7 +28,7 @@
             app:contentScrim="@color/windowBackground"
             app:layout_scrollFlags="scroll|snap">
 
-            <androidx.appcompat.widget.Toolbar
+            <com.edge2.views.CenterToolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"

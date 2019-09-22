@@ -28,7 +28,7 @@
         android:paddingLeft="10dp"
         android:paddingTop="10dp"
         android:paddingRight="10dp"
-        android:textColor="@color/whiteText"
+        android:textColor="@color/whiteTextHeader"
         android:textSize="14sp"
         tools:text="Some large text" />
 
