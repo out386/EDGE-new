@@ -17,17 +17,17 @@
         <item name="android:background">@color/windowBackground</item>
         <item name="itemTextAppearanceInactive">@style/TextSmallSubInctive</item>
         <item name="itemTextAppearanceActive">@style/TextSmallSubActive</item>
+        <item name="itemTextColor">@drawable/bottomnav_text</item>
+        <item name="itemRippleColor">@null</item>
     </style>
 
     <style name="TextSmallSubActive" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/quicksand</item>
-        <item name="android:textColor">@color/textHeader</item>
         <item name="android:textSize">13sp</item>
     </style>
 
     <style name="TextSmallSubInctive" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/quicksand</item>
-        <item name="android:textColor">@color/textSub</item>
         <item name="android:textSize">13sp</item>
     </style>
 
