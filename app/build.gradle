@@ -17,10 +17,7 @@ android {
                     'proguard-rules.pro'
         }
         debug {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
-                    'proguard-rules.pro',
-                    'proguard-rules-debug.pro'
+            minifyEnabled false
         }
     }
     compileOptions {
