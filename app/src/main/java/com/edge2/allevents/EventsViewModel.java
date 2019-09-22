@@ -27,10 +27,10 @@ import com.edge2.views.carousel.SubeventNameModel;
 
 import java.util.List;
 
-class EventsViewModel extends ViewModel {
+public class EventsViewModel extends ViewModel {
     private EventsRepo bannerData;
 
-    LiveData<List<SubeventNameModel>> getBanner() {
+    public LiveData<List<SubeventNameModel>> getBanner() {
         if (bannerData == null)
             bannerData = new EventsRepo("banner");
         return bannerData.loadBanner();

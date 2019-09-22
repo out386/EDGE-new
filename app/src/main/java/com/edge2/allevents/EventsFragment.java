@@ -20,10 +20,7 @@ package com.edge2.allevents;
  *
  */
 
-import android.app.Activity;
-import android.graphics.Point;
 import android.os.Bundle;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,13 +41,9 @@ import com.edge2.views.carousel.SubeventNameModel;
 import java.util.ArrayList;
 import java.util.List;
 
-import ir.apend.slider.model.Slide;
-import ir.apend.slider.ui.Slider;
-
 public class EventsFragment extends Fragment {
     public static final String TAG = "main";
 
-    private Slider banner;
     private RecyclerView mainReycler;
     private EventsViewModel viewModel;
 
@@ -59,13 +52,12 @@ public class EventsFragment extends Fragment {
                              Bundle savedInstanceState) {
         Logger.log("EventsFragment", "onCreateView: ");
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        banner = rootView.findViewById(R.id.top_banner);
+
         mainReycler = rootView.findViewById(R.id.main_recycler);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(
                 requireContext(), RecyclerView.VERTICAL, false);
         mainReycler.setHasFixedSize(true);
         mainReycler.setLayoutManager(layoutManager);
-        banner.setScreenWidth(getScreenWidth());
         setupObservers();
         prototype();
         return rootView;
@@ -95,34 +87,6 @@ public class EventsFragment extends Fragment {
     private void setupObservers() {
         viewModel = ViewModelProviders.of(this)
                 .get(EventsViewModel.class);
-
-        viewModel.getBanner()
-                .observe(this, eventNameModels -> {
-                    List<Slide> list = new ArrayList<>(eventNameModels.size());
-                    for (int i = 0; i < eventNameModels.size(); i++) {
-                        list.add(new Slide(i, eventNameModels.get(i).getImg(), 0));
-                    }
-                    banner.setItemClickListener(new BannerListener());
-                    banner.addSlides(list);
-                });
-    }
-
-    private int getScreenWidth() {
-        Activity activity = getActivity();
-        if (activity != null) {
-            Display display = activity.getWindowManager().getDefaultDisplay();
-            Point size = new Point();
-            display.getSize(size);
-            return size.x;
-        }
-        return -1;
-    }
-
-    class BannerListener implements AdapterView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Logger.log("BannerListener", "onItemClick: " + position);
-        }
     }
 
     private class OnItemClickedListener implements SubeventAdapter.OnItemClickListener {

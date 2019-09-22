@@ -21,38 +21,21 @@ package com.edge2.utils;
  */
 
 import android.content.Context;
-import android.util.DisplayMetrics;
+import android.graphics.Point;
 import android.view.Display;
 import android.view.WindowManager;
 
 public class DimenUtils {
-    /**
-     * Get real metrics of default display
-     *
-     * @param context Context
-     * @return The real metrics of default display
-     */
-    private static DisplayMetrics getRealDisplayMetrics(Context context) {
+
+    public static int getWindowWidth(Context context) {
         WindowManager windowManager =
                 (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display;
         if (windowManager != null && (display = windowManager.getDefaultDisplay()) != null) {
-            DisplayMetrics dm = new DisplayMetrics();
-            display.getRealMetrics(dm);
-            return dm;
-        } else {
-            return null;
+            Point size = new Point();
+            display.getSize(size);
+            return size.x;
         }
-    }
-
-    /**
-     * Get the real width of screen
-     *
-     * @param context Context
-     * @return The real width of screen
-     */
-    public static int getRealWidth(Context context) {
-        DisplayMetrics dm = getRealDisplayMetrics(context);
-        return dm != null ? dm.widthPixels : 0;
+        return 0;
     }
 }

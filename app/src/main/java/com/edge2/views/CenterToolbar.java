@@ -64,8 +64,8 @@ public class CenterToolbar extends Toolbar {
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
 
-        int width = DimenUtils.getRealWidth(getContext());
-        toolbarTv.getLocationOnScreen(arr);
+        int width = DimenUtils.getWindowWidth(getContext());
+        toolbarTv.getLocationInWindow(arr);
         int targetPos = (width / 2) - (toolbarTv.getWidth() / 2 + arr[0]);
         toolbarTv.setTranslationX(toolbarTv.getTranslationX() + targetPos);
     }
