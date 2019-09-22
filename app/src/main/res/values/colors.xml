@@ -6,8 +6,9 @@
     <color name="windowBackground">#FFFFFF</color>
     <color name="carouselHeroBgOverlayStart">#56000000</color>
     <color name="carouselHeroBgOverlayEnd">#FF222222</color>
-    <color name="whiteTextHeader">#FFFFFF</color>
+    <color name="carouselTextHeader">#FFFFFF</color>
     <color name="toolbarText2">#585858</color>
     <color name="textHeader">#050505</color>
     <color name="textSub">#727272</color>
+    <color name="iconFill">#AF050505</color>
 </resources>

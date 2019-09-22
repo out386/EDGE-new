@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#1D1D1D</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="windowBackground">#171717</color>
+    <color name="carouselHeroBgOverlayStart">#56000000</color>
+    <color name="carouselHeroBgOverlayEnd">#FF222222</color>
+    <color name="carouselTextHeader">#FFFFFF</color>
+    <color name="toolbarText2">#FFFFFF</color>
+    <color name="textHeader">#FFFFFF</color>
+    <color name="textSub">#ACACAC</color>
+    <color name="iconFill">#AFFFFFFF</color>
+</resources>

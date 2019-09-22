@@ -21,12 +21,14 @@ package com.edge2;
  */
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -48,26 +50,12 @@ import java.util.List;
 import ir.apend.slider.model.Slide;
 import ir.apend.slider.ui.Slider;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends ThemeActivity
+        implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     private String currentFragment;
     private BottomNavigationView navigation;
     private Slider banner;
-
-    private BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener =
-            item -> {
-                switch (item.getItemId()) {
-                    case R.id.navigation_home:
-                        if (currentFragment == null
-                                || !currentFragment.equals(EventsFragment.TAG)) {
-                            currentFragment = EventsFragment.TAG;
-                            Fragment fragment = new EventsFragment();
-                            switchFragment(fragment, EventsFragment.TAG, false);
-                        }
-                        break;
-                }
-                return true;
-            };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,17 +69,36 @@ public class MainActivity extends AppCompatActivity {
         }
 
         banner = findViewById(R.id.top_banner);
-
         navigation = findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
+        navigation.setOnNavigationItemSelectedListener(this);
         navigation.setItemIconTintList(null);
-        setSystemUIFlags();
         setupInsets();
         setupBanner();
 
         currentFragment = EventsFragment.TAG;
         Fragment fragment = new EventsFragment();
         switchFragment(fragment, EventsFragment.TAG, false);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.navigation_home:
+                if (currentFragment == null
+                        || !currentFragment.equals(EventsFragment.TAG)) {
+                    currentFragment = EventsFragment.TAG;
+                    Fragment fragment = new EventsFragment();
+                    switchFragment(fragment, EventsFragment.TAG, false);
+                }
+                break;
+        }
+        return true;
     }
 
     private void setupBanner() {
@@ -149,16 +156,6 @@ public class MainActivity extends AppCompatActivity {
 
             return insets.consumeSystemWindowInsets();
         });
-    }
-
-    private void setSystemUIFlags() {
-        View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
-                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
-                        View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR |
-                        View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-        );
     }
 
     private void switchFragment(Fragment fragment, String tag, boolean addToBackstack) {

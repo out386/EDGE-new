@@ -28,7 +28,7 @@
         android:paddingLeft="10dp"
         android:paddingTop="10dp"
         android:paddingRight="10dp"
-        android:textColor="@color/whiteTextHeader"
+        android:textColor="@color/carouselTextHeader"
         android:textSize="14sp"
         tools:text="Some large text" />
 
