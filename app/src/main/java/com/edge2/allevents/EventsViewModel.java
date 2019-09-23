@@ -30,7 +30,7 @@ import java.util.List;
 public class EventsViewModel extends ViewModel {
     private EventsRepo bannerData;
 
-    public LiveData<List<SubeventNameModel>> getBanner() {
+    LiveData<List<SubeventNameModel>> getBanner() {
         if (bannerData == null)
             bannerData = new EventsRepo("banner");
         return bannerData.loadBanner();

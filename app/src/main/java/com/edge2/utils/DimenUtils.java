@@ -22,6 +22,7 @@ package com.edge2.utils;
 
 import android.content.Context;
 import android.graphics.Point;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.WindowManager;
 
@@ -37,5 +38,14 @@ public class DimenUtils {
             return size.x;
         }
         return 0;
+    }
+
+    public static int getActionbarHeight(Context context) {
+        TypedValue tv = new TypedValue();
+        if (context.getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+            return TypedValue.complexToDimensionPixelSize(tv.data,
+                    context.getResources().getDisplayMetrics());
+        }
+        return -1;
     }
 }

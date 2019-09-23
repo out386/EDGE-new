@@ -24,27 +24,37 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.edge2.MainActivity;
 import com.edge2.R;
+import com.edge2.utils.DimenUtils;
 import com.edge2.utils.Logger;
 import com.edge2.views.carousel.EventModel;
 import com.edge2.views.carousel.SubeventAdapter;
 import com.edge2.views.carousel.SubeventNameModel;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import ir.apend.slider.model.Slide;
+import ir.apend.slider.ui.Slider;
+
 public class EventsFragment extends Fragment {
-    public static final String TAG = "main";
 
     private RecyclerView mainReycler;
     private EventsViewModel viewModel;
+    private Slider banner;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -53,13 +63,50 @@ public class EventsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         mainReycler = rootView.findViewById(R.id.main_recycler);
+        banner = rootView.findViewById(R.id.top_banner);
+        banner.setScreenWidth(DimenUtils.getWindowWidth(requireContext()));
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(
                 requireContext(), RecyclerView.VERTICAL, false);
         mainReycler.setHasFixedSize(true);
         mainReycler.setLayoutManager(layoutManager);
+
+        ((MainActivity) requireActivity()).setupToolbar(rootView.findViewById(R.id.toolbar));
+        setupInsets(rootView);
         setupObservers();
         prototype();
         return rootView;
+    }
+
+    private void setupInsets(View v) {
+        AppBarLayout appBarLayout = v.findViewById(R.id.app_bar_layout);
+        CoordinatorLayout.LayoutParams appbarParams =
+                (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
+        CollapsingToolbarLayout.LayoutParams bannerParams =
+                (CollapsingToolbarLayout.LayoutParams) banner.getLayoutParams();
+        Toolbar toolbar = v.findViewById(R.id.toolbar);
+        ViewGroup.LayoutParams toolbarParams = toolbar.getLayoutParams();
+        int toolbarHeight = DimenUtils.getActionbarHeight(requireContext());
+
+        v.setOnApplyWindowInsetsListener((v1, insets) -> {
+            int topInset = insets.getSystemWindowInsetTop();
+            int leftInset = insets.getSystemWindowInsetLeft();
+            int rightInset = insets.getSystemWindowInsetRight();
+            int bottomInset = insets.getSystemWindowInsetBottom();
+
+            toolbarParams.height = toolbarHeight + topInset;
+            toolbar.setLayoutParams(toolbarParams);
+            toolbar.setPadding(leftInset, topInset, rightInset, 0);
+
+            mainReycler.setPadding(leftInset, 0, rightInset, bottomInset);
+
+            appBarLayout.post(() -> {
+                appbarParams.height = appBarLayout.getHeight() + toolbarParams.height;
+                appBarLayout.setLayoutParams(appbarParams);
+                bannerParams.setMargins(leftInset, toolbarParams.height, rightInset, 0);
+                banner.setLayoutParams(bannerParams);
+            });
+            return insets;
+        });
     }
 
     private void prototype() {
@@ -84,8 +131,18 @@ public class EventsFragment extends Fragment {
     }
 
     private void setupObservers() {
+        BannerListener bannerListener = new BannerListener();
         viewModel = ViewModelProviders.of(this)
                 .get(EventsViewModel.class);
+
+        viewModel.getBanner().observe(this, eventNameModels -> {
+            List<Slide> list = new ArrayList<>(eventNameModels.size());
+            for (int i = 0; i < eventNameModels.size(); i++) {
+                list.add(new Slide(i, eventNameModels.get(i).getImg(), 0));
+            }
+            banner.setItemClickListener(bannerListener);
+            banner.addSlides(list);
+        });
     }
 
     private class OnItemClickedListener implements SubeventAdapter.OnItemClickListener {
@@ -95,4 +152,10 @@ public class EventsFragment extends Fragment {
         }
     }
 
+    class BannerListener implements AdapterView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Logger.log("BannerListener", "onItemClick: " + position);
+        }
+    }
 }
