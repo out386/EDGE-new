@@ -2,11 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_home"
+        android:id="@+id/events_dest"
         android:icon="@drawable/ic_home"
         android:title="@string/title_home" />
     <item
-        android:id="@+id/navigation_homes"
+        android:id="@+id/placeholder_dest"
         android:icon="@drawable/ic_home"
         android:title="@string/title_home" />
 

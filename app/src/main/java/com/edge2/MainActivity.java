@@ -22,20 +22,17 @@ package com.edge2;
 
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
-import com.edge2.allevents.EventsFragment;
 import com.edge2.allevents.EventsViewModel;
 import com.edge2.utils.DimenUtils;
 import com.edge2.utils.Logger;
@@ -50,11 +47,9 @@ import java.util.List;
 import ir.apend.slider.model.Slide;
 import ir.apend.slider.ui.Slider;
 
-public class MainActivity extends ThemeActivity
-        implements BottomNavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends ThemeActivity {
 
-    private String currentFragment;
-    private BottomNavigationView navigation;
+    private BottomNavigationView bottomNav;
     private Slider banner;
 
     @Override
@@ -68,36 +63,18 @@ public class MainActivity extends ThemeActivity
             bar.setDisplayShowTitleEnabled(false);
         }
 
+        NavController navController = Navigation.findNavController(this, R.id.content_frame);
         banner = findViewById(R.id.top_banner);
-        navigation = findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(this);
-        navigation.setItemIconTintList(null);
+        bottomNav = findViewById(R.id.navigation);
+        NavigationUI.setupWithNavController(bottomNav, navController);
+        bottomNav.setItemIconTintList(null);
         setupInsets();
         setupBanner();
-
-        currentFragment = EventsFragment.TAG;
-        Fragment fragment = new EventsFragment();
-        switchFragment(fragment, EventsFragment.TAG, false);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.navigation_home:
-                if (currentFragment == null
-                        || !currentFragment.equals(EventsFragment.TAG)) {
-                    currentFragment = EventsFragment.TAG;
-                    Fragment fragment = new EventsFragment();
-                    switchFragment(fragment, EventsFragment.TAG, false);
-                }
-                break;
-        }
         return true;
     }
 
@@ -121,7 +98,7 @@ public class MainActivity extends ThemeActivity
     private void setupInsets() {
         View decorView = getWindow().getDecorView();
         CoordinatorLayout.LayoutParams navbarParams =
-                (CoordinatorLayout.LayoutParams) navigation.getLayoutParams();
+                (CoordinatorLayout.LayoutParams) bottomNav.getLayoutParams();
         FrameLayout contentView = findViewById(R.id.content_frame);
         CenterToolbar toolbar = findViewById(R.id.toolbar);
         AppBarLayout appBarLayout = findViewById(R.id.app_bar_layout);
@@ -136,10 +113,10 @@ public class MainActivity extends ThemeActivity
             int rightInset = insets.getSystemWindowInsetRight();
             int bottomInset = insets.getSystemWindowInsetBottom();
 
-            navigation.post(() -> {
-                navbarParams.height = navigation.getHeight() + bottomInset;
-                navigation.setLayoutParams(navbarParams);
-                navigation.setPadding(leftInset, 0, rightInset, bottomInset);
+            bottomNav.post(() -> {
+                navbarParams.height = bottomNav.getHeight() + bottomInset;
+                bottomNav.setLayoutParams(navbarParams);
+                bottomNav.setPadding(leftInset, 0, rightInset, bottomInset);
             });
 
             toolbar.post(() ->
@@ -156,20 +133,6 @@ public class MainActivity extends ThemeActivity
 
             return insets.consumeSystemWindowInsets();
         });
-    }
-
-    private void switchFragment(Fragment fragment, String tag, boolean addToBackstack) {
-        Logger.log("MainActivity", "switchFragment: Switching to: " + tag);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-
-        FragmentTransaction transaction = fragmentManager
-                .beginTransaction()
-                .replace(R.id.content_frame, fragment);
-
-        if (addToBackstack)
-            transaction.addToBackStack(tag);
-        transaction.commit();
-
     }
 
     class BannerListener implements AdapterView.OnItemClickListener {
