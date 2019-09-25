@@ -22,8 +22,8 @@ package com.edge2.allevents;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.edge2.allevents.models.BannerItemsModel;
 import com.edge2.utils.Logger;
-import com.edge2.views.carousel.SubeventNameModel;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -33,14 +33,14 @@ import java.util.List;
 class EventsRepo {
     private String collection;
     private FirebaseFirestore db;
-    private MutableLiveData<List<SubeventNameModel>> eventNamesData;
+    private MutableLiveData<List<BannerItemsModel>> eventNamesData;
 
     EventsRepo(String collection) {
         this.collection = collection;
         db = FirebaseFirestore.getInstance();
     }
 
-    MutableLiveData<List<SubeventNameModel>> loadBanner() {
+    MutableLiveData<List<BannerItemsModel>> loadBanner() {
         Logger.log("EventsRepo", "loadBanner");
 
         if (eventNamesData == null)
@@ -49,9 +49,9 @@ class EventsRepo {
         db.collection(collection)
                 .get()
                 .addOnSuccessListener(snapshot -> {
-                    List<SubeventNameModel> results = new ArrayList<>();
+                    List<BannerItemsModel> results = new ArrayList<>();
                     for (QueryDocumentSnapshot document : snapshot) {
-                        SubeventNameModel model = new SubeventNameModel(document);
+                        BannerItemsModel model = new BannerItemsModel(document);
                         results.add(model);
                     }
                     eventNamesData.setValue(results);

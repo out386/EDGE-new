@@ -9,4 +9,5 @@
     <string name="action_theme_day">Light theme</string>
     <string name="action_theme_battery">Based on battery saver</string>
     <string name="action_theme_system">Based on system theme</string>
+    <string name="num_sub_events">%d event%s</string>
 </resources>

@@ -20,33 +20,50 @@ package com.edge2.allevents;
  *
  */
 
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.edge2.views.carousel.CarouselPlay;
-import com.edge2.views.carousel.EventModel;
+import com.edge2.R;
+import com.edge2.allevents.models.EventModel;
 
 import java.util.List;
 
 public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsViewHolder> {
     private List<EventModel> items;
+    private OnEventsClickedListener listener;
 
-    EventsAdapter(List<EventModel> items) {
+    EventsAdapter(List<EventModel> items, OnEventsClickedListener listener) {
         this.items = items;
+        this.listener = listener;
     }
 
     @NonNull
     @Override
     public EventsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        CarouselPlay carousel = new CarouselPlay(parent.getContext());
-        return new EventsViewHolder(carousel);
+        View item = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.events_item, parent, false);
+        return new EventsViewHolder(item);
     }
 
     @Override
     public void onBindViewHolder(@NonNull EventsViewHolder holder, int position) {
-        holder.carouselItem.addItems(items.get(position));
+        EventModel item = items.get(position);
+        ImageView imageView = holder.eventImage;
+        imageView.setImageDrawable(item.getImage());
+        holder.eventName.setText(item.getName());
+        holder.eventSubCount.setText(item.getNumEvents());
+        holder.rootView.setOnClickListener(view ->
+                listener.onEventClicked(position)
+        );
+        holder.eventButton.setOnClickListener(view ->
+                listener.onEventClicked(position)
+        );
     }
 
     @Override
@@ -55,11 +72,23 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsView
     }
 
     static class EventsViewHolder extends RecyclerView.ViewHolder {
-        CarouselPlay carouselItem;
+        View rootView;
+        ImageView eventImage;
+        ImageView eventButton;
+        TextView eventName;
+        TextView eventSubCount;
 
-        EventsViewHolder(CarouselPlay carouselItem) {
-            super(carouselItem);
-            this.carouselItem = carouselItem;
+        EventsViewHolder(View item) {
+            super(item);
+            rootView = item;
+            eventImage = item.findViewById(R.id.event_image);
+            eventButton = item.findViewById(R.id.event_button);
+            eventName = item.findViewById(R.id.event_name);
+            eventSubCount = item.findViewById(R.id.event_num_sub);
         }
+    }
+
+    interface OnEventsClickedListener {
+        void onEventClicked(int position);
     }
 }

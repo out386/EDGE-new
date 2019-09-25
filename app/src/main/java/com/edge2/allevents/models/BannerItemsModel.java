@@ -1,4 +1,4 @@
-package com.edge2.views.carousel;
+package com.edge2.allevents.models;
 
 /*
  * Copyright (C) 2019 Ritayan Chakraborty <ritayanout@gmail.com>
@@ -24,23 +24,23 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.Map;
 
-public class SubeventNameModel {
-    private String name;
+public class BannerItemsModel {
+    private String id;
     private String img;
 
-    public SubeventNameModel(QueryDocumentSnapshot documentSnapshot) {
+    public BannerItemsModel(QueryDocumentSnapshot documentSnapshot) {
         Map<String, Object> data = documentSnapshot.getData();
-        name = (String) data.get("name");
+        id = (String) data.get("id");
         img = (String) data.get("img");
     }
 
-    public SubeventNameModel(String name, String img) {
-        this.name = name;
+    public BannerItemsModel(String id, String img) {
+        this.id = id;
         this.img = img;
     }
 
-    public String getName() {
-        return name;
+    public String getId() {
+        return id;
     }
 
     public String getImg() {

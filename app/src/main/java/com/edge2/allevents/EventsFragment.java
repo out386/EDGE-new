@@ -20,6 +20,7 @@ package com.edge2.allevents;
  *
  */
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,16 +32,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.edge2.MainActivity;
 import com.edge2.R;
+import com.edge2.allevents.models.EventModel;
 import com.edge2.utils.DimenUtils;
 import com.edge2.utils.Logger;
-import com.edge2.views.carousel.EventModel;
-import com.edge2.views.carousel.SubeventAdapter;
-import com.edge2.views.carousel.SubeventNameModel;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
@@ -55,18 +54,27 @@ public class EventsFragment extends Fragment {
     private RecyclerView mainReycler;
     private EventsViewModel viewModel;
     private Slider banner;
+    private Context context;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Logger.log("EventsFragment", "onCreateView: ");
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         mainReycler = rootView.findViewById(R.id.main_recycler);
         banner = rootView.findViewById(R.id.top_banner);
-        banner.setScreenWidth(DimenUtils.getWindowWidth(requireContext()));
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(
-                requireContext(), RecyclerView.VERTICAL, false);
+        banner.setScreenWidth(DimenUtils.getWindowWidth(context));
+
+        float itemSize = getResources().getDimension(R.dimen.main_events_img_w) +
+                2 * getResources().getDimension(R.dimen.main_events_padding);
+        int columnCount = getRecyclerColumnCount(rootView, mainReycler, itemSize);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(context, columnCount);
         mainReycler.setHasFixedSize(true);
         mainReycler.setLayoutManager(layoutManager);
 
@@ -85,7 +93,7 @@ public class EventsFragment extends Fragment {
                 (CollapsingToolbarLayout.LayoutParams) banner.getLayoutParams();
         Toolbar toolbar = v.findViewById(R.id.toolbar);
         ViewGroup.LayoutParams toolbarParams = toolbar.getLayoutParams();
-        int toolbarHeight = DimenUtils.getActionbarHeight(requireContext());
+        int toolbarHeight = DimenUtils.getActionbarHeight(context);
 
         v.setOnApplyWindowInsetsListener((v1, insets) -> {
             int topInset = insets.getSystemWindowInsetTop();
@@ -111,27 +119,19 @@ public class EventsFragment extends Fragment {
 
     private void prototype() {
         ArrayList<EventModel> events = new ArrayList<>();
-        for (int j = 0; j < 5; j++) {
-
-            List<SubeventNameModel> protolist = new ArrayList<>(10);
-            for (int i = 0; i < 10; i++) {
-                protolist.add(new SubeventNameModel("Big event name " + i,
-                        "https://firebasestorage.googleapis.com/v0/b/edge-new-a7306.appspot.com/o/blitzkrieg.png?alt=media&token=9fe726d3-90bf-4acc-b035-51a846e0141e"));
-            }
-
-            EventModel event = new EventModel("Some Event Name",
-                    "https://firebasestorage.googleapis.com/v0/b/edge-new-a7306.appspot.com/o/ic_launcher_round.png?alt=media&token=896c4d4f-d926-4bc9-9a4f-882fad02fbd9",
-                    "https://firebasestorage.googleapis.com/v0/b/edge-new-a7306.appspot.com/o/pexels-photo-426893.jpeg?alt=media&token=fbaeb486-be72-435a-8ea5-a9bd2762ee84",
-                    protolist,
-                    new OnItemClickedListener());
+        String template = context.getString(R.string.num_sub_events);
+        for (int j = 0; j < 12; j++) {
+            EventModel event = new EventModel("ComputeAid",
+                    requireActivity().getDrawable(R.drawable.computeaid), 4, template);
             events.add(event);
         }
-        EventsAdapter eventsAdapter = new EventsAdapter(events);
+        EventsAdapter eventsAdapter = new EventsAdapter(events,
+                position -> Logger.log("EventListener", "onEventClicked: " + position));
         mainReycler.setAdapter(eventsAdapter);
     }
 
     private void setupObservers() {
-        BannerListener bannerListener = new BannerListener();
+        OnBannerItemClickedListener bannerListener = new OnBannerItemClickedListener();
         viewModel = ViewModelProviders.of(this)
                 .get(EventsViewModel.class);
 
@@ -145,14 +145,15 @@ public class EventsFragment extends Fragment {
         });
     }
 
-    private class OnItemClickedListener implements SubeventAdapter.OnItemClickListener {
-        @Override
-        public void onItemClicked(SubeventNameModel item) {
-            Logger.log("EventsListItem", "Clicked: " + item.getName());
-        }
+    private int getRecyclerColumnCount(View parent, View child, float pxWidth) {
+        int totalPadding = parent.getPaddingRight() + parent.getPaddingLeft()
+                + child.getPaddingRight() + child.getPaddingLeft();
+        pxWidth += child.getPaddingRight() + child.getPaddingLeft();
+        int screenWidth = DimenUtils.getWindowWidth(context) - totalPadding;
+        return (int) Math.floor(screenWidth / pxWidth);
     }
 
-    class BannerListener implements AdapterView.OnItemClickListener {
+    class OnBannerItemClickedListener implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Logger.log("BannerListener", "onItemClick: " + position);

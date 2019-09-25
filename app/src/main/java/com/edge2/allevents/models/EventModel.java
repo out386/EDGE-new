@@ -1,4 +1,4 @@
-package com.edge2.views.carousel;
+package com.edge2.allevents.models;
 
 /*
  * Copyright (C) 2019 Ritayan Chakraborty <ritayanout@gmail.com>
@@ -20,41 +20,29 @@ package com.edge2.views.carousel;
  *
  */
 
-import java.util.List;
+import android.graphics.drawable.Drawable;
 
 public class EventModel {
     private String name;
-    private String icon;
-    private String backgroundImg;
-    private List<SubeventNameModel> subevents;
-    private SubeventAdapter.OnItemClickListener listener;
+    private Drawable image;
+    private String numEvents;
 
-    public EventModel(String name, String icon, String backgroundImg,
-                      List<SubeventNameModel> subevents, SubeventAdapter.OnItemClickListener listener) {
+    public EventModel(String name, Drawable image, int countEvents, String countTemplate) {
         this.name = name;
-        this.icon = icon;
-        this.backgroundImg = backgroundImg;
-        this.subevents = subevents;
-        this.listener = listener;
+        this.image = image;
+        numEvents = String.format(countTemplate, countEvents,
+                countEvents == 1 ? "" : "s");
     }
 
     public String getName() {
         return name;
     }
 
-    String getIcon() {
-        return icon;
+    public Drawable getImage() {
+        return image;
     }
 
-    String getBackgroundImg() {
-        return backgroundImg;
-    }
-
-    List<SubeventNameModel> getSubevents() {
-        return subevents;
-    }
-
-    SubeventAdapter.OnItemClickListener getListener() {
-        return listener;
+    public String getNumEvents() {
+        return numEvents;
     }
 }

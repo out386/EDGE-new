@@ -23,6 +23,7 @@ package com.edge2;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
@@ -69,6 +70,11 @@ public class MainActivity extends ThemeActivity {
             int leftInset = insets.getSystemWindowInsetLeft();
             int rightInset = insets.getSystemWindowInsetRight();
             int bottomInset = insets.getSystemWindowInsetBottom();
+
+            View content = findViewById(R.id.content_frame);
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) content.getLayoutParams();
+            // Needed because the CoordinatorLayout in content causes the view to shift up when scrolled
+            params.bottomMargin = -bottomInset;
 
             bottomNav.setPadding(leftInset, 0, rightInset, 0);
             decorView.setPadding(0, 0, 0, bottomInset);

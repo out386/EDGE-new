@@ -1,0 +1,10 @@
+<resources>
+    <dimen name="carousel_hero_width">230dp</dimen>
+    <dimen name="allevents_main_events_w">140dp</dimen>
+    <dimen name="allevents_main_events_img_w">120dp</dimen>
+    <dimen name="allevents_main_events_img_h">76dp</dimen>
+    <dimen name="allevents_main_events_button_w">40dp</dimen>
+    <dimen name="allevents_main_events_button_h">15.4dp</dimen>
+    <dimen name="allevents_main_events_button_padd_h">3dp</dimen>
+    <dimen name="allevents_main_events_button_padd_v">14.4dp</dimen>
+</resources>

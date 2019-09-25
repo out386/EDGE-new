@@ -23,14 +23,14 @@ package com.edge2.allevents;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.edge2.views.carousel.SubeventNameModel;
+import com.edge2.allevents.models.BannerItemsModel;
 
 import java.util.List;
 
 public class EventsViewModel extends ViewModel {
     private EventsRepo bannerData;
 
-    LiveData<List<SubeventNameModel>> getBanner() {
+    LiveData<List<BannerItemsModel>> getBanner() {
         if (bannerData == null)
             bannerData = new EventsRepo("banner");
         return bannerData.loadBanner();
