@@ -12,5 +12,6 @@
     <dimen name="allevents_main_events_button_h">27dp</dimen>
     <dimen name="allevents_main_events_button_padd_h">5dp</dimen>
     <dimen name="allevents_main_events_button_padd_v">24dp</dimen>
-    
+    <dimen name="allevents_quick_ic_size">60dp</dimen>
+    <dimen name="allevents_quick_size_h">250dp</dimen>
 </resources>

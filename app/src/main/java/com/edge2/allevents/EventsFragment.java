@@ -21,7 +21,9 @@ package com.edge2.allevents;
  */
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,13 +35,16 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.edge2.MainActivity;
 import com.edge2.R;
 import com.edge2.allevents.models.EventModel;
+import com.edge2.allevents.models.QuickItemModel;
 import com.edge2.utils.DimenUtils;
 import com.edge2.utils.Logger;
+import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
@@ -52,6 +57,7 @@ import ir.apend.slider.ui.Slider;
 public class EventsFragment extends Fragment {
 
     private RecyclerView mainReycler;
+    private RecyclerView quickReycler;
     private EventsViewModel viewModel;
     private Slider banner;
     private Context context;
@@ -68,15 +74,22 @@ public class EventsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         mainReycler = rootView.findViewById(R.id.main_recycler);
+        quickReycler = rootView.findViewById(R.id.quick_recycler);
+        new GravitySnapHelper(Gravity.START).attachToRecyclerView(quickReycler);
         banner = rootView.findViewById(R.id.top_banner);
         banner.setScreenWidth(DimenUtils.getWindowWidth(context));
 
-        float itemSize = getResources().getDimension(R.dimen.main_events_img_w) +
-                2 * getResources().getDimension(R.dimen.main_events_padding);
+        float itemSize = getResources().getDimensionPixelSize(R.dimen.allevents_main_events_img_w) +
+                2 * getResources().getDimension(R.dimen.allevents_main_events_padding);
         int columnCount = getRecyclerColumnCount(rootView, mainReycler, itemSize);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(context, columnCount);
+        RecyclerView.LayoutManager mainLayoutManager = new GridLayoutManager(context, columnCount);
         mainReycler.setHasFixedSize(true);
-        mainReycler.setLayoutManager(layoutManager);
+        mainReycler.setLayoutManager(mainLayoutManager);
+
+        RecyclerView.LayoutManager quickLayoutManager = new LinearLayoutManager(
+                context, RecyclerView.HORIZONTAL, false);
+        quickReycler.setHasFixedSize(true);
+        quickReycler.setLayoutManager(quickLayoutManager);
 
         ((MainActivity) requireActivity()).setupToolbar(rootView.findViewById(R.id.toolbar));
         setupInsets(rootView);
@@ -106,6 +119,7 @@ public class EventsFragment extends Fragment {
             toolbar.setPadding(leftInset, topInset, rightInset, 0);
 
             mainReycler.setPadding(leftInset, 0, rightInset, bottomInset);
+            quickReycler.setPadding(leftInset, 0, rightInset, 0);
 
             appBarLayout.post(() -> {
                 appbarParams.height = appBarLayout.getHeight() + toolbarParams.height;
@@ -122,12 +136,25 @@ public class EventsFragment extends Fragment {
         String template = context.getString(R.string.num_sub_events);
         for (int j = 0; j < 12; j++) {
             EventModel event = new EventModel("ComputeAid",
-                    requireActivity().getDrawable(R.drawable.computeaid), 4, template);
+                    context.getDrawable(R.drawable.computeaid), 4, template);
             events.add(event);
         }
         EventsAdapter eventsAdapter = new EventsAdapter(events,
                 position -> Logger.log("EventListener", "onEventClicked: " + position));
         mainReycler.setAdapter(eventsAdapter);
+
+
+        ArrayList<QuickItemModel> quickItems = new ArrayList<>();
+        for (int j = 0; j < 5; j++) {
+            QuickItemModel item = new QuickItemModel("Accommodation",
+                    context.getDrawable(R.drawable.quick_accomodation),
+                    "Accommodation registration is open");
+            quickItems.add(item);
+        }
+        QuickItemsAdapter quickAdapter = new QuickItemsAdapter(quickItems,
+                position -> Logger.log("EventListener", "onQuickClicked: " + position));
+        quickReycler.setAdapter(quickAdapter);
+        quickReycler.addItemDecoration(new QuickItemDecorator());
     }
 
     private void setupObservers() {
@@ -157,6 +184,22 @@ public class EventsFragment extends Fragment {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Logger.log("BannerListener", "onItemClick: " + position);
+        }
+    }
+
+    private class QuickItemDecorator extends RecyclerView.ItemDecoration {
+        @Override
+        public void getItemOffsets(@NonNull Rect outRect, @NonNull View view,
+                                   @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+            super.getItemOffsets(outRect, view, parent, state);
+            int margin = getResources().getDimensionPixelSize(R.dimen.margin);
+            int marginLarge = getResources().getDimensionPixelSize(R.dimen.margin_large);
+            if (parent.getChildAdapterPosition(view) == 0)
+                outRect.left = marginLarge;
+            else
+                outRect.left = margin;
+            if (parent.getChildAdapterPosition(view) == parent.getAdapter().getItemCount() - 1)
+                outRect.right = marginLarge;
         }
     }
 }
