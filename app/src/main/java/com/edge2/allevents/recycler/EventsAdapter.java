@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.edge2.R;
@@ -48,21 +49,26 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsView
     public EventsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View item = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.events_item, parent, false);
-        return new EventsViewHolder(item);
+        return new EventsViewHolder(item.findViewById(R.id.event_root));
     }
 
     @Override
     public void onBindViewHolder(@NonNull EventsViewHolder holder, int position) {
         EventModel item = items.get(position);
+        View root = holder.rootView;
         ImageView imageView = holder.eventImage;
         imageView.setImageDrawable(item.getImage());
         holder.eventName.setText(item.getName());
         holder.eventSubCount.setText(item.getNumEvents());
-        holder.rootView.setOnClickListener(view ->
-                listener.onEventClicked(position)
+
+        ViewCompat.setTransitionName(imageView, "transition" + position);
+        ViewCompat.setTransitionName(root, "root" + position);
+
+        root.setOnClickListener(view ->
+                listener.onEventClicked(position, imageView, root)
         );
         holder.eventButton.setOnClickListener(view ->
-                listener.onEventClicked(position)
+                listener.onEventClicked(position, imageView, root)
         );
     }
 
@@ -89,6 +95,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsView
     }
 
     public interface OnEventsClickedListener {
-        void onEventClicked(int position);
+        void onEventClicked(int position, View imageView, View rootView);
     }
 }

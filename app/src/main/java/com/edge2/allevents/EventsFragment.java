@@ -27,6 +27,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 
@@ -35,6 +36,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.fragment.FragmentNavigator;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -77,6 +80,7 @@ public class EventsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        postponeEnterTransition();
 
         mainReycler = rootView.findViewById(R.id.main_recycler);
         quickReycler = rootView.findViewById(R.id.quick_recycler);
@@ -98,6 +102,7 @@ public class EventsFragment extends Fragment {
 
         ((MainActivity) requireActivity()).setupToolbar(rootView.findViewById(R.id.toolbar));
         setupInsets(rootView);
+        setupRecyclerListeners();
         setupObservers();
         prototype();
         return rootView;
@@ -140,7 +145,9 @@ public class EventsFragment extends Fragment {
             });
             return insets;
         });
+    }
 
+    private void setupRecyclerListeners() {
         mainReycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -148,6 +155,22 @@ public class EventsFragment extends Fragment {
                 listener.onEventsScrolled(dy);
             }
         });
+
+        // Needed because the shared element transition doesn't work on return unless
+        // postponeEnterTransition() is called. And postponeEnterTransition needs a corresponding
+        // startPostponedEnterTransition()
+        ViewTreeObserver viewTreeObserver = mainReycler.getViewTreeObserver();
+        viewTreeObserver
+                .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        if (mainReycler.getMeasuredWidth() > 0 && mainReycler.getMeasuredHeight() > 0) {
+                            if (viewTreeObserver.isAlive())
+                                viewTreeObserver.removeOnGlobalLayoutListener(this);
+                            startPostponedEnterTransition();
+                        }
+                    }
+                });
     }
 
     private void prototype() {
@@ -158,8 +181,7 @@ public class EventsFragment extends Fragment {
                     context.getDrawable(R.drawable.computeaid), 4, template);
             events.add(event);
         }
-        EventsAdapter eventsAdapter = new EventsAdapter(events,
-                position -> Logger.log("EventListener", "onEventClicked: " + position));
+        EventsAdapter eventsAdapter = new EventsAdapter(events, new EventsClickedListener());
         mainReycler.setAdapter(eventsAdapter);
 
 
@@ -214,16 +236,32 @@ public class EventsFragment extends Fragment {
             super.getItemOffsets(outRect, view, parent, state);
             int margin = getResources().getDimensionPixelSize(R.dimen.margin);
             int marginLarge = getResources().getDimensionPixelSize(R.dimen.margin_large);
+            RecyclerView.Adapter adapter = parent.getAdapter();
             if (parent.getChildAdapterPosition(view) == 0)
                 outRect.left = marginLarge;
             else
                 outRect.left = margin;
-            if (parent.getChildAdapterPosition(view) == parent.getAdapter().getItemCount() - 1)
+            if (adapter != null &&
+                    parent.getChildAdapterPosition(view) == adapter.getItemCount() - 1)
                 outRect.right = marginLarge;
         }
     }
 
     public interface OnEventsFragmentListener {
         void onEventsScrolled(int dy);
+    }
+
+    class EventsClickedListener implements EventsAdapter.OnEventsClickedListener {
+        @Override
+        public void onEventClicked(int position, View imageView, View rootView) {
+            String transitionName = getString(R.string.events_to_sub_transition);
+            String rootTransitionName = getString(R.string.events_to_sub_root_transition);
+            FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
+                    .addSharedElement(imageView, transitionName)
+                    .addSharedElement(rootView, rootTransitionName)
+                    .build();
+            NavHostFragment.findNavController(EventsFragment.this)
+                    .navigate(R.id.action_events_to_subEvents, null, null, extras);
+        }
     }
 }

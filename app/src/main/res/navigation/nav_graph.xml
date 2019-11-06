@@ -9,8 +9,21 @@
         android:id="@+id/events_dest"
         android:name="com.edge2.allevents.EventsFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_main" />
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/action_events_to_subEvents"
+            app:destination="@id/subEventsFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+    </fragment>
     <fragment
         android:id="@+id/placeholder_dest"
         android:name="com.edge2.PlaceholderFragment" />
+    <fragment
+        android:id="@+id/subEventsFragment"
+        android:name="com.edge2.subevents.SubEventsFragment"
+        android:label="fragment_sub_events"
+        tools:layout="@layout/fragment_sub_events" />
 </navigation>

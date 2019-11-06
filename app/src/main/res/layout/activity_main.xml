@@ -11,6 +11,7 @@
         app:navGraph="@navigation/nav_graph"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:defaultNavHost="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:elevation="5dp" />
 
