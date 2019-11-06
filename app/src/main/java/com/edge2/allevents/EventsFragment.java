@@ -23,11 +23,13 @@ package com.edge2.allevents;
 import android.content.Context;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -46,7 +48,6 @@ import com.edge2.utils.DimenUtils;
 import com.edge2.utils.Logger;
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,11 +62,13 @@ public class EventsFragment extends Fragment {
     private EventsViewModel viewModel;
     private Slider banner;
     private Context context;
+    private OnEventsFragmentListener listener;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         this.context = context;
+        listener = (OnEventsFragmentListener) context;
     }
 
     @Override
@@ -80,7 +83,7 @@ public class EventsFragment extends Fragment {
         banner.setScreenWidth(DimenUtils.getWindowWidth(context));
 
         float itemSize = getResources().getDimensionPixelSize(R.dimen.allevents_main_events_img_w) +
-                2 * getResources().getDimension(R.dimen.allevents_main_events_padding);
+                2 * getResources().getDimension(R.dimen.allevents_main_events_padding_h);
         int columnCount = getRecyclerColumnCount(rootView, mainReycler, itemSize);
         RecyclerView.LayoutManager mainLayoutManager = new GridLayoutManager(context, columnCount);
         mainReycler.setHasFixedSize(true);
@@ -102,8 +105,8 @@ public class EventsFragment extends Fragment {
         AppBarLayout appBarLayout = v.findViewById(R.id.app_bar_layout);
         CoordinatorLayout.LayoutParams appbarParams =
                 (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
-        CollapsingToolbarLayout.LayoutParams bannerParams =
-                (CollapsingToolbarLayout.LayoutParams) banner.getLayoutParams();
+        LinearLayout.LayoutParams bannerParams =
+                (LinearLayout.LayoutParams) banner.getLayoutParams();
         Toolbar toolbar = v.findViewById(R.id.toolbar);
         ViewGroup.LayoutParams toolbarParams = toolbar.getLayoutParams();
         int toolbarHeight = DimenUtils.getActionbarHeight(context);
@@ -112,13 +115,12 @@ public class EventsFragment extends Fragment {
             int topInset = insets.getSystemWindowInsetTop();
             int leftInset = insets.getSystemWindowInsetLeft();
             int rightInset = insets.getSystemWindowInsetRight();
-            int bottomInset = insets.getSystemWindowInsetBottom();
 
             toolbarParams.height = toolbarHeight + topInset;
             toolbar.setLayoutParams(toolbarParams);
             toolbar.setPadding(leftInset, topInset, rightInset, 0);
 
-            mainReycler.setPadding(leftInset, 0, rightInset, bottomInset);
+            mainReycler.setPadding(leftInset, 0, rightInset, 0);
             quickReycler.setPadding(leftInset, 0, rightInset, 0);
 
             appBarLayout.post(() -> {
@@ -128,6 +130,13 @@ public class EventsFragment extends Fragment {
                 banner.setLayoutParams(bannerParams);
             });
             return insets;
+        });
+        mainReycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                listener.onEventsScrolled(dy);
+            }
         });
     }
 
@@ -177,7 +186,8 @@ public class EventsFragment extends Fragment {
                 + child.getPaddingRight() + child.getPaddingLeft();
         pxWidth += child.getPaddingRight() + child.getPaddingLeft();
         int screenWidth = DimenUtils.getWindowWidth(context) - totalPadding;
-        return (int) Math.floor(screenWidth / pxWidth);
+        int columnCount = (int) Math.floor(screenWidth / pxWidth) - 1;
+        return columnCount <= 1 ? 2 : columnCount;
     }
 
     class OnBannerItemClickedListener implements AdapterView.OnItemClickListener {
@@ -201,5 +211,9 @@ public class EventsFragment extends Fragment {
             if (parent.getChildAdapterPosition(view) == parent.getAdapter().getItemCount() - 1)
                 outRect.right = marginLarge;
         }
+    }
+
+    public interface OnEventsFragmentListener {
+        void onEventsScrolled(int dy);
     }
 }

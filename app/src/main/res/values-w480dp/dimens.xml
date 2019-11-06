@@ -2,7 +2,7 @@
     <dimen name="carousel_hero_width">230dp</dimen>
     <dimen name="allevents_main_events_w">220dp</dimen>
     <dimen name="allevents_main_events_img_w">150dp</dimen>
-    <dimen name="allevents_main_events_img_h">95dp</dimen>
+    <dimen name="allevents_main_events_img_h">120dp</dimen>
     <dimen name="allevents_main_events_button_w">70dp</dimen>
     <dimen name="allevents_main_events_button_h">27dp</dimen>
     <dimen name="allevents_main_events_button_padd_h">5dp</dimen>

@@ -3,6 +3,7 @@
     <color name="colorPrimary">#1D1D1D</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="windowBackground">#171717</color>
+    <color name="systemBars">#B31D1D1D</color>
     <color name="carouselHeroBgOverlayStart">#56000000</color>
     <color name="carouselHeroBgOverlayEnd">#FF222222</color>
     <color name="carouselTextHeader">#FFFFFF</color>

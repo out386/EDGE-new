@@ -21,8 +21,10 @@ package com.edge2;
  */
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewPropertyAnimator;
 import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.ActionBar;
@@ -31,19 +33,25 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import com.edge2.allevents.EventsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class MainActivity extends ThemeActivity {
+public class MainActivity extends ThemeActivity implements EventsFragment.OnEventsFragmentListener {
 
     private BottomNavigationView bottomNav;
+    private int animTime;
+    private int lastEventScrollDy = 0;
+    private ViewPropertyAnimator bottomNavAnimator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        animTime = getResources().getInteger(android.R.integer.config_mediumAnimTime);
         NavController navController = Navigation.findNavController(this, R.id.content_frame);
         bottomNav = findViewById(R.id.navigation);
+        bottomNavAnimator = bottomNav.animate();
         NavigationUI.setupWithNavController(bottomNav, navController);
         bottomNav.setItemIconTintList(null);
         setupInsets();
@@ -64,9 +72,8 @@ public class MainActivity extends ThemeActivity {
     }
 
     private void setupInsets() {
-        View decorView = getWindow().getDecorView();
-
-        decorView.setOnApplyWindowInsetsListener((view, insets) -> {
+        View rootView = findViewById(R.id.mainRoot);
+        rootView.setOnApplyWindowInsetsListener((view, insets) -> {
             int leftInset = insets.getSystemWindowInsetLeft();
             int rightInset = insets.getSystemWindowInsetRight();
             int bottomInset = insets.getSystemWindowInsetBottom();
@@ -76,11 +83,34 @@ public class MainActivity extends ThemeActivity {
             // Needed because the CoordinatorLayout in content causes the view to shift up when scrolled
             params.bottomMargin = -bottomInset;
 
-            bottomNav.setPadding(leftInset, 0, rightInset, 0);
-            decorView.setPadding(0, 0, 0, bottomInset);
+            RelativeLayout.LayoutParams bottomNavParams =
+                    (RelativeLayout.LayoutParams) bottomNav.getLayoutParams();
+            bottomNav.setPadding(leftInset, 0, rightInset, bottomInset);
+            //bottomNavParams.setMargins(0, 0, 0, bottomInset);
+            rootView.setPadding(0, 0, 0, 0);
 
             return insets;
         });
     }
 
+    @Override
+    public void onEventsScrolled(int dy) {
+        if (dy < 1) {
+            if (lastEventScrollDy >= 1) {
+                bottomNavAnimator.cancel();
+                bottomNavAnimator
+                        .setDuration(animTime)
+                        .translationY(0);
+                lastEventScrollDy = dy;
+            }
+        } else {
+            if (lastEventScrollDy < 1) {
+                bottomNavAnimator.cancel();
+                bottomNavAnimator = bottomNav.animate()
+                        .setDuration(animTime)
+                        .translationY(bottomNav.getHeight() << 1);
+                lastEventScrollDy = dy;
+            }
+        }
+    }
 }

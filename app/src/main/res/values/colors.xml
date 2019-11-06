@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#FFFFFF</color>
     <color name="colorAccent">#F44336</color>
     <color name="windowBackground">#FFFFFF</color>
+    <color name="systemBars">#B3FFFFFF</color>
     <color name="carouselHeroBgOverlayStart">#56000000</color>
     <color name="carouselHeroBgOverlayEnd">#FF222222</color>
     <color name="carouselTextHeader">#FFFFFF</color>
