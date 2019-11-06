@@ -82,7 +82,7 @@ public class EventsFragment extends Fragment {
         quickReycler = rootView.findViewById(R.id.quick_recycler);
         new GravitySnapHelper(Gravity.START).attachToRecyclerView(quickReycler);
         banner = rootView.findViewById(R.id.top_banner);
-        banner.setScreenWidth(DimenUtils.getWindowWidth(context));
+        banner.setTargetWidth(getResources().getDimensionPixelSize(R.dimen.allevents_banner_w));
 
         float itemSize = getResources().getDimensionPixelSize(R.dimen.allevents_main_events_img_w) +
                 2 * getResources().getDimension(R.dimen.allevents_main_events_padding_h);

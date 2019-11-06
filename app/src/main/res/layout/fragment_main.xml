@@ -36,11 +36,11 @@
                 <ir.apend.slider.ui.Slider
                     android:id="@+id/top_banner"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="@dimen/allevents_banner_h"
                     app:animateIndicators="true"
                     app:defaultIndicators="circle"
                     app:indicatorSize="8dp"
-                    app:intervalSecond="5"
+                    app:intervalSecond="2"
                     app:layout_collapseMode="parallax"
                     app:loopSlides="true"
                     android:paddingTop="@dimen/margin_huge" />
