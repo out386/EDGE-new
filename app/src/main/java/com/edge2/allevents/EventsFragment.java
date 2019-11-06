@@ -23,7 +23,6 @@ package com.edge2.allevents;
 import android.content.Context;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,6 +43,8 @@ import com.edge2.MainActivity;
 import com.edge2.R;
 import com.edge2.allevents.models.EventModel;
 import com.edge2.allevents.models.QuickItemModel;
+import com.edge2.allevents.recycler.EventsAdapter;
+import com.edge2.allevents.recycler.ItemDecoration;
 import com.edge2.utils.DimenUtils;
 import com.edge2.utils.Logger;
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
@@ -63,6 +64,7 @@ public class EventsFragment extends Fragment {
     private Slider banner;
     private Context context;
     private OnEventsFragmentListener listener;
+    private ItemDecoration itemDecoration;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -115,6 +117,7 @@ public class EventsFragment extends Fragment {
             int topInset = insets.getSystemWindowInsetTop();
             int leftInset = insets.getSystemWindowInsetLeft();
             int rightInset = insets.getSystemWindowInsetRight();
+            int bottomInset = insets.getSystemWindowInsetBottom();
 
             toolbarParams.height = toolbarHeight + topInset;
             toolbar.setLayoutParams(toolbarParams);
@@ -122,6 +125,12 @@ public class EventsFragment extends Fragment {
 
             mainReycler.setPadding(leftInset, 0, rightInset, 0);
             quickReycler.setPadding(leftInset, 0, rightInset, 0);
+
+            if (itemDecoration != null)
+                mainReycler.removeItemDecoration(itemDecoration);
+            itemDecoration =
+                    new ItemDecoration(mainReycler.getLayoutManager(), bottomInset, topInset);
+            mainReycler.addItemDecoration(itemDecoration);
 
             appBarLayout.post(() -> {
                 appbarParams.height = appBarLayout.getHeight() + toolbarParams.height;
@@ -131,6 +140,7 @@ public class EventsFragment extends Fragment {
             });
             return insets;
         });
+
         mainReycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {

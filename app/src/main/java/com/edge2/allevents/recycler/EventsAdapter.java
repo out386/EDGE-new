@@ -1,4 +1,4 @@
-package com.edge2.allevents;
+package com.edge2.allevents.recycler;
 
 /*
  * Copyright (C) 2019 Ritayan Chakraborty <ritayanout@gmail.com>
@@ -38,7 +38,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsView
     private List<EventModel> items;
     private OnEventsClickedListener listener;
 
-    EventsAdapter(List<EventModel> items, OnEventsClickedListener listener) {
+    public EventsAdapter(List<EventModel> items, OnEventsClickedListener listener) {
         this.items = items;
         this.listener = listener;
     }
@@ -88,7 +88,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsView
         }
     }
 
-    interface OnEventsClickedListener {
+    public interface OnEventsClickedListener {
         void onEventClicked(int position);
     }
 }
