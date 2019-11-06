@@ -22,9 +22,11 @@ package com.edge2;
 
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.NavController;
@@ -47,11 +49,9 @@ public class MainActivity extends ThemeActivity implements EventsFragment.OnEven
         setContentView(R.layout.activity_main);
 
         animTime = getResources().getInteger(android.R.integer.config_mediumAnimTime);
-        NavController navController = Navigation.findNavController(this, R.id.content_frame);
         bottomNav = findViewById(R.id.navigation);
-        bottomNavAnimator = bottomNav.animate();
-        NavigationUI.setupWithNavController(bottomNav, navController);
-        bottomNav.setItemIconTintList(null);
+
+        setupBottomNav();
         setupInsets();
     }
 
@@ -61,6 +61,24 @@ public class MainActivity extends ThemeActivity implements EventsFragment.OnEven
         if (bar != null) {
             bar.setDisplayShowTitleEnabled(false);
         }
+    }
+
+    private void setupBottomNav() {
+        NavController navController = Navigation.findNavController(this, R.id.content_frame);
+        bottomNavAnimator = bottomNav.animate();
+        bottomNav.setOnNavigationItemSelectedListener(item -> {
+            switch(item.getItemId()) {
+                case R.id.nav_events:
+                    navController.navigate(R.id.events_dest);
+                    break;
+                case R.id.nav_sett:
+                    navController.navigate(R.id.placeholder_dest);
+                    break;
+            }
+            return true;
+        });
+        bottomNav.setOnNavigationItemReselectedListener(item -> {});
+        bottomNav.setItemIconTintList(null);
     }
 
     @Override
