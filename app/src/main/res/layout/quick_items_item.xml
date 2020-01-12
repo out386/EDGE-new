@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/allevents_quick_size_h"
     android:layout_height="wrap_content"
     android:background="@drawable/general_ripple"
     android:foreground="@drawable/card_bg"
-    android:padding="@dimen/margin_large"
     android:orientation="horizontal"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:padding="@dimen/margin_large">
 
     <ImageView
         android:id="@+id/quick_image"
@@ -14,32 +14,32 @@
         android:layout_height="@dimen/allevents_quick_ic_size"
         tools:src="@drawable/quick_accomodation" />
 
-    <RelativeLayout
+    <TextView
+        android:id="@+id/quick_name"
+        style="@style/QuickItemsTextHeader"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/margin_huge">
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="@dimen/margin_huge"
+        android:layout_toEndOf="@id/quick_image"
+        android:ellipsize="end"
+        android:includeFontPadding="false"
+        android:maxLines="1"
+        android:scrollHorizontally="true"
+        tools:text="Accommodations" />
 
-        <TextView
-            android:id="@+id/quick_name"
-            style="@style/TextHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:maxLines="1"
-            tools:text="Accomodation" />
+    <TextView
+        android:id="@+id/quick_desc"
+        style="@style/TextSmallSub"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="@dimen/margin_huge"
+        android:layout_toEndOf="@id/quick_image"
+        android:ellipsize="end"
+        android:includeFontPadding="false"
+        android:maxLines="2"
+        android:scrollHorizontally="true"
+        tools:text="Registrations are now open" />
 
-        <TextView
-            android:id="@+id/quick_desc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="Accomodation registration is open"
-            android:maxLines="2"
-            android:ellipsize="end"
-            android:scrollHorizontally="true"
-            android:layout_alignParentBottom="true"
-            style="@style/TextSmallSub" />
-
-    </RelativeLayout>
-
-
-</LinearLayout>
+</RelativeLayout>

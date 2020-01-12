@@ -222,9 +222,9 @@ public class EventsFragment extends Fragment {
 
         ArrayList<QuickItemModel> quickItems = new ArrayList<>();
         for (int j = 0; j < 5; j++) {
-            QuickItemModel item = new QuickItemModel("Accommodation",
+            QuickItemModel item = new QuickItemModel("Accommodations",
                     context.getDrawable(R.drawable.quick_accomodation),
-                    "Accommodation registration is open");
+                    "Registrations are now open");
             quickItems.add(item);
         }
         QuickItemsAdapter quickAdapter = new QuickItemsAdapter(quickItems,
