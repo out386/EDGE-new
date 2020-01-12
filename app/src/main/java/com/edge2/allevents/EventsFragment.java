@@ -61,6 +61,9 @@ import ir.apend.slider.ui.Slider;
 
 public class EventsFragment extends Fragment {
 
+    private static final String KEY_APPBAR_OFFSET = "appBarOffset";
+
+    private AppBarLayout appBarLayout;
     private RecyclerView mainReycler;
     private RecyclerView quickReycler;
     private EventsViewModel viewModel;
@@ -68,6 +71,8 @@ public class EventsFragment extends Fragment {
     private Context context;
     private OnEventsFragmentListener listener;
     private ItemDecoration itemDecoration;
+    private int appBarOffset;
+    private OnAppbarOffsetChangedListener appbarListener;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -82,6 +87,11 @@ public class EventsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         postponeEnterTransition();
 
+        if (savedInstanceState != null) {
+            appBarOffset = savedInstanceState.getInt(KEY_APPBAR_OFFSET);
+        }
+
+        appBarLayout = rootView.findViewById(R.id.app_bar_layout);
         mainReycler = rootView.findViewById(R.id.main_recycler);
         quickReycler = rootView.findViewById(R.id.quick_recycler);
         new GravitySnapHelper(Gravity.START).attachToRecyclerView(quickReycler);
@@ -109,7 +119,6 @@ public class EventsFragment extends Fragment {
     }
 
     private void setupInsets(View v) {
-        AppBarLayout appBarLayout = v.findViewById(R.id.app_bar_layout);
         CoordinatorLayout.LayoutParams appbarParams =
                 (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
         LinearLayout.LayoutParams bannerParams =
@@ -142,9 +151,35 @@ public class EventsFragment extends Fragment {
                 appBarLayout.setLayoutParams(appbarParams);
                 bannerParams.setMargins(leftInset, toolbarParams.height, rightInset, 0);
                 banner.setLayoutParams(bannerParams);
+                int currOffset = appBarLayout.getBottom() - appBarLayout.getHeight();
+                AppBarLayout.Behavior behavior = (AppBarLayout.Behavior) appbarParams.getBehavior();
+                behavior.onNestedPreScroll(v.findViewById(R.id.main_coordinator),
+                        appBarLayout, null, 0, -1 * appBarOffset + currOffset, new int[]{0, 0}, 0);
+                setAppbarListener(appBarLayout);
             });
             return insets;
         });
+    }
+
+    private void setAppbarListener(AppBarLayout appBarLayout) {
+        if (appbarListener == null)
+            appBarLayout.addOnOffsetChangedListener(new OnAppbarOffsetChangedListener());
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(KEY_APPBAR_OFFSET, appBarOffset);
+        // show the bottomnav in preparation for a new fragment to be shown
+        listener.onEventsScrolled(-1);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        appBarLayout.removeOnOffsetChangedListener(appbarListener);
+        // show the bottomnav in preparation for a new fragment to be shown
+        listener.onEventsScrolled(-1);
     }
 
     private void setupRecyclerListeners() {
@@ -264,4 +299,19 @@ public class EventsFragment extends Fragment {
                     .navigate(R.id.action_events_to_subEvents, null, null, extras);
         }
     }
+
+    class OnAppbarOffsetChangedListener implements AppBarLayout.OnOffsetChangedListener {
+        private int previousOffset = Integer.MIN_VALUE;
+
+        @Override
+        public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+            appBarOffset = verticalOffset;
+            if (previousOffset != Integer.MIN_VALUE && previousOffset != verticalOffset) {
+                // Needed because the RecyclerView's OnScrollListener doesn't help when the appbar is scrolling
+                listener.onEventsScrolled(previousOffset - verticalOffset);
+            }
+            previousOffset = verticalOffset;
+        }
+    }
+
 }

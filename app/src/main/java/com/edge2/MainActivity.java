@@ -22,16 +22,13 @@ package com.edge2;
 
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
 
 import com.edge2.allevents.EventsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -67,7 +64,7 @@ public class MainActivity extends ThemeActivity implements EventsFragment.OnEven
         NavController navController = Navigation.findNavController(this, R.id.content_frame);
         bottomNavAnimator = bottomNav.animate();
         bottomNav.setOnNavigationItemSelectedListener(item -> {
-            switch(item.getItemId()) {
+            switch (item.getItemId()) {
                 case R.id.nav_events:
                     navController.navigate(R.id.events_dest);
                     break;
@@ -77,7 +74,8 @@ public class MainActivity extends ThemeActivity implements EventsFragment.OnEven
             }
             return true;
         });
-        bottomNav.setOnNavigationItemReselectedListener(item -> {});
+        bottomNav.setOnNavigationItemReselectedListener(item -> {
+        });
         bottomNav.setItemIconTintList(null);
     }
 
