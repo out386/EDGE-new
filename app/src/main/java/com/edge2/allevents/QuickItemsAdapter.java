@@ -31,16 +31,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.edge2.R;
 import com.edge2.allevents.models.QuickItemModel;
+import com.edge2.views.CustomViewOnClickedListener;
+import com.edge2.views.OnClickListener;
 
 import java.util.List;
 
 public class QuickItemsAdapter extends RecyclerView.Adapter<QuickItemsAdapter.QuickItemsViewHolder> {
     private List<QuickItemModel> items;
-    private OnQuickItemClickedListener listener;
+    private CustomViewOnClickedListener listener;
 
-    QuickItemsAdapter(List<QuickItemModel> items, OnQuickItemClickedListener listener) {
+    QuickItemsAdapter(List<QuickItemModel> items, @NonNull OnClickListener listener) {
         this.items = items;
-        this.listener = listener;
+        this.listener = new CustomViewOnClickedListener(listener);
     }
 
     @NonNull
@@ -59,7 +61,7 @@ public class QuickItemsAdapter extends RecyclerView.Adapter<QuickItemsAdapter.Qu
         holder.itemName.setText(item.getName());
         holder.itemDesc.setText(item.getDesc());
         holder.rootView.setOnClickListener(view ->
-                listener.onItemClicked(position)
+                listener.onClick(position)
         );
     }
 
@@ -81,9 +83,5 @@ public class QuickItemsAdapter extends RecyclerView.Adapter<QuickItemsAdapter.Qu
             itemName = item.findViewById(R.id.quick_name);
             itemDesc = item.findViewById(R.id.quick_desc);
         }
-    }
-
-    interface OnQuickItemClickedListener {
-        void onItemClicked(int position);
     }
 }

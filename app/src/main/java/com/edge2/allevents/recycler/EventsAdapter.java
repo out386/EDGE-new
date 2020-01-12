@@ -32,16 +32,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.edge2.R;
 import com.edge2.allevents.models.EventModel;
+import com.edge2.views.CustomViewOnClickedListener;
+import com.edge2.views.OnClickListener;
 
 import java.util.List;
 
 public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsViewHolder> {
     private List<EventModel> items;
-    private OnEventsClickedListener listener;
+    private CustomViewOnClickedListener listener;
 
-    public EventsAdapter(List<EventModel> items, OnEventsClickedListener listener) {
+    public EventsAdapter(List<EventModel> items, @NonNull OnClickListener listener) {
         this.items = items;
-        this.listener = listener;
+        this.listener = new CustomViewOnClickedListener(listener);
     }
 
     @NonNull
@@ -65,10 +67,10 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsView
         ViewCompat.setTransitionName(root, "root" + position);
 
         root.setOnClickListener(view ->
-                listener.onEventClicked(position, imageView, root)
+                listener.onClick(position, imageView, root)
         );
         holder.eventButton.setOnClickListener(view ->
-                listener.onEventClicked(position, imageView, root)
+                listener.onClick(position, imageView, root)
         );
     }
 
@@ -94,7 +96,4 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsView
         }
     }
 
-    public interface OnEventsClickedListener {
-        void onEventClicked(int position, View imageView, View rootView);
-    }
 }

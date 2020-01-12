@@ -216,7 +216,7 @@ public class EventsFragment extends Fragment {
                     context.getDrawable(R.drawable.computeaid), 4, template);
             events.add(event);
         }
-        EventsAdapter eventsAdapter = new EventsAdapter(events, new EventsClickedListener());
+        EventsAdapter eventsAdapter = new EventsAdapter(events, this::onEventClicked);
         mainReycler.setAdapter(eventsAdapter);
 
 
@@ -228,7 +228,7 @@ public class EventsFragment extends Fragment {
             quickItems.add(item);
         }
         QuickItemsAdapter quickAdapter = new QuickItemsAdapter(quickItems,
-                position -> Logger.log("EventListener", "onQuickClicked: " + position));
+                (position, v1, v2) -> Logger.log("EventListener", "onQuickClicked: " + position));
         quickReycler.setAdapter(quickAdapter);
         quickReycler.addItemDecoration(new QuickItemDecorator());
     }
@@ -286,18 +286,15 @@ public class EventsFragment extends Fragment {
         void onEventsScrolled(int dy);
     }
 
-    class EventsClickedListener implements EventsAdapter.OnEventsClickedListener {
-        @Override
-        public void onEventClicked(int position, View imageView, View rootView) {
-            String transitionName = getString(R.string.events_to_sub_transition);
-            String rootTransitionName = getString(R.string.events_to_sub_root_transition);
-            FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
-                    .addSharedElement(imageView, transitionName)
-                    .addSharedElement(rootView, rootTransitionName)
-                    .build();
-            NavHostFragment.findNavController(EventsFragment.this)
-                    .navigate(R.id.action_events_to_subEvents, null, null, extras);
-        }
+    public void onEventClicked(int position, View imageView, View rootView) {
+        String transitionName = getString(R.string.events_to_sub_transition);
+        String rootTransitionName = getString(R.string.events_to_sub_root_transition);
+        FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
+                .addSharedElement(imageView, transitionName)
+                .addSharedElement(rootView, rootTransitionName)
+                .build();
+        NavHostFragment.findNavController(EventsFragment.this)
+                .navigate(R.id.action_events_to_subEvents, null, null, extras);
     }
 
     class OnAppbarOffsetChangedListener implements AppBarLayout.OnOffsetChangedListener {
