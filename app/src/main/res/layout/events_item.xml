@@ -13,7 +13,8 @@
     android:paddingTop="@dimen/margin"
     android:paddingBottom="@dimen/margin"
     android:id="@+id/event_root"
-    android:background="@drawable/general_ripple">
+    android:background="@color/windowBackground"
+    android:foreground="@drawable/general_ripple">
 
     <ImageView
         android:id="@+id/event_image"

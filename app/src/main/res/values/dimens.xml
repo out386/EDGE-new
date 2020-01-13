@@ -4,11 +4,13 @@
     <dimen name="margin">8dp</dimen>
     <dimen name="margin_large">16dp</dimen>
     <dimen name="margin_huge">25dp</dimen>
-    <dimen name="allevents_banner_w">308.571428571dp</dimen>
+    <dimen name="allevents_banner_w">308.5714dp</dimen>
     <dimen name="allevents_banner_h">200dp</dimen>
     <dimen name="allevents_main_events_w">220dp</dimen>
-    <dimen name="allevents_main_events_img_w">150dp</dimen>
+    <dimen name="allevents_main_events_img_w">189.4739dp</dimen>
     <dimen name="allevents_main_events_img_h">120dp</dimen>
+    <dimen name="allevents_main_events_img_large_w">236.8421dp</dimen>
+    <dimen name="allevents_main_events_img_large_h">150dp</dimen>
     <dimen name="allevents_main_events_padding_h">24dp</dimen>
     <dimen name="allevents_main_events_padding_v">24dp</dimen>
     <dimen name="allevents_main_events_button_w">70dp</dimen>

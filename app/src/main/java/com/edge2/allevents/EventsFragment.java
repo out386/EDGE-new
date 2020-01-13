@@ -32,6 +32,7 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
@@ -111,23 +112,24 @@ public class EventsFragment extends Fragment {
         quickReycler.setLayoutManager(quickLayoutManager);
 
         ((MainActivity) requireActivity()).setupToolbar(rootView.findViewById(R.id.toolbar));
-        setupInsets(rootView);
         setupRecyclerListeners();
         setupObservers();
         prototype();
         return rootView;
     }
 
-    private void setupInsets(View v) {
-        CoordinatorLayout.LayoutParams appbarParams =
-                (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
-        LinearLayout.LayoutParams bannerParams =
-                (LinearLayout.LayoutParams) banner.getLayoutParams();
-        Toolbar toolbar = v.findViewById(R.id.toolbar);
-        ViewGroup.LayoutParams toolbarParams = toolbar.getLayoutParams();
-        int toolbarHeight = DimenUtils.getActionbarHeight(context);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setupInsets(view);
+    }
 
+    private void setupInsets(View v) {
         v.setOnApplyWindowInsetsListener((v1, insets) -> {
+            Toolbar toolbar = v.findViewById(R.id.toolbar);
+            ViewGroup.LayoutParams toolbarParams = toolbar.getLayoutParams();
+            int toolbarHeight = DimenUtils.getActionbarHeight(context);
+
             int topInset = insets.getSystemWindowInsetTop();
             int leftInset = insets.getSystemWindowInsetLeft();
             int rightInset = insets.getSystemWindowInsetRight();
@@ -147,23 +149,36 @@ public class EventsFragment extends Fragment {
             mainReycler.addItemDecoration(itemDecoration);
 
             appBarLayout.post(() -> {
+                CoordinatorLayout.LayoutParams appbarParams =
+                        (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
+                LinearLayout.LayoutParams bannerParams =
+                        (LinearLayout.LayoutParams) banner.getLayoutParams();
                 appbarParams.height = appBarLayout.getHeight() + toolbarParams.height;
                 appBarLayout.setLayoutParams(appbarParams);
                 bannerParams.setMargins(leftInset, toolbarParams.height, rightInset, 0);
                 banner.setLayoutParams(bannerParams);
                 int currOffset = appBarLayout.getBottom() - appBarLayout.getHeight();
                 AppBarLayout.Behavior behavior = (AppBarLayout.Behavior) appbarParams.getBehavior();
-                behavior.onNestedPreScroll(v.findViewById(R.id.main_coordinator),
-                        appBarLayout, null, 0, -1 * appBarOffset + currOffset, new int[]{0, 0}, 0);
+                if (behavior != null)
+                    behavior.onNestedPreScroll(v.findViewById(R.id.main_coordinator),
+                            appBarLayout, null, 0, -1 * appBarOffset + currOffset,
+                            new int[]{0, 0}, 0);
                 setAppbarListener(appBarLayout);
             });
             return insets;
         });
+
+        // Required if other fragments use CollapsingToolbarLayout.
+        // No idea why that makes onApplyWindowInsets never fire.
+        if (v.getRootWindowInsets() != null)
+            v.dispatchApplyWindowInsets(v.getRootWindowInsets());
     }
 
     private void setAppbarListener(AppBarLayout appBarLayout) {
-        if (appbarListener == null)
-            appBarLayout.addOnOffsetChangedListener(new OnAppbarOffsetChangedListener());
+        if (appbarListener == null) {
+            appbarListener = new OnAppbarOffsetChangedListener();
+            appBarLayout.addOnOffsetChangedListener(appbarListener);
+        }
     }
 
     @Override
@@ -178,6 +193,7 @@ public class EventsFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         appBarLayout.removeOnOffsetChangedListener(appbarListener);
+        appbarListener = null;
         // show the bottomnav in preparation for a new fragment to be shown
         listener.onEventsScrolled(-1);
     }
@@ -228,7 +244,8 @@ public class EventsFragment extends Fragment {
             quickItems.add(item);
         }
         QuickItemsAdapter quickAdapter = new QuickItemsAdapter(quickItems,
-                (position, v1, v2) -> Logger.log("EventListener", "onQuickClicked: " + position));
+                (position, v1, v2, v3, v4) ->
+                        Logger.log("EventListener", "onQuickClicked: " + position));
         quickReycler.setAdapter(quickAdapter);
         quickReycler.addItemDecoration(new QuickItemDecorator());
     }
@@ -286,12 +303,19 @@ public class EventsFragment extends Fragment {
         void onEventsScrolled(int dy);
     }
 
-    public void onEventClicked(int position, View imageView, View rootView) {
-        String transitionName = getString(R.string.events_to_sub_transition);
-        String rootTransitionName = getString(R.string.events_to_sub_root_transition);
+    private void onEventClicked(int position, View rootView, View imageView,
+                                View nameView, View countView) {
+        String transitionImgName = getString(R.string.events_to_sub_img_transition);
+        String transitionNameName = getString(R.string.events_to_sub_name_transition);
+        String transitionCountName = getString(R.string.events_to_sub_count_transition);
+        String transitionRootName = getString(R.string.events_to_sub_root_transition);
+
+        // To add more shared views here, call "setTransitionName" in the adapter
         FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
-                .addSharedElement(imageView, transitionName)
-                .addSharedElement(rootView, rootTransitionName)
+                .addSharedElement(imageView, transitionImgName)
+                .addSharedElement(nameView, transitionNameName)
+                .addSharedElement(countView, transitionCountName)
+                .addSharedElement(rootView, transitionRootName)
                 .build();
         NavHostFragment.findNavController(EventsFragment.this)
                 .navigate(R.id.action_events_to_subEvents, null, null, extras);

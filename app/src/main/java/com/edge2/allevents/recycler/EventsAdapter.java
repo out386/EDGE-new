@@ -58,19 +58,23 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsView
     public void onBindViewHolder(@NonNull EventsViewHolder holder, int position) {
         EventModel item = items.get(position);
         View root = holder.rootView;
+        TextView name = holder.eventName;
+        TextView count = holder.eventSubCount;
         ImageView imageView = holder.eventImage;
         imageView.setImageDrawable(item.getImage());
         holder.eventName.setText(item.getName());
         holder.eventSubCount.setText(item.getNumEvents());
 
-        ViewCompat.setTransitionName(imageView, "transition" + position);
+        ViewCompat.setTransitionName(imageView, "img" + position);
+        ViewCompat.setTransitionName(name, "name" + position);
+        ViewCompat.setTransitionName(count, "count" + position);
         ViewCompat.setTransitionName(root, "root" + position);
 
         root.setOnClickListener(view ->
-                listener.onClick(position, imageView, root)
+                listener.onClick(position, root, imageView, name, count)
         );
         holder.eventButton.setOnClickListener(view ->
-                listener.onClick(position, imageView, root)
+                listener.onClick(position, root, imageView, name, count)
         );
     }
 

@@ -23,7 +23,7 @@
         android:name="com.edge2.PlaceholderFragment" />
     <fragment
         android:id="@+id/subEventsFragment"
-        android:name="com.edge2.subevents.SubEventsFragment"
+        android:name="com.edge2.event.EventFragment"
         android:label="fragment_sub_events"
-        tools:layout="@layout/fragment_sub_events" />
+        tools:layout="@layout/fragment_event" />
 </navigation>

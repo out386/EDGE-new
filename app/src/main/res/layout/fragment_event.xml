@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:transitionName="@string/events_to_sub_root_transition">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:outlineAmbientShadowColor="#00000000"
+        android:outlineSpotShadowColor="#00000000"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            android:background="@color/windowBackground"
+            app:contentScrim="@color/windowBackground"
+            app:layout_scrollFlags="scroll">
+
+            <com.edge2.views.CenterToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@color/colorPrimary"
+                android:elevation="3dp"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                tools:layout_height="?attr/actionBarSize" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/event_header"
+                tools:layout_marginTop="?attr/actionBarSize">
+
+                <ImageView
+                    android:id="@+id/event_image"
+                    android:layout_width="@dimen/allevents_main_events_img_large_w"
+                    android:layout_height="@dimen/allevents_main_events_img_large_h"
+                    android:layout_margin="@dimen/margin_large"
+                    android:src="@drawable/computeaid"
+                    android:transitionName="@string/events_to_sub_img_transition" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_toEndOf="@id/event_image"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/margin_large">
+
+                    <TextView
+                        android:id="@+id/event_name"
+                        style="@style/TextHeader"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="CyberCrusade"
+                        android:transitionName="@string/events_to_sub_name_transition"/>
+
+                    <TextView
+                        android:id="@+id/event_num_sub"
+                        style="@style/TextSmallSub"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="3 events"
+                        android:textSize="12sp"
+                        android:transitionName="@string/events_to_sub_count_transition" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/event_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <TextView
+            android:id="@+id/event_body"
+            style="@style/TextSmallSub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="40sp"
+            android:padding="16dp"
+            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+        exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
+        in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur." />
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
