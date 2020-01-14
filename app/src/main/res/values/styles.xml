@@ -29,6 +29,10 @@
         <item name="android:textColor">@color/textSub</item>
     </style>
 
+    <style name="TextSub" parent="TextSmallSub">
+        <item name="android:textSize">14sp</item>
+    </style>
+
     <style name="TextHeader" parent="TextAppearance.AppCompat">
         <item name="android:textSize">16sp</item>
         <item name="android:fontFamily">@font/orkney_medium</item>

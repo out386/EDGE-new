@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:id="@+id/eventcat_root"
+    android:background="@color/windowBackground"
+    android:foreground="@drawable/general_ripple"
+    android:layout_marginTop="@dimen/event_cat_events_margin"
+    android:layout_marginBottom="@dimen/event_cat_events_margin"
+    android:paddingTop="@dimen/margin_large"
+    android:paddingBottom="@dimen/margin_large"
+    android:paddingStart="@dimen/margin_large"
+    android:paddingEnd="@dimen/margin_large">
+
+    <ImageView
+        android:id="@+id/eventcat_icon"
+        android:layout_width="@dimen/allevents_main_event_icon_wh"
+        android:layout_height="@dimen/allevents_main_event_icon_wh"
+        android:scaleType="centerCrop"
+        android:layout_marginEnd="@dimen/allevents_main_events_padding_h"
+        tools:src="@drawable/event_icon" />
+
+    <TextView
+        android:id="@+id/eventcat_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/TextHeader"
+        tools:text="CyberCrusade"
+        android:layout_toEndOf="@id/eventcat_icon"
+        android:layout_alignTop="@id/eventcat_icon"/>
+
+    <TextView
+        android:id="@+id/eventcat_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin"
+        android:layout_marginTop="@dimen/margin"
+        style="@style/TextSub"
+        tools:text="Some medium long description about whatever this is"
+        android:layout_toEndOf="@id/eventcat_icon"
+        android:layout_below="@id/eventcat_name"/>
+
+    <ImageView
+        android:id="@+id/eventcat_button"
+        android:layout_width="@dimen/allevents_main_events_button_w"
+        android:layout_height="@dimen/allevents_main_events_button_h"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/eventcat_desc"
+        android:src="@drawable/ic_small_arrow"
+        android:background="@drawable/button_ripple"
+        android:paddingStart="@dimen/allevents_main_events_button_padd_v"
+        android:paddingEnd="@dimen/allevents_main_events_button_padd_v"
+        android:paddingTop="@dimen/allevents_main_events_button_padd_h"
+        android:paddingBottom="@dimen/allevents_main_events_button_padd_h" />
+
+</RelativeLayout>

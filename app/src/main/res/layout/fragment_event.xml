@@ -1,75 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/scroll_view"
+    xmlns:tools="http://schemas.android.com/tools"
     android:transitionName="@string/events_to_sub_root_transition">
 
-    <ImageView
-        android:id="@+id/event_image"
-        android:layout_width="@dimen/allevents_main_events_img_header_w"
-        android:layout_height="@dimen/allevents_main_events_img_header_h"
-        android:src="@drawable/computeaid"
-        android:transitionName="@string/events_to_sub_img_transition"
-        android:layout_marginTop="@dimen/margin_large"
-        android:layout_marginStart="@dimen/margin_large" />
-
-    <TextView
-        android:id="@+id/event_name"
-        style="@style/TextHeader"
-        android:textSize="20sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ComputeAid"
-        android:layout_marginEnd="@dimen/margin_large"
-        android:layout_marginStart="@dimen/margin_large"
-        android:layout_toEndOf="@id/event_image"
-        android:layout_alignParentEnd="true"
-        android:layout_alignTop="@id/event_image"
-        android:transitionName="@string/events_to_sub_name_transition" />
-
-    <TextView
-        android:id="@+id/event_num_sub"
-        style="@style/TextSmallSub"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/margin_large"
-        android:layout_marginStart="@dimen/margin_large"
-        android:text="Anyone can write code that a computer can understand, but good
-programmers write code that humans can understand."
-        android:textSize="12sp"
-        android:layout_toEndOf="@id/event_image"
-        android:layout_alignBottom="@id/event_image"
-        android:justificationMode="inter_word"
-        android:transitionName="@string/events_to_sub_count_transition" />
-
-    <View
-        android:id="@+id/divider"
-        android:layout_width="match_parent"
-        android:layout_height="6dp"
-        android:background="@color/divider"
-        android:layout_below="@id/event_num_sub"
-        android:layout_marginTop="@dimen/margin_huge" />
-
-    <androidx.core.widget.NestedScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="@dimen/margin_large"
-        android:layout_marginEnd="@dimen/margin_large"
-        android:id="@+id/scroll_view"
-        android:layout_below="@id/divider">
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/event_content"
-            style="@style/TextSmallSub"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_huge"
-            android:textSize="40sp"
-            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur." />
+            android:id="@+id/eventcat_top">
 
-    </androidx.core.widget.NestedScrollView>
+            <ImageView
+                android:id="@+id/eventcat_icon"
+                android:layout_width="@dimen/allevents_main_events_img_header_w"
+                android:layout_height="@dimen/allevents_main_events_img_header_h"
+                android:src="@drawable/computeaid"
+                android:transitionName="@string/events_to_sub_img_transition"
+                android:layout_marginTop="@dimen/margin_huge"
+                android:layout_marginStart="@dimen/margin_large" />
 
-</RelativeLayout>
+            <TextView
+                android:id="@+id/eventcat_name"
+                style="@style/TextHeader"
+                android:textSize="20sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ComputeAid"
+                android:layout_marginEnd="@dimen/margin_large"
+                android:layout_marginStart="@dimen/margin_large"
+                android:layout_toEndOf="@id/eventcat_icon"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@id/eventcat_icon"
+                android:transitionName="@string/events_to_sub_name_transition" />
+
+            <TextView
+                android:id="@+id/eventcat_desc"
+                style="@style/TextSub"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin"
+                android:layout_marginEnd="@dimen/margin_large"
+                android:layout_marginStart="@dimen/margin_large"
+                android:text="Anyone can write code that a computer can understand, but good
+programmers write code that humans can understand."
+                android:layout_toEndOf="@id/eventcat_icon"
+                android:layout_below="@id/eventcat_name"
+                android:justificationMode="inter_word"
+                android:transitionName="@string/events_to_sub_count_transition" />
+
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="6dp"
+            android:background="@color/divider"
+            android:layout_below="@id/eventcat_top"
+            android:layout_marginTop="@dimen/margin_huge" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/eventcat_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:itemCount="10"
+            tools:listitem="@layout/event_category_item"
+            tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

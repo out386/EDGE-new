@@ -11,6 +11,7 @@
     <dimen name="allevents_main_events_img_h">120dp</dimen>
     <dimen name="allevents_main_events_img_header_w">157.8947dp</dimen>
     <dimen name="allevents_main_events_img_header_h">100dp</dimen>
+    <dimen name="allevents_main_event_icon_wh">80dp</dimen>
     <dimen name="allevents_main_events_padding_h">24dp</dimen>
     <dimen name="allevents_main_events_padding_v">24dp</dimen>
     <dimen name="allevents_main_events_button_w">70dp</dimen>
@@ -19,4 +20,5 @@
     <dimen name="allevents_main_events_button_padd_v">24dp</dimen>
     <dimen name="allevents_quick_ic_size">60dp</dimen>
     <dimen name="allevents_quick_size_h">250dp</dimen>
+    <dimen name="event_cat_events_margin">8dp</dimen>
 </resources>
