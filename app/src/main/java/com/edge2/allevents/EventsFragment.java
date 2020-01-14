@@ -140,8 +140,10 @@ public class EventsFragment extends Fragment {
 
             if (itemDecoration != null)
                 mainReycler.removeItemDecoration(itemDecoration);
+            int itemMargins = context.getResources()
+                    .getDimensionPixelSize(R.dimen.margin_huge);
             itemDecoration =
-                    new ItemDecoration(mainReycler.getLayoutManager(), bottomInset, topInset);
+                    new ItemDecoration(mainReycler.getLayoutManager(), bottomInset, itemMargins);
             mainReycler.addItemDecoration(itemDecoration);
 
             topView.post(() -> {
