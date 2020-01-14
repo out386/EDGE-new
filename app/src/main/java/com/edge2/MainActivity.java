@@ -131,14 +131,14 @@ public class MainActivity extends ThemeActivity implements OnFragmentScrollListe
             }
         }
 
-        // Only animate if the toolbar is either hiding, or was hidden. No need otherwise as
+        // Only animate if the toolbar is either expanding, or was expanded. No need otherwise as
         // toolbarDy would change by small numbers in such cases.
-        if (lastToolbarScrollDy == Integer.MAX_VALUE) { // The toolbar was hidden before
+        if (lastToolbarScrollDy == Integer.MAX_VALUE) { // The toolbar was expanded before
             toolbarAnimator.cancel();
             toolbarAnimator
                     .setDuration(animTime)
                     .translationY(Math.min(0, Math.max(toolbarHeight, toolbarDy)));
-        } else if (toolbarDy == Integer.MAX_VALUE) { // The toolbar is being hidden
+        } else if (toolbarDy == Integer.MAX_VALUE) { // The toolbar is being expanded
             toolbarAnimator.cancel();
             toolbarAnimator
                     .setDuration(animTime)

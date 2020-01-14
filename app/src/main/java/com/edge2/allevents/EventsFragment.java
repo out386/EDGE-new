@@ -108,6 +108,9 @@ public class EventsFragment extends Fragment {
         quickReycler.setHasFixedSize(true);
         quickReycler.setLayoutManager(quickLayoutManager);
 
+        // Show the toolbar and bottomnav
+        listener.onListScrolled(-1, Integer.MAX_VALUE);
+
         setupRecyclerListeners();
         setupObservers();
         prototype();
@@ -161,15 +164,6 @@ public class EventsFragment extends Fragment {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(KEY_APPBAR_OFFSET, appBarOffset);
-        // show the bottomnav & toolbar in preparation for a new fragment to be shown
-        listener.onListScrolled(-1, Integer.MAX_VALUE);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        // show the bottomnav & toolbar in preparation for a new fragment to be shown
-        listener.onListScrolled(-1, Integer.MAX_VALUE);
     }
 
     private void setupRecyclerListeners() {

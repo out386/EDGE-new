@@ -22,16 +22,15 @@ package com.edge2.event;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.transition.Transition;
@@ -39,8 +38,6 @@ import androidx.transition.TransitionInflater;
 
 import com.edge2.OnFragmentScrollListener;
 import com.edge2.R;
-import com.edge2.utils.DimenUtils;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 public class EventFragment extends Fragment {
     private OnFragmentScrollListener listener;
@@ -78,20 +75,19 @@ public class EventFragment extends Fragment {
             int leftInset = insets.getSystemWindowInsetLeft();
             int rightInset = insets.getSystemWindowInsetRight();
             View content = v.findViewById(R.id.event_content);
-            RelativeLayout header = v.findViewById(R.id.event_header);
-            int toolbarHeight = DimenUtils.getActionbarHeight(v.getContext());
 
             content.setPadding(leftInset, 0, rightInset, 0);
-            header.post(()-> {
-                LinearLayout.LayoutParams headerParams =
-                        (LinearLayout.LayoutParams) header.getLayoutParams();
-                headerParams.setMargins(leftInset, toolbarHeight + topInset,
-                        rightInset, 0);
-                header.setLayoutParams(headerParams);
+            v.post(() -> {
+                FrameLayout.LayoutParams rootParams =
+                        (FrameLayout.LayoutParams) v.getLayoutParams();
+                rootParams.setMargins(leftInset, topInset, rightInset, 0);
+                v.setLayoutParams(rootParams);
 
+                // Hide the toolbar
+                listener.onListScrolled(0, -Integer.MAX_VALUE);
                 startPostponedEnterTransition();
             });
-            setupScrollListener(v, header);
+            setupScrollListener(v);
             return insets;
         });
 
@@ -100,18 +96,11 @@ public class EventFragment extends Fragment {
             v.dispatchApplyWindowInsets(v.getRootWindowInsets());
     }
 
-    private void setupScrollListener(View rootView, View topView) {
+    private void setupScrollListener(View rootView) {
         NestedScrollView scrollView = rootView.findViewById(R.id.scroll_view);
         scrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener)
                 (v, scrollX, scrollY, oldScrollX, oldScrollY) ->
                         listener.onListScrolled(
-                                scrollY - oldScrollY, topView.getHeight() - scrollY));
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        // show the bottomnav & toolbar in preparation for a new fragment to be shown
-        listener.onListScrolled(-1, Integer.MAX_VALUE);
+                                scrollY - oldScrollY, -Integer.MAX_VALUE));
     }
 }
