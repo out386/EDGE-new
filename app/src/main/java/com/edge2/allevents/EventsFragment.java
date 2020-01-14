@@ -33,8 +33,7 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.FragmentNavigator;
@@ -43,7 +42,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.edge2.MainActivity;
+import com.edge2.OnFragmentScrollListener;
 import com.edge2.R;
 import com.edge2.allevents.models.EventModel;
 import com.edge2.allevents.models.QuickItemModel;
@@ -52,7 +51,6 @@ import com.edge2.allevents.recycler.ItemDecoration;
 import com.edge2.utils.DimenUtils;
 import com.edge2.utils.Logger;
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
-import com.google.android.material.appbar.AppBarLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,22 +62,21 @@ public class EventsFragment extends Fragment {
 
     private static final String KEY_APPBAR_OFFSET = "appBarOffset";
 
-    private AppBarLayout appBarLayout;
     private RecyclerView mainReycler;
     private RecyclerView quickReycler;
     private EventsViewModel viewModel;
     private Slider banner;
     private Context context;
-    private OnEventsFragmentListener listener;
+    private OnFragmentScrollListener listener;
     private ItemDecoration itemDecoration;
     private int appBarOffset;
-    private OnAppbarOffsetChangedListener appbarListener;
+    private View topView;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         this.context = context;
-        listener = (OnEventsFragmentListener) context;
+        listener = (OnFragmentScrollListener) context;
     }
 
     @Override
@@ -92,7 +89,7 @@ public class EventsFragment extends Fragment {
             appBarOffset = savedInstanceState.getInt(KEY_APPBAR_OFFSET);
         }
 
-        appBarLayout = rootView.findViewById(R.id.app_bar_layout);
+        topView = rootView.findViewById(R.id.top_view);
         mainReycler = rootView.findViewById(R.id.main_recycler);
         quickReycler = rootView.findViewById(R.id.quick_recycler);
         new GravitySnapHelper(Gravity.START).attachToRecyclerView(quickReycler);
@@ -111,7 +108,6 @@ public class EventsFragment extends Fragment {
         quickReycler.setHasFixedSize(true);
         quickReycler.setLayoutManager(quickLayoutManager);
 
-        ((MainActivity) requireActivity()).setupToolbar(rootView.findViewById(R.id.toolbar));
         setupRecyclerListeners();
         setupObservers();
         prototype();
@@ -121,23 +117,20 @@ public class EventsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        NestedScrollView scrollView = view.findViewById(R.id.scroll_view);
+        scrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener)
+                (v, scrollX, scrollY, oldScrollX, oldScrollY) ->
+                        listener.onListScrolled(
+                                scrollY - oldScrollY, topView.getHeight() - scrollY));
         setupInsets(view);
     }
 
     private void setupInsets(View v) {
         v.setOnApplyWindowInsetsListener((v1, insets) -> {
-            Toolbar toolbar = v.findViewById(R.id.toolbar);
-            ViewGroup.LayoutParams toolbarParams = toolbar.getLayoutParams();
-            int toolbarHeight = DimenUtils.getActionbarHeight(context);
-
             int topInset = insets.getSystemWindowInsetTop();
             int leftInset = insets.getSystemWindowInsetLeft();
             int rightInset = insets.getSystemWindowInsetRight();
             int bottomInset = insets.getSystemWindowInsetBottom();
-
-            toolbarParams.height = toolbarHeight + topInset;
-            toolbar.setLayoutParams(toolbarParams);
-            toolbar.setPadding(leftInset, topInset, rightInset, 0);
 
             mainReycler.setPadding(leftInset, 0, rightInset, 0);
             quickReycler.setPadding(leftInset, 0, rightInset, 0);
@@ -148,65 +141,38 @@ public class EventsFragment extends Fragment {
                     new ItemDecoration(mainReycler.getLayoutManager(), bottomInset, topInset);
             mainReycler.addItemDecoration(itemDecoration);
 
-            appBarLayout.post(() -> {
-                CoordinatorLayout.LayoutParams appbarParams =
-                        (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
-                LinearLayout.LayoutParams bannerParams =
-                        (LinearLayout.LayoutParams) banner.getLayoutParams();
-                appbarParams.height = appBarLayout.getHeight() + toolbarParams.height;
-                appBarLayout.setLayoutParams(appbarParams);
-                bannerParams.setMargins(leftInset, toolbarParams.height, rightInset, 0);
-                banner.setLayoutParams(bannerParams);
-                int currOffset = appBarLayout.getBottom() - appBarLayout.getHeight();
-                AppBarLayout.Behavior behavior = (AppBarLayout.Behavior) appbarParams.getBehavior();
-                if (behavior != null)
-                    behavior.onNestedPreScroll(v.findViewById(R.id.main_coordinator),
-                            appBarLayout, null, 0, -1 * appBarOffset + currOffset,
-                            new int[]{0, 0}, 0);
-                setAppbarListener(appBarLayout);
+            topView.post(() -> {
+                int toolbarHeight = DimenUtils.getActionbarHeight(context);
+                LinearLayout.LayoutParams topViewParams =
+                        (LinearLayout.LayoutParams) topView.getLayoutParams();
+                topViewParams.topMargin = toolbarHeight + topInset;
+                topView.setLayoutParams(topViewParams);
             });
             return insets;
         });
 
-        // Required if other fragments use CollapsingToolbarLayout.
+        // Required if other fragments are transacted.
         // No idea why that makes onApplyWindowInsets never fire.
         if (v.getRootWindowInsets() != null)
             v.dispatchApplyWindowInsets(v.getRootWindowInsets());
-    }
-
-    private void setAppbarListener(AppBarLayout appBarLayout) {
-        if (appbarListener == null) {
-            appbarListener = new OnAppbarOffsetChangedListener();
-            appBarLayout.addOnOffsetChangedListener(appbarListener);
-        }
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(KEY_APPBAR_OFFSET, appBarOffset);
-        // show the bottomnav in preparation for a new fragment to be shown
-        listener.onEventsScrolled(-1);
+        // show the bottomnav & toolbar in preparation for a new fragment to be shown
+        listener.onListScrolled(-1, Integer.MAX_VALUE);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        appBarLayout.removeOnOffsetChangedListener(appbarListener);
-        appbarListener = null;
-        // show the bottomnav in preparation for a new fragment to be shown
-        listener.onEventsScrolled(-1);
+        // show the bottomnav & toolbar in preparation for a new fragment to be shown
+        listener.onListScrolled(-1, Integer.MAX_VALUE);
     }
 
     private void setupRecyclerListeners() {
-        mainReycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                listener.onEventsScrolled(dy);
-            }
-        });
-
         // Needed because the shared element transition doesn't work on return unless
         // postponeEnterTransition() is called. And postponeEnterTransition needs a corresponding
         // startPostponedEnterTransition()
@@ -299,10 +265,6 @@ public class EventsFragment extends Fragment {
         }
     }
 
-    public interface OnEventsFragmentListener {
-        void onEventsScrolled(int dy);
-    }
-
     private void onEventClicked(int position, View rootView, View imageView,
                                 View nameView, View countView) {
         String transitionImgName = getString(R.string.events_to_sub_img_transition);
@@ -319,20 +281,6 @@ public class EventsFragment extends Fragment {
                 .build();
         NavHostFragment.findNavController(EventsFragment.this)
                 .navigate(R.id.action_events_to_subEvents, null, null, extras);
-    }
-
-    class OnAppbarOffsetChangedListener implements AppBarLayout.OnOffsetChangedListener {
-        private int previousOffset = Integer.MIN_VALUE;
-
-        @Override
-        public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-            appBarOffset = verticalOffset;
-            if (previousOffset != Integer.MIN_VALUE && previousOffset != verticalOffset) {
-                // Needed because the RecyclerView's OnScrollListener doesn't help when the appbar is scrolling
-                listener.onEventsScrolled(previousOffset - verticalOffset);
-            }
-            previousOffset = verticalOffset;
-        }
     }
 
 }

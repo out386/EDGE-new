@@ -23,6 +23,7 @@ package com.edge2;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
 
 import androidx.appcompat.app.ActionBar;
@@ -30,34 +31,38 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import com.edge2.allevents.EventsFragment;
+import com.edge2.utils.DimenUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class MainActivity extends ThemeActivity implements EventsFragment.OnEventsFragmentListener {
+public class MainActivity extends ThemeActivity implements OnFragmentScrollListener {
 
     private BottomNavigationView bottomNav;
+    private Toolbar toolbar;
     private int animTime;
     private int lastEventScrollDy = 0;
+    private int lastToolbarScrollDy = 0;
+    private int toolbarHeight;
     private ViewPropertyAnimator bottomNavAnimator;
+    private ViewPropertyAnimator toolbarAnimator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        animTime = getResources().getInteger(android.R.integer.config_mediumAnimTime);
+        animTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
         bottomNav = findViewById(R.id.navigation);
 
-        setupBottomNav();
-        setupInsets();
-    }
-
-    public void setupToolbar(Toolbar toolbar) {
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar bar = getSupportActionBar();
         if (bar != null) {
             bar.setDisplayShowTitleEnabled(false);
         }
+        toolbarAnimator = toolbar.animate();
+
+        setupBottomNav();
+        setupInsets();
     }
 
     private void setupBottomNav() {
@@ -86,12 +91,19 @@ public class MainActivity extends ThemeActivity implements EventsFragment.OnEven
     }
 
     private void setupInsets() {
-        View rootView = findViewById(R.id.mainRoot);
+        View rootView = findViewById(R.id.main_root);
         rootView.setOnApplyWindowInsetsListener((view, insets) -> {
+            int topInset = insets.getSystemWindowInsetTop();
             int leftInset = insets.getSystemWindowInsetLeft();
             int rightInset = insets.getSystemWindowInsetRight();
             int bottomInset = insets.getSystemWindowInsetBottom();
+            ViewGroup.LayoutParams toolbarParams = toolbar.getLayoutParams();
+            int toolbarHeight = DimenUtils.getActionbarHeight(rootView.getContext());
 
+            toolbarParams.height = toolbarHeight + topInset;
+            toolbar.setLayoutParams(toolbarParams);
+            toolbar.setPadding(leftInset, topInset, rightInset, 0);
+            this.toolbarHeight = -toolbarParams.height;
             bottomNav.setPadding(leftInset, 0, rightInset, bottomInset);
             rootView.setPadding(0, 0, 0, 0);
 
@@ -100,7 +112,7 @@ public class MainActivity extends ThemeActivity implements EventsFragment.OnEven
     }
 
     @Override
-    public void onEventsScrolled(int dy) {
+    public void onListScrolled(int dy, int toolbarDy) {
         if (dy < 1) {
             if (lastEventScrollDy >= 1) {
                 bottomNavAnimator.cancel();
@@ -114,9 +126,26 @@ public class MainActivity extends ThemeActivity implements EventsFragment.OnEven
                 bottomNavAnimator.cancel();
                 bottomNavAnimator = bottomNav.animate()
                         .setDuration(animTime)
-                        .translationY(bottomNav.getHeight() << 1);
+                        .translationY(bottomNav.getHeight());
                 lastEventScrollDy = dy;
             }
         }
+
+        // Only animate if the toolbar is either hiding, or was hidden. No need otherwise as
+        // toolbarDy would change by small numbers in such cases.
+        if (lastToolbarScrollDy == Integer.MAX_VALUE) { // The toolbar was hidden before
+            toolbarAnimator.cancel();
+            toolbarAnimator
+                    .setDuration(animTime)
+                    .translationY(Math.min(0, Math.max(toolbarHeight, toolbarDy)));
+        } else if (toolbarDy == Integer.MAX_VALUE) { // The toolbar is being hidden
+            toolbarAnimator.cancel();
+            toolbarAnimator
+                    .setDuration(animTime)
+                    .translationY(0);
+        } else {
+            toolbar.setTranslationY(Math.min(0, Math.max(toolbarHeight, toolbarDy)));
+        }
+        lastToolbarScrollDy = toolbarDy;
     }
 }
