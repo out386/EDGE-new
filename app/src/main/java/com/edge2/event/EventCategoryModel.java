@@ -20,14 +20,14 @@ package com.edge2.event;
  *
  */
 
-import android.graphics.drawable.Drawable;
+import androidx.annotation.DrawableRes;
 
 public class EventCategoryModel {
     private String name;
-    private Drawable icon;
+    private int icon;
     private String desc;
 
-    public EventCategoryModel(String name, Drawable icon, String desc) {
+    EventCategoryModel(String name, @DrawableRes int icon, String desc) {
         this.name = name;
         this.icon = icon;
         this.desc = desc;
@@ -37,7 +37,7 @@ public class EventCategoryModel {
         return name;
     }
 
-    public Drawable getIcon() {
+    public int getIcon() {
         return icon;
     }
 

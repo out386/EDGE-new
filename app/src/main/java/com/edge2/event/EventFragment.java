@@ -27,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -39,6 +40,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.Transition;
 import androidx.transition.TransitionInflater;
 
+import com.bumptech.glide.Glide;
 import com.edge2.OnFragmentScrollListener;
 import com.edge2.R;
 import com.edge2.event.recycler.EventCategoryAdapter;
@@ -49,6 +51,9 @@ import java.util.ArrayList;
 
 public class EventFragment extends Fragment {
     private static final String KEY_TRANSITION_FINISHED = "transitionFinished";
+    public static final String KEY_CAT_IMAGE = "catImage";
+    public static final String KEY_CAT_NAME = "catName";
+    public static final String KEY_CAT_DESC = "catDesc";
 
     private OnFragmentScrollListener listener;
     private RecyclerView mainReycler;
@@ -93,8 +98,11 @@ public class EventFragment extends Fragment {
         View topView = view.findViewById(R.id.eventcat_top);
         NestedScrollView scrollView = view.findViewById(R.id.scroll_view);
         TextView desc = view.findViewById(R.id.eventcat_desc);
+        TextView name = view.findViewById(R.id.eventcat_name);
+        ImageView image = view.findViewById(R.id.eventcat_icon);
         View dummy = view.findViewById(R.id.eventcat_dummy_bg);
 
+        // The recyclerview is only populated here if the fragment transition animation won't play now
         if (isTransitionFinished)
             prototype();
 
@@ -105,6 +113,7 @@ public class EventFragment extends Fragment {
         transition.addListener(sharedElementListener);
 
         setupInsets(view, divider, topView, scrollView);
+        setData(name, desc, image);
     }
 
     @Override
@@ -118,6 +127,17 @@ public class EventFragment extends Fragment {
         super.onDestroyView();
         if (sharedElementListener != null)
             transition.removeListener(sharedElementListener);
+    }
+
+    private void setData(TextView name, TextView desc, ImageView image) {
+        Bundle args = getArguments();
+        if (args != null) {
+            name.setText(args.getString(KEY_CAT_NAME));
+            desc.setText(args.getString(KEY_CAT_DESC));
+            Glide.with(image.getContext()).
+                    load(args.getInt(KEY_CAT_IMAGE))
+                    .into(image);
+        }
     }
 
     private void setupInsets(View v, View divider, View topView, NestedScrollView scrollView) {
@@ -168,11 +188,11 @@ public class EventFragment extends Fragment {
             EventCategoryModel event;
             if (j % 2 == 0)
                 event = new EventCategoryModel("Crypto Quest",
-                        context.getDrawable(R.drawable.event_icon),
+                        R.drawable.event_icon,
                         "Put your cryptography and deciphering skills to the test by proving yourself while solving the clues.");
             else
                 event = new EventCategoryModel("Bug Hunt",
-                        context.getDrawable(R.drawable.event_icon),
+                        R.drawable.event_icon,
                         "Some dummy short description");
             events.add(event);
         }
@@ -214,9 +234,6 @@ public class EventFragment extends Fragment {
             desc.setTranslationY(-desc.getHeight() / 3);
             desc.setAlpha(0);
             divider.setAlpha(0);
-            /*content.setAlpha(0);
-            content.setTranslationY(getResources()
-                    .getDimensionPixelOffset(R.dimen.event_cat_content_anim_offset));*/
         }
 
         @Override
@@ -231,11 +248,8 @@ public class EventFragment extends Fragment {
                     .setDuration(animTime)
                     .translationY(0)
                     .alpha(1);
-            /*content.animate()
-                    .setDuration(animTime)
-                    .setInterpolator(interpolator)
-                    .translationY(0)
-                    .alpha(1);*/
+
+            // The recyclerview is populated here, so that the item animation plays after the transition
             prototype();
             isTransitionFinished = true;
         }

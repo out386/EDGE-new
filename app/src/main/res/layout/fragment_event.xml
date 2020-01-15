@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="match_parent">
 
     <!--Hack to animate the background-->
     <LinearLayout
+        android:id="@+id/eventcat_dummy_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/eventcat_dummy_bg"
         android:background="@color/windowBackground"
-        android:transitionName="@string/events_to_sub_root_transition"
-        android:orientation="vertical" />
+        android:orientation="vertical"
+        android:transitionName="@string/events_to_sub_root_transition" />
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/scroll_view">
+        android:layout_height="match_parent">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -30,50 +30,50 @@
                 android:layout_below="@+id/divider"
                 android:layoutAnimation="@anim/slide_in_top"
                 tools:itemCount="10"
-                tools:listitem="@layout/event_category_item"
-                tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/event_category_item" />
 
             <RelativeLayout
+                android:id="@+id/eventcat_top"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/windowBackground"
-                android:id="@+id/eventcat_top">
+                android:background="@color/windowBackground">
 
                 <ImageView
                     android:id="@+id/eventcat_icon"
                     android:layout_width="@dimen/allevents_main_events_img_header_w"
                     android:layout_height="@dimen/allevents_main_events_img_header_h"
-                    android:src="@drawable/computeaid"
-                    android:transitionName="@string/events_to_sub_img_transition"
+                    android:layout_marginStart="@dimen/margin_large"
                     android:layout_marginTop="@dimen/margin_huge"
-                    android:layout_marginStart="@dimen/margin_large" />
+                    android:transitionName="@string/events_to_sub_img_transition"
+                    tools:src="@drawable/computeaid" />
 
                 <TextView
                     android:id="@+id/eventcat_name"
                     style="@style/TextHeader"
-                    android:textSize="20sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ComputeAid"
-                    android:layout_marginEnd="@dimen/margin_large"
-                    android:layout_marginStart="@dimen/margin_large"
-                    android:layout_toEndOf="@id/eventcat_icon"
                     android:layout_alignTop="@id/eventcat_icon"
-                    android:transitionName="@string/events_to_sub_name_transition" />
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    android:layout_toEndOf="@id/eventcat_icon"
+                    android:textSize="20sp"
+                    android:transitionName="@string/events_to_sub_name_transition"
+                    tools:text="ComputeAid" />
 
                 <TextView
                     android:id="@+id/eventcat_desc"
                     style="@style/TextSub"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_below="@id/eventcat_name"
+                    android:layout_marginStart="@dimen/margin_large"
                     android:layout_marginTop="@dimen/margin"
                     android:layout_marginEnd="@dimen/margin_large"
-                    android:layout_marginStart="@dimen/margin_large"
-                    android:text="Anyone can write code that a computer can understand, but good
-programmers write code that humans can understand."
                     android:layout_toEndOf="@id/eventcat_icon"
-                    android:layout_below="@id/eventcat_name"
-                    android:justificationMode="inter_word" />
+                    android:justificationMode="inter_word"
+                    tools:text="Anyone can write code that a computer can understand, but good
+programmers write code that humans can understand." />
 
             </RelativeLayout>
 
@@ -81,9 +81,9 @@ programmers write code that humans can understand."
                 android:id="@+id/divider"
                 android:layout_width="match_parent"
                 android:layout_height="6dp"
-                android:background="@color/divider"
+                android:layout_below="@id/eventcat_top"
                 android:layout_marginTop="@dimen/margin_huge"
-                android:layout_below="@id/eventcat_top" />
+                android:background="@color/divider" />
 
 
         </RelativeLayout>

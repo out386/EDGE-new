@@ -20,29 +20,35 @@ package com.edge2.allevents.models;
  *
  */
 
-import android.graphics.drawable.Drawable;
+import androidx.annotation.DrawableRes;
 
 public class EventModel {
     private String name;
-    private Drawable image;
+    private int image;
     private String numEvents;
+    private String desc;
 
-    public EventModel(String name, Drawable image, int countEvents, String countTemplate) {
+    public EventModel(String name, @DrawableRes int image, int countEvents, String countTemplate, String desc) {
         this.name = name;
         this.image = image;
         numEvents = String.format(countTemplate, countEvents,
                 countEvents == 1 ? "" : "s");
+        this.desc = desc;
     }
 
     public String getName() {
         return name;
     }
 
-    public Drawable getImage() {
+    public int getImage() {
         return image;
     }
 
     public String getNumEvents() {
         return numEvents;
+    }
+
+    public String getDesc() {
+        return desc;
     }
 }

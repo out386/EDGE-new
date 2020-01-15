@@ -48,6 +48,7 @@ import com.edge2.allevents.models.EventModel;
 import com.edge2.allevents.models.QuickItemModel;
 import com.edge2.allevents.recycler.EventsAdapter;
 import com.edge2.allevents.recycler.ItemDecoration;
+import com.edge2.event.EventFragment;
 import com.edge2.utils.DimenUtils;
 import com.edge2.utils.Logger;
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
@@ -71,6 +72,7 @@ public class EventsFragment extends Fragment {
     private ItemDecoration itemDecoration;
     private int appBarOffset;
     private View topView;
+    private ArrayList<EventModel> allEventsList;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -187,14 +189,15 @@ public class EventsFragment extends Fragment {
     }
 
     private void prototype() {
-        ArrayList<EventModel> events = new ArrayList<>();
+        allEventsList = new ArrayList<>();
         String template = context.getString(R.string.num_sub_events);
+        String desc = "Anyone can write code that a computer can understand, but good programmers write code that humans can understand.";
         for (int j = 0; j < 12; j++) {
             EventModel event = new EventModel("ComputeAid",
-                    context.getDrawable(R.drawable.computeaid), 4, template);
-            events.add(event);
+                    R.drawable.computeaid, 4, template, desc);
+            allEventsList.add(event);
         }
-        EventsAdapter eventsAdapter = new EventsAdapter(events, this::onEventClicked);
+        EventsAdapter eventsAdapter = new EventsAdapter(allEventsList, this::onEventClicked);
         mainReycler.setAdapter(eventsAdapter);
 
 
@@ -263,6 +266,7 @@ public class EventsFragment extends Fragment {
 
     private void onEventClicked(int position, View rootView, View imageView,
                                 View nameView, View countView) {
+        EventModel item = allEventsList.get(position);
         String transitionImgName = getString(R.string.events_to_sub_img_transition);
         String transitionNameName = getString(R.string.events_to_sub_name_transition);
         String transitionRootName = getString(R.string.events_to_sub_root_transition);
@@ -273,8 +277,14 @@ public class EventsFragment extends Fragment {
                 .addSharedElement(nameView, transitionNameName)
                 .addSharedElement(rootView, transitionRootName)
                 .build();
+
+        Bundle args = new Bundle();
+        args.putString(EventFragment.KEY_CAT_NAME, item.getName());
+        args.putString(EventFragment.KEY_CAT_DESC, item.getDesc());
+        args.putInt(EventFragment.KEY_CAT_IMAGE, item.getImage());
+
         NavHostFragment.findNavController(EventsFragment.this)
-                .navigate(R.id.action_events_to_subEvents, null, null, extras);
+                .navigate(R.id.action_events_to_subEvents, args, null, extras);
     }
 
 }

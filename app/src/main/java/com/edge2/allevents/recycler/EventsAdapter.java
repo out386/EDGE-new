@@ -30,6 +30,7 @@ import androidx.annotation.NonNull;
 import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.edge2.R;
 import com.edge2.allevents.models.EventModel;
 import com.edge2.views.CustomViewOnClickedListener;
@@ -61,9 +62,11 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsView
         TextView name = holder.eventName;
         TextView count = holder.eventSubCount;
         ImageView imageView = holder.eventImage;
-        imageView.setImageDrawable(item.getImage());
         holder.eventName.setText(item.getName());
         holder.eventSubCount.setText(item.getNumEvents());
+        Glide.with(imageView.getContext())
+                .load(item.getImage())
+                .into(imageView);
 
         ViewCompat.setTransitionName(imageView, "img" + position);
         ViewCompat.setTransitionName(name, "name" + position);
