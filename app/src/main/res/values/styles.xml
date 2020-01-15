@@ -24,7 +24,11 @@
         <item name="android:textColor">@color/textSub</item>
     </style>
 
-    <style name="TextSub" parent="TextSmallSub">
+    <style name="TextSubLowImp" parent="TextSmallSub">
+        <item name="android:textColor">@color/textSubLowImp</item>
+    </style>
+
+    <style name="TextBody" parent="TextSmallSub">
         <item name="android:textSize">14sp</item>
     </style>
 
