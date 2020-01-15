@@ -65,10 +65,10 @@ public class EventCategoryAdapter extends RecyclerView.Adapter<EventCategoryAdap
         holder.eventName.setText(item.getName());
         holder.eventDesc.setText(item.getDesc());
 
-        ViewCompat.setTransitionName(imageView, "icon" + position);
-        ViewCompat.setTransitionName(name, "name" + position);
-        ViewCompat.setTransitionName(count, "desc" + position);
-        ViewCompat.setTransitionName(root, "root" + position);
+        ViewCompat.setTransitionName(imageView, "caticon" + position);
+        ViewCompat.setTransitionName(name, "catname" + position);
+        ViewCompat.setTransitionName(count, "catdesc" + position);
+        ViewCompat.setTransitionName(root, "catroot" + position);
 
         root.setOnClickListener(view ->
                 listener.onClick(position, root, imageView, name, count)

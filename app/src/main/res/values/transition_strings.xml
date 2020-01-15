@@ -2,6 +2,5 @@
 <resources>
     <string name="events_to_sub_img_transition">eventsToSubImgTransition</string>
     <string name="events_to_sub_name_transition">eventsToSubNameTransition</string>
-    <string name="events_to_sub_count_transition">eventsToSubCountTransition</string>
     <string name="events_to_sub_root_transition">eventsToSubRootTransition</string>
 </resources>

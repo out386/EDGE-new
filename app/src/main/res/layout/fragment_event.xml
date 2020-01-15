@@ -1,77 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/scroll_view"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:transitionName="@string/events_to_sub_root_transition">
+    xmlns:tools="http://schemas.android.com/tools">
 
+    <!--Hack to animate the background-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:id="@+id/eventcat_dummy_bg"
+        android:background="@color/windowBackground"
+        android:transitionName="@string/events_to_sub_root_transition"
+        android:orientation="vertical" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/scroll_view">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/eventcat_top">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/eventcat_icon"
-                android:layout_width="@dimen/allevents_main_events_img_header_w"
-                android:layout_height="@dimen/allevents_main_events_img_header_h"
-                android:src="@drawable/computeaid"
-                android:transitionName="@string/events_to_sub_img_transition"
-                android:layout_marginTop="@dimen/margin_huge"
-                android:layout_marginStart="@dimen/margin_large" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/eventcat_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/divider"
+                android:layoutAnimation="@anim/slide_in_top"
+                tools:itemCount="10"
+                tools:listitem="@layout/event_category_item"
+                tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-            <TextView
-                android:id="@+id/eventcat_name"
-                style="@style/TextHeader"
-                android:textSize="20sp"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="ComputeAid"
-                android:layout_marginEnd="@dimen/margin_large"
-                android:layout_marginStart="@dimen/margin_large"
-                android:layout_toEndOf="@id/eventcat_icon"
-                android:layout_alignParentEnd="true"
-                android:layout_alignTop="@id/eventcat_icon"
-                android:transitionName="@string/events_to_sub_name_transition" />
+                android:background="@color/windowBackground"
+                android:id="@+id/eventcat_top">
 
-            <TextView
-                android:id="@+id/eventcat_desc"
-                style="@style/TextSub"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin"
-                android:layout_marginEnd="@dimen/margin_large"
-                android:layout_marginStart="@dimen/margin_large"
-                android:text="Anyone can write code that a computer can understand, but good
+                <ImageView
+                    android:id="@+id/eventcat_icon"
+                    android:layout_width="@dimen/allevents_main_events_img_header_w"
+                    android:layout_height="@dimen/allevents_main_events_img_header_h"
+                    android:src="@drawable/computeaid"
+                    android:transitionName="@string/events_to_sub_img_transition"
+                    android:layout_marginTop="@dimen/margin_huge"
+                    android:layout_marginStart="@dimen/margin_large" />
+
+                <TextView
+                    android:id="@+id/eventcat_name"
+                    style="@style/TextHeader"
+                    android:textSize="20sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ComputeAid"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_toEndOf="@id/eventcat_icon"
+                    android:layout_alignTop="@id/eventcat_icon"
+                    android:transitionName="@string/events_to_sub_name_transition" />
+
+                <TextView
+                    android:id="@+id/eventcat_desc"
+                    style="@style/TextSub"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:text="Anyone can write code that a computer can understand, but good
 programmers write code that humans can understand."
-                android:layout_toEndOf="@id/eventcat_icon"
-                android:layout_below="@id/eventcat_name"
-                android:justificationMode="inter_word"
-                android:transitionName="@string/events_to_sub_count_transition" />
+                    android:layout_toEndOf="@id/eventcat_icon"
+                    android:layout_below="@id/eventcat_name"
+                    android:justificationMode="inter_word" />
+
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="6dp"
+                android:background="@color/divider"
+                android:layout_marginTop="@dimen/margin_huge"
+                android:layout_below="@id/eventcat_top" />
+
 
         </RelativeLayout>
 
-        <View
-            android:id="@+id/divider"
-            android:layout_width="match_parent"
-            android:layout_height="6dp"
-            android:background="@color/divider"
-            android:layout_below="@id/eventcat_top"
-            android:layout_marginTop="@dimen/margin_huge" />
+    </androidx.core.widget.NestedScrollView>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/eventcat_content"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:itemCount="10"
-            tools:listitem="@layout/event_category_item"
-            tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
-    </LinearLayout>
-
-</androidx.core.widget.NestedScrollView>
+</RelativeLayout>

@@ -265,14 +265,12 @@ public class EventsFragment extends Fragment {
                                 View nameView, View countView) {
         String transitionImgName = getString(R.string.events_to_sub_img_transition);
         String transitionNameName = getString(R.string.events_to_sub_name_transition);
-        String transitionCountName = getString(R.string.events_to_sub_count_transition);
         String transitionRootName = getString(R.string.events_to_sub_root_transition);
 
         // To add more shared views here, call "setTransitionName" in the adapter
         FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
                 .addSharedElement(imageView, transitionImgName)
                 .addSharedElement(nameView, transitionNameName)
-                .addSharedElement(countView, transitionCountName)
                 .addSharedElement(rootView, transitionRootName)
                 .build();
         NavHostFragment.findNavController(EventsFragment.this)

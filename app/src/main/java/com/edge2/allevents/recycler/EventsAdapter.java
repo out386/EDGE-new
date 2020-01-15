@@ -67,7 +67,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsView
 
         ViewCompat.setTransitionName(imageView, "img" + position);
         ViewCompat.setTransitionName(name, "name" + position);
-        ViewCompat.setTransitionName(count, "count" + position);
         ViewCompat.setTransitionName(root, "root" + position);
 
         root.setOnClickListener(view ->

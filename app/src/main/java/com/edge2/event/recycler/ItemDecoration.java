@@ -43,7 +43,7 @@ public class ItemDecoration extends RecyclerView.ItemDecoration {
 
         final int itemPosition = parent.getChildAdapterPosition(view);
         RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) view.getLayoutParams();
-        if (itemPosition == adapter.getItemCount()) {
+        if (itemPosition == adapter.getItemCount() - 1) {
             params.bottomMargin = 0;
             outRect.bottom = bottomOffset;
         } else if (itemPosition == 0) {

@@ -25,8 +25,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -46,11 +48,16 @@ import com.edge2.utils.DimenUtils;
 import java.util.ArrayList;
 
 public class EventFragment extends Fragment {
+    private static final String KEY_TRANSITION_FINISHED = "transitionFinished";
+
     private OnFragmentScrollListener listener;
     private RecyclerView mainReycler;
     private int topViewHeight;
     private ItemDecoration itemDecoration;
     private Context context;
+    private OnSharedElementListener sharedElementListener;
+    private Transition transition;
+    private boolean isTransitionFinished;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -63,13 +70,15 @@ public class EventFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         postponeEnterTransition();
+        if (savedInstanceState != null)
+            isTransitionFinished = savedInstanceState.getBoolean(KEY_TRANSITION_FINISHED);
 
         View rootView = inflater.inflate(R.layout.fragment_event, container, false);
         mainReycler = rootView.findViewById(R.id.eventcat_content);
         mainReycler.setHasFixedSize(true);
         mainReycler.setLayoutManager(new LinearLayoutManager(context));
 
-        Transition transition = TransitionInflater.from(context)
+        transition = TransitionInflater.from(context)
                 .inflateTransition(android.R.transition.move);
         setSharedElementEnterTransition(transition);
         setSharedElementReturnTransition(transition);
@@ -80,11 +89,38 @@ public class EventFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setupInsets(view);
-        prototype();
+        View divider = view.findViewById(R.id.divider);
+        View topView = view.findViewById(R.id.eventcat_top);
+        NestedScrollView scrollView = view.findViewById(R.id.scroll_view);
+        TextView desc = view.findViewById(R.id.eventcat_desc);
+        View dummy = view.findViewById(R.id.eventcat_dummy_bg);
+
+        if (isTransitionFinished)
+            prototype();
+
+        if (sharedElementListener != null) {
+            transition.removeListener(sharedElementListener);
+        }
+        sharedElementListener = new OnSharedElementListener(dummy, desc, divider, mainReycler);
+        transition.addListener(sharedElementListener);
+
+        setupInsets(view, divider, topView, scrollView);
     }
 
-    private void setupInsets(View v) {
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(KEY_TRANSITION_FINISHED, isTransitionFinished);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (sharedElementListener != null)
+            transition.removeListener(sharedElementListener);
+    }
+
+    private void setupInsets(View v, View divider, View topView, NestedScrollView scrollView) {
         v.setOnApplyWindowInsetsListener((v1, insets) -> {
             int topInset = insets.getSystemWindowInsetTop();
             int leftInset = insets.getSystemWindowInsetLeft();
@@ -101,14 +137,11 @@ public class EventFragment extends Fragment {
             itemDecoration = new ItemDecoration(bottomInset, itemMargin - itemPadding);
             mainReycler.addItemDecoration(itemDecoration);
 
-            RelativeLayout topView = v.findViewById(R.id.eventcat_top);
-            View divider = v.findViewById(R.id.divider);
-
             topView.post(() -> {
-                LinearLayout.LayoutParams topViewParams =
-                        (LinearLayout.LayoutParams) topView.getLayoutParams();
+                RelativeLayout.LayoutParams topViewParams =
+                        (RelativeLayout.LayoutParams) topView.getLayoutParams();
                 int toolbarHeight = DimenUtils.getActionbarHeight(context);
-                int dividerHeight = ((LinearLayout.LayoutParams) divider.getLayoutParams()).topMargin
+                int dividerHeight = ((RelativeLayout.LayoutParams) divider.getLayoutParams()).topMargin
                         + divider.getHeight();
 
                 topViewParams.setMargins(leftInset, toolbarHeight + topInset, rightInset, 0);
@@ -120,7 +153,7 @@ public class EventFragment extends Fragment {
                 topViewHeight = topView.getHeight() + dividerHeight;
                 startPostponedEnterTransition();
             });
-            setupScrollListener(v);
+            setupScrollListener(scrollView);
             return insets;
         });
 
@@ -145,17 +178,81 @@ public class EventFragment extends Fragment {
         }
         EventCategoryAdapter eventsAdapter = new EventCategoryAdapter(events, this::onEventClicked);
         mainReycler.setAdapter(eventsAdapter);
+        mainReycler.scheduleLayoutAnimation();
     }
 
     private void onEventClicked(int position, View rootView, View imageView,
                                 View nameView, View countView) {
     }
 
-    private void setupScrollListener(View rootView) {
-        NestedScrollView scrollView = rootView.findViewById(R.id.scroll_view);
+    private void setupScrollListener(NestedScrollView scrollView) {
         scrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener)
                 (v, scrollX, scrollY, oldScrollX, oldScrollY) ->
                         listener.onListScrolled(
                                 scrollY - oldScrollY, topViewHeight - scrollY));
+    }
+
+    private class OnSharedElementListener implements Transition.TransitionListener {
+        private int animTime;
+        private View dummy;
+        private View desc;
+        private View divider;
+        private View content;
+        private Interpolator interpolator;
+
+        OnSharedElementListener(View dummy, View desc, View divider, View content) {
+            animTime = getResources().getInteger(android.R.integer.config_mediumAnimTime);
+            this.dummy = dummy;
+            this.desc = desc;
+            this.divider = divider;
+            this.content = content;
+            interpolator = new DecelerateInterpolator();
+        }
+
+        @Override
+        public void onTransitionStart(@NonNull Transition transition) {
+            desc.setTranslationY(-desc.getHeight() / 3);
+            desc.setAlpha(0);
+            divider.setAlpha(0);
+            /*content.setAlpha(0);
+            content.setTranslationY(getResources()
+                    .getDimensionPixelOffset(R.dimen.event_cat_content_anim_offset));*/
+        }
+
+        @Override
+        public void onTransitionEnd(@NonNull Transition transition) {
+            dummy.setVisibility(View.GONE);
+
+            divider.animate()
+                    .setDuration(animTime)
+                    .setInterpolator(interpolator)
+                    .alpha(1);
+            desc.animate()
+                    .setDuration(animTime)
+                    .translationY(0)
+                    .alpha(1);
+            /*content.animate()
+                    .setDuration(animTime)
+                    .setInterpolator(interpolator)
+                    .translationY(0)
+                    .alpha(1);*/
+            prototype();
+            isTransitionFinished = true;
+        }
+
+        @Override
+        public void onTransitionCancel(@NonNull Transition transition) {
+
+        }
+
+        @Override
+        public void onTransitionPause(@NonNull Transition transition) {
+
+        }
+
+        @Override
+        public void onTransitionResume(@NonNull Transition transition) {
+
+        }
     }
 }
