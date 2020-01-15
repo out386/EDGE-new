@@ -12,6 +12,7 @@
     <color name="textHeader">#050505</color>
     <color name="textSub">#727272</color>
     <color name="iconFill">#141414</color>
+    <color name="iconFillRed">#D61A20</color>
     <color name="cardStroke">#DBDBDB</color>
     <color name="divider">#0B000000</color>
     <color name="rippleColor">#337E7E7E</color>

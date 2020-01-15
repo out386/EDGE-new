@@ -22,12 +22,9 @@ package com.edge2.views;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
@@ -36,8 +33,10 @@ import com.edge2.R;
 import com.edge2.utils.DimenUtils;
 
 public class CenterToolbar extends Toolbar {
-    private TextView toolbarTv;
+    private ImageView imageText;
+    private ImageView imageLogo;
     private int[] arr = new int[2];
+    private int paddingLeftLogo;
 
     public CenterToolbar(Context context) {
         this(context, null);
@@ -53,11 +52,24 @@ public class CenterToolbar extends Toolbar {
     }
 
     private void init() {
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        toolbarTv = getToolbarTV();
-        addView(toolbarTv, params);
+        Context context = getContext();
+        Resources res = context.getResources();
+        int padding = res.getDimensionPixelSize(R.dimen.toolbar_image_padding_top_bottom_x2);
+        paddingLeftLogo = res.getDimensionPixelSize(R.dimen.toolbar_image_padding_left);
+        int toolbarHeight = DimenUtils.getActionbarHeight(context);
+        int aspectRatioLogo = res.getDimensionPixelSize(R.dimen.toolbar_image_logo_aspect_ratio);
+        int height = toolbarHeight - padding;
+        int widthLogo = aspectRatioLogo * height;
+
+        LayoutParams logoParams = new LayoutParams(widthLogo, height);
+        LayoutParams textParams = new LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, toolbarHeight - padding);
+
+        imageText = getToolbarTextImageView();
+        imageLogo = getToolbarLogoImageView();
+
+        addView(imageText, textParams);
+        addView(imageLogo, logoParams);
     }
 
     @Override
@@ -65,33 +77,26 @@ public class CenterToolbar extends Toolbar {
         super.onLayout(changed, l, t, r, b);
 
         int width = DimenUtils.getWindowWidth(getContext());
-        toolbarTv.getLocationInWindow(arr);
-        int targetPos = (width / 2) - (toolbarTv.getWidth() / 2 + arr[0]);
-        toolbarTv.setTranslationX(toolbarTv.getTranslationX() + targetPos);
+        imageText.getLocationInWindow(arr);
+        int targetPos = (width / 2) - (imageText.getWidth() / 2 + arr[0]);
+        imageText.setTranslationX(imageText.getTranslationX() + targetPos);
+
+        imageLogo.getLocationInWindow(arr);
+        targetPos = arr[0];
+        imageLogo.setTranslationX(imageLogo.getTranslationX() - targetPos + paddingLeftLogo);
     }
 
-    public TextView getToolbarTV() {
-        Context context = getContext();
-        Resources.Theme theme = context.getTheme();
-        TextView toolbarTV = new TextView(getContext());
-        toolbarTV.setTextAppearance(R.style.ToolbarText);
+    public ImageView getToolbarTextImageView() {
+        ImageView imageView = new ImageView(getContext());
 
-        String appName = context.getString(R.string.app_name);
-        int appName1Length = context.getString(R.string.app_name1).length();
-        SpannableString toolbarString = new SpannableString(appName);
-        toolbarString.setSpan(
-                new ForegroundColorSpan(getResources()
-                        .getColor(R.color.colorAccent, theme)),
-                0,
-                appName1Length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        toolbarString.setSpan(
-                new ForegroundColorSpan(getResources()
-                        .getColor(R.color.toolbarText2, theme)),
-                appName1Length,
-                appName.length(),
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        toolbarTV.setText(toolbarString);
-        return toolbarTV;
+        imageView.setImageResource(R.drawable.stat_edge);
+        return imageView;
+    }
+
+    public ImageView getToolbarLogoImageView() {
+        ImageView imageView = new ImageView(getContext());
+
+        imageView.setImageResource(R.drawable.stat_edge_logo);
+        return imageView;
     }
 }
