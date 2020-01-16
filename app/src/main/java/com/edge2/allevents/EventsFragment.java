@@ -73,6 +73,8 @@ public class EventsFragment extends Fragment {
     private int appBarOffset;
     private View topView;
     private ArrayList<EventModel> allEventsList;
+    private EventsAdapter eventsAdapter;
+    private QuickItemsAdapter quickAdapter;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -189,28 +191,31 @@ public class EventsFragment extends Fragment {
     }
 
     private void prototype() {
-        allEventsList = new ArrayList<>();
-        String template = context.getString(R.string.num_sub_events);
-        String desc = "Anyone can write code that a computer can understand, but good programmers write code that humans can understand.";
-        for (int j = 0; j < 12; j++) {
-            EventModel event = new EventModel("ComputeAid",
-                    R.drawable.computeaid, 4, template, desc);
-            allEventsList.add(event);
+        if (eventsAdapter == null) {
+            allEventsList = new ArrayList<>();
+            String template = context.getString(R.string.num_sub_events);
+            String desc = "Anyone can write code that a computer can understand, but good programmers write code that humans can understand.";
+            for (int j = 0; j < 12; j++) {
+                EventModel event = new EventModel("ComputeAid",
+                        R.drawable.computeaid, 4, template, desc);
+                allEventsList.add(event);
+            }
+            eventsAdapter = new EventsAdapter(allEventsList, this::onEventClicked);
         }
-        EventsAdapter eventsAdapter = new EventsAdapter(allEventsList, this::onEventClicked);
         mainReycler.setAdapter(eventsAdapter);
 
-
-        ArrayList<QuickItemModel> quickItems = new ArrayList<>();
-        for (int j = 0; j < 5; j++) {
-            QuickItemModel item = new QuickItemModel("Accommodations",
-                    context.getDrawable(R.drawable.quick_accomodation),
-                    "Registrations are now open");
-            quickItems.add(item);
+        if (quickAdapter == null) {
+            ArrayList<QuickItemModel> quickItems = new ArrayList<>();
+            for (int j = 0; j < 5; j++) {
+                QuickItemModel item = new QuickItemModel("Accommodations",
+                        context.getDrawable(R.drawable.quick_accomodation),
+                        "Registrations are now open");
+                quickItems.add(item);
+            }
+            quickAdapter = new QuickItemsAdapter(quickItems,
+                    (position, v1, v2, v3, v4) ->
+                            Logger.log("EventListener", "onQuickClicked: " + position));
         }
-        QuickItemsAdapter quickAdapter = new QuickItemsAdapter(quickItems,
-                (position, v1, v2, v3, v4) ->
-                        Logger.log("EventListener", "onQuickClicked: " + position));
         quickReycler.setAdapter(quickAdapter);
         quickReycler.addItemDecoration(new QuickItemDecorator());
     }
