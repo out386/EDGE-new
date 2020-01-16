@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--Hack to animate the background-->
+    <LinearLayout
+        android:id="@+id/eventdetails_dummy_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/windowBackground"
+        android:orientation="vertical"
+        android:transitionName="@string/sub_to_details_root_transition" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <!--Needed to apply padding for window insets-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/eventdetails_content"
+                android:layout_marginBottom="@dimen/margin_huge"
+                android:layout_below="@+id/divider">
+
+                <TextView
+                    android:id="@+id/eventdetails_contacts"
+                    style="@style/TextBody"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/eventdetails_rules"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    android:foreground="@drawable/card_bg"
+                    android:background="@color/windowBackground"
+                    android:padding="@dimen/margin"
+                    tools:text="Name A: 0123456789" />
+
+                <TextView
+                    android:id="@+id/eventdetails_rules"
+                    style="@style/TextBody"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/eventdetails_long_desc"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    android:foreground="@drawable/card_bg"
+                    android:background="@color/windowBackground"
+                    android:padding="@dimen/margin"
+                    tools:text="@sample/single_event_rules" />
+
+                <TextView
+                    android:id="@+id/eventdetails_long_desc"
+                    style="@style/TextBody"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    android:foreground="@drawable/card_bg"
+                    android:background="@color/windowBackground"
+                    android:padding="@dimen/margin"
+                    tools:text="@sample/details_long_desc" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/eventdetails_top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/windowBackground">
+
+                <ImageView
+                    android:id="@+id/eventdetails_icon"
+                    android:layout_width="@dimen/allevents_main_events_img_header_h"
+                    android:layout_height="@dimen/allevents_main_events_img_header_h"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginTop="@dimen/margin_huge"
+                    android:transitionName="@string/sub_to_details_img_transition"
+                    tools:src="@drawable/event_icon" />
+
+                <TextView
+                    android:id="@+id/eventdetails_name"
+                    style="@style/TextHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/eventdetails_icon"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    android:layout_toEndOf="@id/eventdetails_icon"
+                    android:textSize="20sp"
+                    tools:text="Crypto Quest"
+                    android:transitionName="@string/sub_to_details_name_transition" />
+
+                <TextView
+                    android:id="@+id/eventdetails_short_desc"
+                    style="@style/TextSubLowImp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/eventdetails_name"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginTop="@dimen/margin"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    android:layout_toEndOf="@id/eventdetails_icon"
+                    android:justificationMode="inter_word"
+                    android:transitionName="@string/sub_to_details_desc_transition"
+                    tools:text="@sample/single_event_short_desc" />
+
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="6dp"
+                android:layout_below="@id/eventdetails_top"
+                android:layout_marginTop="@dimen/margin_huge"
+                android:layout_marginBottom="@dimen/margin_huge"
+                android:background="@color/divider" />
+
+
+        </RelativeLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</RelativeLayout>

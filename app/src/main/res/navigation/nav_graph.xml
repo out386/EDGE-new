@@ -25,5 +25,18 @@
         android:id="@+id/subEventsFragment"
         android:name="com.edge2.event.EventFragment"
         android:label="fragment_sub_events"
-        tools:layout="@layout/fragment_event" />
+        tools:layout="@layout/fragment_event" >
+        <action
+            android:id="@+id/action_subEvents_to_eventDetails"
+            app:destination="@id/eventDetailsFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/eventDetailsFragment"
+        android:name="com.edge2.eventdetails.EventDetailsFragment"
+        android:label="fragment_event_details"
+        tools:layout="@layout/fragment_event_details" />
 </navigation>

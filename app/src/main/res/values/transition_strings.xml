@@ -3,4 +3,9 @@
     <string name="events_to_sub_img_transition">eventsToSubImgTransition</string>
     <string name="events_to_sub_name_transition">eventsToSubNameTransition</string>
     <string name="events_to_sub_root_transition">eventsToSubRootTransition</string>
+
+    <string name="sub_to_details_img_transition">subToDetailsImgTransition</string>
+    <string name="sub_to_details_name_transition">subToDetailsNameTransition</string>
+    <string name="sub_to_details_desc_transition">subToDetailsDescTransition</string>
+    <string name="sub_to_details_root_transition">subToDetailsRootTransition</string>
 </resources>

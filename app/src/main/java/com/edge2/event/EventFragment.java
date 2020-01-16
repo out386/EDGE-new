@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.ImageView;
@@ -35,16 +36,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.FragmentNavigator;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.Transition;
-import androidx.transition.TransitionInflater;
 
 import com.bumptech.glide.Glide;
+import com.edge2.MoveTransition;
 import com.edge2.OnFragmentScrollListener;
 import com.edge2.R;
 import com.edge2.event.recycler.EventCategoryAdapter;
 import com.edge2.event.recycler.ItemDecoration;
+import com.edge2.eventdetails.EventDetailsFragment;
 import com.edge2.utils.DimenUtils;
 
 import java.util.ArrayList;
@@ -63,6 +67,7 @@ public class EventFragment extends Fragment {
     private OnSharedElementListener sharedElementListener;
     private Transition transition;
     private boolean isTransitionFinished;
+    private ArrayList<EventCategoryModel> eventList;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -83,8 +88,7 @@ public class EventFragment extends Fragment {
         mainReycler.setHasFixedSize(true);
         mainReycler.setLayoutManager(new LinearLayoutManager(context));
 
-        transition = TransitionInflater.from(context)
-                .inflateTransition(android.R.transition.move);
+        transition = new MoveTransition();
         setSharedElementEnterTransition(transition);
         setSharedElementReturnTransition(transition);
 
@@ -102,14 +106,10 @@ public class EventFragment extends Fragment {
         ImageView image = view.findViewById(R.id.eventcat_icon);
         View dummy = view.findViewById(R.id.eventcat_dummy_bg);
 
-        // The recyclerview is only populated here if the fragment transition animation won't play now
-        if (isTransitionFinished)
-            prototype();
-
         if (sharedElementListener != null) {
             transition.removeListener(sharedElementListener);
         }
-        sharedElementListener = new OnSharedElementListener(dummy, desc, divider, mainReycler);
+        sharedElementListener = new OnSharedElementListener(dummy, desc, divider);
         transition.addListener(sharedElementListener);
 
         setupInsets(view, divider, topView, scrollView);
@@ -168,12 +168,12 @@ public class EventFragment extends Fragment {
                 topView.setLayoutParams(topViewParams);
 
                 // Hide the toolbar
-                //listener.onListScrolled(0, -Integer.MAX_VALUE);
                 listener.onListScrolled(0, Integer.MAX_VALUE);
                 topViewHeight = topView.getHeight() + dividerHeight;
                 startPostponedEnterTransition();
             });
             setupScrollListener(scrollView);
+            setupRecyclerListeners();
             return insets;
         });
 
@@ -183,7 +183,7 @@ public class EventFragment extends Fragment {
     }
 
     private void prototype() {
-        ArrayList<EventCategoryModel> events = new ArrayList<>();
+        eventList = new ArrayList<>();
         for (int j = 0; j < 10; j++) {
             EventCategoryModel event;
             if (j % 2 == 0)
@@ -194,15 +194,36 @@ public class EventFragment extends Fragment {
                 event = new EventCategoryModel("Bug Hunt",
                         R.drawable.event_icon,
                         "Some dummy short description");
-            events.add(event);
+            eventList.add(event);
         }
-        EventCategoryAdapter eventsAdapter = new EventCategoryAdapter(events, this::onEventClicked);
+        EventCategoryAdapter eventsAdapter = new EventCategoryAdapter(eventList, this::onEventClicked);
         mainReycler.setAdapter(eventsAdapter);
         mainReycler.scheduleLayoutAnimation();
     }
 
-    private void onEventClicked(int position, View rootView, View imageView,
-                                View nameView, View countView) {
+    private void onEventClicked(int position, View rootView, View imageView, View nameView,
+                                View descView) {
+
+        EventCategoryModel item = eventList.get(position);
+        Bundle args = new Bundle();
+        args.putString(EventDetailsFragment.KEY_EVENT_NAME, item.getName());
+        args.putString(EventDetailsFragment.KEY_EVENT_DESC, item.getDesc());
+        args.putInt(EventDetailsFragment.KEY_EVENT_IMAGE, item.getIcon());
+
+        // To add more shared views here, call "setTransitionName" in the adapter
+        String transitionImgName = getString(R.string.sub_to_details_img_transition);
+        String transitionNameName = getString(R.string.sub_to_details_name_transition);
+        String transitionDescName = getString(R.string.sub_to_details_desc_transition);
+        String transitionRootName = getString(R.string.sub_to_details_root_transition);
+        FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
+                .addSharedElement(imageView, transitionImgName)
+                .addSharedElement(nameView, transitionNameName)
+                .addSharedElement(descView, transitionDescName)
+                .addSharedElement(rootView, transitionRootName)
+                .build();
+
+        NavHostFragment.findNavController(EventFragment.this)
+                .navigate(R.id.action_subEvents_to_eventDetails, args, null, extras);
     }
 
     private void setupScrollListener(NestedScrollView scrollView) {
@@ -212,26 +233,44 @@ public class EventFragment extends Fragment {
                                 scrollY - oldScrollY, topViewHeight - scrollY));
     }
 
+    private void setupRecyclerListeners() {
+        ViewTreeObserver viewTreeObserver = mainReycler.getViewTreeObserver();
+        viewTreeObserver
+                .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        if (viewTreeObserver.isAlive())
+                            viewTreeObserver.removeOnGlobalLayoutListener(this);
+
+                        // Populating the RecyclerView here, as doing so before layout causes items
+                        // to disappear when returning from the details fragment. That's an issue
+                        // with shared element animations and layout animations
+                        if (isTransitionFinished)
+                            prototype();
+                    }
+                });
+    }
+
     private class OnSharedElementListener implements Transition.TransitionListener {
         private int animTime;
+        private int animOffset;
         private View dummy;
         private View desc;
         private View divider;
-        private View content;
         private Interpolator interpolator;
 
-        OnSharedElementListener(View dummy, View desc, View divider, View content) {
+        OnSharedElementListener(View dummy, View desc, View divider) {
             animTime = getResources().getInteger(android.R.integer.config_mediumAnimTime);
+            animOffset = getResources().getDimensionPixelOffset(R.dimen.item_animate_h_offset);
             this.dummy = dummy;
             this.desc = desc;
             this.divider = divider;
-            this.content = content;
             interpolator = new DecelerateInterpolator();
         }
 
         @Override
         public void onTransitionStart(@NonNull Transition transition) {
-            desc.setTranslationY(-desc.getHeight() / 3);
+            desc.setTranslationY(animOffset);
             desc.setAlpha(0);
             divider.setAlpha(0);
         }
