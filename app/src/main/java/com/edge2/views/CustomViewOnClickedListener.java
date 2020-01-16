@@ -39,18 +39,17 @@ public class CustomViewOnClickedListener {
     }
 
     public void onClick(int position) {
-        onClick(position, null, null,
-                null, null);
+        onClick(position, null, null, null, null, null);
     }
 
     public void onClick(int position, @Nullable View root, @Nullable View view1,
-                        @Nullable View view2, @Nullable View view3) {
+                        @Nullable View view2, @Nullable View view3, @Nullable View view4) {
         // Block double clicks
         if (isNoClickInProgress) {
             isNoClickInProgress = false;
             // Allow view ripple to play before triggering click
             clickHandler.postDelayed(() -> {
-                listener.onClick(position, root, view1, view2, view3);
+                listener.onClick(position, root, view1, view2, view3, view4);
                 isNoClickInProgress = true;
             }, ANIM_DELAY);
         }

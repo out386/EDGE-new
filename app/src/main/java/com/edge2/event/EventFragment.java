@@ -25,7 +25,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.ImageView;
@@ -43,7 +42,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.Transition;
 
 import com.bumptech.glide.Glide;
-import com.edge2.MoveTransition;
+import com.edge2.transitions.MoveTransition;
 import com.edge2.OnFragmentScrollListener;
 import com.edge2.R;
 import com.edge2.event.recycler.EventCategoryAdapter;
@@ -69,6 +68,7 @@ public class EventFragment extends Fragment {
     private Transition transition;
     private boolean isTransitionFinished;
     private ArrayList<EventCategoryModel> eventList;
+    private TextView nameTv;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -88,11 +88,12 @@ public class EventFragment extends Fragment {
         mainReycler = rootView.findViewById(R.id.eventcat_content);
         mainReycler.setHasFixedSize(true);
         mainReycler.setLayoutManager(new LinearLayoutManager(context));
+        nameTv = rootView.findViewById(R.id.eventcat_name);
 
         if (isTransitionFinished)
             prototype();
 
-        transition = new MoveTransition();
+        transition = new MoveTransition(nameTv);
         setSharedElementEnterTransition(transition);
         setSharedElementReturnTransition(transition);
         return rootView;
@@ -105,7 +106,6 @@ public class EventFragment extends Fragment {
         View topView = view.findViewById(R.id.eventcat_top);
         NestedScrollView scrollView = view.findViewById(R.id.scroll_view);
         TextView desc = view.findViewById(R.id.eventcat_desc);
-        TextView name = view.findViewById(R.id.eventcat_name);
         ImageView image = view.findViewById(R.id.eventcat_icon);
         View dummy = view.findViewById(R.id.eventcat_dummy_bg);
 
@@ -116,7 +116,7 @@ public class EventFragment extends Fragment {
         transition.addListener(sharedElementListener);
 
         setupInsets(view, divider, topView, scrollView);
-        setData(name, desc, image);
+        setData(desc, image);
     }
 
     @Override
@@ -132,10 +132,10 @@ public class EventFragment extends Fragment {
             transition.removeListener(sharedElementListener);
     }
 
-    private void setData(TextView name, TextView desc, ImageView image) {
+    private void setData(TextView desc, ImageView image) {
         Bundle args = getArguments();
         if (args != null) {
-            name.setText(args.getString(KEY_CAT_NAME));
+            nameTv.setText(args.getString(KEY_CAT_NAME));
             desc.setText(args.getString(KEY_CAT_DESC));
             Glide.with(image.getContext()).
                     load(args.getInt(KEY_CAT_IMAGE))
@@ -210,7 +210,7 @@ public class EventFragment extends Fragment {
     }
 
     private void onEventClicked(int position, View rootView, View imageView, View nameView,
-                                View descView) {
+                                View descView, View button) {
 
         EventCategoryModel item = eventList.get(position);
         Bundle args = new Bundle();
@@ -223,11 +223,13 @@ public class EventFragment extends Fragment {
         String transitionNameName = getString(R.string.sub_to_details_name_transition);
         String transitionDescName = getString(R.string.sub_to_details_desc_transition);
         String transitionRootName = getString(R.string.sub_to_details_root_transition);
+        String transitionButtonName = getString(R.string.sub_to_details_button_transition);
         FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
                 .addSharedElement(imageView, transitionImgName)
                 .addSharedElement(nameView, transitionNameName)
                 .addSharedElement(descView, transitionDescName)
                 .addSharedElement(rootView, transitionRootName)
+                .addSharedElement(button, transitionButtonName)
                 .build();
 
         NavHostFragment.findNavController(EventFragment.this)

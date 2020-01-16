@@ -8,4 +8,5 @@
     <string name="sub_to_details_name_transition">subToDetailsNameTransition</string>
     <string name="sub_to_details_desc_transition">subToDetailsDescTransition</string>
     <string name="sub_to_details_root_transition">subToDetailsRootTransition</string>
+    <string name="sub_to_details_button_transition">subToDetailsButtonTransition</string>
 </resources>

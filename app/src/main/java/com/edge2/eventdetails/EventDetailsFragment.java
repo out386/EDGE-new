@@ -38,7 +38,7 @@ import androidx.fragment.app.Fragment;
 import androidx.transition.Transition;
 
 import com.bumptech.glide.Glide;
-import com.edge2.MoveTransition;
+import com.edge2.transitions.MoveTransition;
 import com.edge2.OnFragmentScrollListener;
 import com.edge2.R;
 import com.edge2.utils.DimenUtils;
@@ -53,6 +53,7 @@ public class EventDetailsFragment extends Fragment {
     private Context context;
     private OnSharedElementListener sharedElementListener;
     private Transition transition;
+    private TextView nameTv;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -66,8 +67,9 @@ public class EventDetailsFragment extends Fragment {
                              Bundle savedInstanceState) {
         postponeEnterTransition();
         View rootView = inflater.inflate(R.layout.fragment_event_details, container, false);
+        nameTv= rootView.findViewById(R.id.eventdetails_name);
 
-        transition = new MoveTransition();
+        transition = new MoveTransition(nameTv);
         setSharedElementEnterTransition(transition);
         setSharedElementReturnTransition(transition);
 
@@ -81,10 +83,9 @@ public class EventDetailsFragment extends Fragment {
         View topView = view.findViewById(R.id.eventdetails_top);
         View contentView = view.findViewById(R.id.eventdetails_content);
         NestedScrollView scrollView = view.findViewById(R.id.scroll_view);
-        TextView shortDesc = view.findViewById(R.id.eventdetails_short_desc);
-        TextView name = view.findViewById(R.id.eventdetails_name);
         ImageView image = view.findViewById(R.id.eventdetails_icon);
         View dummy = view.findViewById(R.id.eventdetails_dummy_bg);
+        TextView shortDescTv = view.findViewById(R.id.eventdetails_short_desc);
         TextView longDesc = view.findViewById(R.id.eventdetails_long_desc);
         TextView rules = view.findViewById(R.id.eventdetails_rules);
         TextView contacts = view.findViewById(R.id.eventdetails_contacts);
@@ -99,7 +100,7 @@ public class EventDetailsFragment extends Fragment {
         transition.addListener(sharedElementListener);
 
         setupInsets(view, divider, topView, scrollView, contentView);
-        setData(name, shortDesc, image);
+        setData(shortDescTv, image);
     }
 
     @Override
@@ -109,11 +110,11 @@ public class EventDetailsFragment extends Fragment {
             transition.removeListener(sharedElementListener);
     }
 
-    private void setData(TextView name, TextView desc, ImageView image) {
+    private void setData(TextView shortDescTv, ImageView image) {
         Bundle args = getArguments();
         if (args != null) {
-            name.setText(args.getString(KEY_EVENT_NAME));
-            desc.setText(args.getString(KEY_EVENT_DESC));
+            nameTv.setText(args.getString(KEY_EVENT_NAME));
+            shortDescTv.setText(args.getString(KEY_EVENT_DESC));
             Glide.with(image.getContext()).
                     load(args.getInt(KEY_EVENT_IMAGE))
                     .into(image);

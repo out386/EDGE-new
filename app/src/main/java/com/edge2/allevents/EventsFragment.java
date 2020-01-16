@@ -213,7 +213,7 @@ public class EventsFragment extends Fragment {
                 quickItems.add(item);
             }
             quickAdapter = new QuickItemsAdapter(quickItems,
-                    (position, v1, v2, v3, v4) ->
+                    (position, v1, v2, v3, v4, v5) ->
                             Logger.log("EventListener", "onQuickClicked: " + position));
         }
         quickReycler.setAdapter(quickAdapter);
@@ -270,7 +270,7 @@ public class EventsFragment extends Fragment {
     }
 
     private void onEventClicked(int position, View rootView, View imageView,
-                                View nameView, View countView) {
+                                View nameView, View countView, View v5) {
         EventModel item = allEventsList.get(position);
         String transitionImgName = getString(R.string.events_to_sub_img_transition);
         String transitionNameName = getString(R.string.events_to_sub_name_transition);

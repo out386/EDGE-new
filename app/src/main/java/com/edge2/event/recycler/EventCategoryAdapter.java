@@ -62,6 +62,7 @@ public class EventCategoryAdapter extends RecyclerView.Adapter<EventCategoryAdap
         TextView name = holder.eventName;
         TextView desc = holder.eventDesc;
         ImageView imageView = holder.eventIcon;
+        ImageView button = holder.eventButton;
         name.setText(item.getName());
         desc.setText(item.getDesc());
 
@@ -69,16 +70,17 @@ public class EventCategoryAdapter extends RecyclerView.Adapter<EventCategoryAdap
         ViewCompat.setTransitionName(name, "catname" + position);
         ViewCompat.setTransitionName(desc, "catdesc" + position);
         ViewCompat.setTransitionName(root, "catroot" + position);
+        ViewCompat.setTransitionName(button, "catbutton" + position);
 
         Glide.with(imageView.getContext())
                 .load(item.getIcon())
                 .into(imageView);
 
         root.setOnClickListener(view ->
-                listener.onClick(position, root, imageView, name, desc)
+                listener.onClick(position, root, imageView, name, desc, button)
         );
         holder.eventButton.setOnClickListener(view ->
-                listener.onClick(position, root, imageView, name, desc)
+                listener.onClick(position, root, imageView, name, desc, button)
         );
     }
 

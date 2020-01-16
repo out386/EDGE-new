@@ -115,6 +115,14 @@
                     android:transitionName="@string/sub_to_details_desc_transition"
                     tools:text="@sample/single_event_short_desc" />
 
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/transparent"
+                    android:transitionName="@string/sub_to_details_button_transition" />
+
             </RelativeLayout>
 
             <View
