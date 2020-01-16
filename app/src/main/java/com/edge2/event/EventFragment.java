@@ -61,6 +61,7 @@ public class EventFragment extends Fragment {
 
     private OnFragmentScrollListener listener;
     private RecyclerView mainReycler;
+    private EventCategoryAdapter mainAdapter;
     private int topViewHeight;
     private ItemDecoration itemDecoration;
     private Context context;
@@ -88,10 +89,12 @@ public class EventFragment extends Fragment {
         mainReycler.setHasFixedSize(true);
         mainReycler.setLayoutManager(new LinearLayoutManager(context));
 
+        if (isTransitionFinished)
+            prototype();
+
         transition = new MoveTransition();
         setSharedElementEnterTransition(transition);
         setSharedElementReturnTransition(transition);
-
         return rootView;
     }
 
@@ -173,7 +176,6 @@ public class EventFragment extends Fragment {
                 startPostponedEnterTransition();
             });
             setupScrollListener(scrollView);
-            setupRecyclerListeners();
             return insets;
         });
 
@@ -183,21 +185,27 @@ public class EventFragment extends Fragment {
     }
 
     private void prototype() {
-        eventList = new ArrayList<>();
-        for (int j = 0; j < 10; j++) {
-            EventCategoryModel event;
-            if (j % 2 == 0)
-                event = new EventCategoryModel("Crypto Quest",
-                        R.drawable.event_icon,
-                        "Put your cryptography and deciphering skills to the test by proving yourself while solving the clues.");
-            else
-                event = new EventCategoryModel("Bug Hunt",
-                        R.drawable.event_icon,
-                        "Some dummy short description");
-            eventList.add(event);
+        if (mainAdapter == null) {
+            eventList = new ArrayList<>();
+            for (int j = 0; j < 10; j++) {
+                EventCategoryModel event;
+                if (j % 2 == 0)
+                    event = new EventCategoryModel("Crypto Quest",
+                            R.drawable.event_icon,
+                            "Put your cryptography and deciphering skills to the test by proving yourself while solving the clues.");
+                else
+                    event = new EventCategoryModel("Bug Hunt",
+                            R.drawable.event_icon,
+                            "Some dummy short description");
+                eventList.add(event);
+            }
+            mainAdapter = new EventCategoryAdapter(eventList, this::onEventClicked);
         }
-        EventCategoryAdapter eventsAdapter = new EventCategoryAdapter(eventList, this::onEventClicked);
-        mainReycler.setAdapter(eventsAdapter);
+
+        // Only play the animation when this fragment is first started (not on backstack pop)
+        if (isTransitionFinished)
+            mainReycler.setLayoutAnimation(null);
+        mainReycler.setAdapter(mainAdapter);
         mainReycler.scheduleLayoutAnimation();
     }
 
@@ -228,26 +236,8 @@ public class EventFragment extends Fragment {
 
     private void setupScrollListener(NestedScrollView scrollView) {
         scrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener)
-                (v, scrollX, scrollY, oldScrollX, oldScrollY) ->
-                        listener.onListScrolled(
-                                scrollY - oldScrollY, topViewHeight - scrollY));
-    }
-
-    private void setupRecyclerListeners() {
-        ViewTreeObserver viewTreeObserver = mainReycler.getViewTreeObserver();
-        viewTreeObserver
-                .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                        if (viewTreeObserver.isAlive())
-                            viewTreeObserver.removeOnGlobalLayoutListener(this);
-
-                        // Populating the RecyclerView here, as doing so before layout causes items
-                        // to disappear when returning from the details fragment. That's an issue
-                        // with shared element animations and layout animations
-                        if (isTransitionFinished)
-                            prototype();
-                    }
+                (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+                    listener.onListScrolled(scrollY - oldScrollY, topViewHeight - scrollY);
                 });
     }
 
@@ -260,7 +250,7 @@ public class EventFragment extends Fragment {
         private Interpolator interpolator;
 
         OnSharedElementListener(View dummy, View desc, View divider) {
-            animTime = getResources().getInteger(android.R.integer.config_mediumAnimTime);
+            animTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
             animOffset = getResources().getDimensionPixelOffset(R.dimen.item_animate_h_offset);
             this.dummy = dummy;
             this.desc = desc;

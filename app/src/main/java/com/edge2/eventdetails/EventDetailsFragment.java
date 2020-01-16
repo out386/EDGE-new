@@ -180,7 +180,7 @@ public class EventDetailsFragment extends Fragment {
 
         OnSharedElementListener(View dummy, View divider, TextView longDesc,
                                 TextView rules, TextView contacts) {
-            animTime = getResources().getInteger(android.R.integer.config_mediumAnimTime);
+            animTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
             animOffset = getResources().getDimensionPixelOffset(R.dimen.item_animate_h_offset);
             this.dummy = dummy;
             this.divider = divider;
@@ -217,13 +217,13 @@ public class EventDetailsFragment extends Fragment {
             rules.animate()
                     .setDuration(animTime)
                     .setInterpolator(interpolator)
-                    .setStartDelay(150)
+                    .setStartDelay(100)
                     .translationY(0)
                     .alpha(1);
             contacts.animate()
                     .setDuration(animTime)
                     .setInterpolator(interpolator)
-                    .setStartDelay(300)
+                    .setStartDelay(200)
                     .translationY(0)
                     .alpha(1);
 
