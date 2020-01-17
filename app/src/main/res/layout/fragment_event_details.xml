@@ -47,7 +47,7 @@
 
                 <TextView
                     android:id="@+id/eventdetails_rules"
-                    style="@style/TextBody"
+                    style="@style/TextBodyLarge"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_below="@+id/eventdetails_long_desc"
@@ -61,7 +61,7 @@
 
                 <TextView
                     android:id="@+id/eventdetails_long_desc"
-                    style="@style/TextBody"
+                    style="@style/TextBodyLarge"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/margin_large"
@@ -90,20 +90,19 @@
 
                 <TextView
                     android:id="@+id/eventdetails_name"
-                    style="@style/TextHeader"
+                    style="@style/TextHeaderLarge"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@id/eventdetails_icon"
                     android:layout_marginStart="@dimen/margin_large"
                     android:layout_marginEnd="@dimen/margin_large"
                     android:layout_toEndOf="@id/eventdetails_icon"
-                    android:textSize="20sp"
                     tools:text="Crypto Quest"
                     android:transitionName="@string/sub_to_details_name_transition" />
 
                 <TextView
                     android:id="@+id/eventdetails_short_desc"
-                    style="@style/TextSubLowImp"
+                    style="@style/TextBody"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/eventdetails_name"

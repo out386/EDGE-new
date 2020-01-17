@@ -50,20 +50,19 @@
 
                 <TextView
                     android:id="@+id/eventcat_name"
-                    style="@style/TextHeader"
+                    style="@style/TextHeaderLarge"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@id/eventcat_icon"
                     android:layout_marginStart="@dimen/margin_large"
                     android:layout_marginEnd="@dimen/margin_large"
                     android:layout_toEndOf="@id/eventcat_icon"
-                    android:textSize="20sp"
                     android:transitionName="@string/events_to_sub_name_transition"
                     tools:text="ComputeAid" />
 
                 <TextView
                     android:id="@+id/eventcat_desc"
-                    style="@style/TextSubLowImp"
+                    style="@style/TextBody"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/eventcat_name"

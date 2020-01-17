@@ -9,8 +9,8 @@
     <color name="carouselTextHeader">#FFFFFF</color>
     <color name="toolbarText2">#FFFFFF</color>
     <color name="textHeader">#FFFFFF</color>
+    <color name="textBodyLarge">#DFDFDF</color>
     <color name="textSub">#ACACAC</color>
-    <color name="textSubLowImp">#8C8C8C</color>
     <color name="cardStroke">#383838</color>
     <color name="divider">#0BFFFFFF</color>
     <color name="iconFill">#B8B8B8</color>

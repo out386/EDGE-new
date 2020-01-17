@@ -18,28 +18,41 @@
         <item name="itemRippleColor">@null</item>
     </style>
 
-    <style name="TextSmallSub" parent="TextAppearance.AppCompat">
-        <item name="android:fontFamily">@font/open_sans</item>
-        <item name="android:textSize">13sp</item>
+    <style name="TextSmallSub" parent="TextBody">
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="TextBody" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/forum</item>
+        <item name="android:textSize">17sp</item>
         <item name="android:textColor">@color/textSub</item>
+        <item name="android:lineSpacingMultiplier">1.2</item>
     </style>
 
-    <style name="TextSubLowImp" parent="TextSmallSub">
-        <item name="android:textColor">@color/textSubLowImp</item>
-    </style>
-
-    <style name="TextBody" parent="TextSmallSub">
-        <item name="android:textSize">14sp</item>
+    <style name="TextBodyLarge" parent="TextBody">
+        <item name="android:lineSpacingMultiplier">1.5</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/textBodyLarge</item>
     </style>
 
     <style name="TextHeader" parent="TextAppearance.AppCompat">
-        <item name="android:textSize">16sp</item>
-        <item name="android:fontFamily">@font/orkney_medium</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/kontakt</item>
         <item name="android:textColor">@color/textHeader</item>
     </style>
 
-    <style name="QuickItemsTextHeader" parent="TextHeader">
-        <item name="android:textSize">14sp</item>
+    <style name="TextHeaderLarge" parent="TextHeader">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="QuickItemsTextHeader" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">15sp</item>
+        <item name="android:fontFamily">@font/kanit</item>
+        <item name="android:textColor">@color/textHeader</item>
+    </style>
+
+    <style name="QuickItemsTextBody" parent="TextSmallSub">
+        <item name="android:lineSpacingMultiplier">1</item>
     </style>
 
 </resources>
