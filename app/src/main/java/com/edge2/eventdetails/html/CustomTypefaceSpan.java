@@ -1,4 +1,4 @@
-package com.edge2.eventdetails;
+package com.edge2.eventdetails.html;
 
 /*
  * Taken from Benjamin Dobell's answer here: https://stackoverflow.com/a/17961854

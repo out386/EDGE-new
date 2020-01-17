@@ -41,6 +41,10 @@
         <item name="android:textColor">@color/textHeader</item>
     </style>
 
+    <style name="TextHeaderMid" parent="TextHeader">
+        <item name="android:textSize">16sp</item>
+    </style>
+
     <style name="TextHeaderLarge" parent="TextHeader">
         <item name="android:textSize">18sp</item>
     </style>

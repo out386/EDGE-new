@@ -193,7 +193,7 @@ public class EventsFragment extends Fragment {
     private void prototype() {
         if (eventsAdapter == null) {
             allEventsList = new ArrayList<>();
-            String template = context.getString(R.string.num_sub_events);
+            String template = context.getString(R.string.sub_events_num);
             String desc = "Anyone can write code that a computer can understand, but good programmers write code that humans can understand.";
             for (int j = 0; j < 12; j++) {
                 EventModel event = new EventModel("ComputeAid",

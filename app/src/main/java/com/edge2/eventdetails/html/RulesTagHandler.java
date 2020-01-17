@@ -1,4 +1,4 @@
-package com.edge2.eventdetails;
+package com.edge2.eventdetails.html;
 
 /*
  * Taken from Chad Bingham's answer here: https://stackoverflow.com/a/28661338 and adapted
@@ -18,12 +18,12 @@ import androidx.core.content.res.ResourcesCompat;
 
 import org.xml.sax.XMLReader;
 
-class RulesTagHandler implements Html.TagHandler {
+public class RulesTagHandler implements Html.TagHandler {
     private int textSize;
     private int textColour;
     private Typeface typeface;
 
-    RulesTagHandler(Context context, int styleRes) {
+    public RulesTagHandler(Context context, int styleRes) {
         setAttrs(context, styleRes);
     }
 

@@ -11,7 +11,11 @@
     <color name="textHeader">#FFFFFF</color>
     <color name="textBodyLarge">#DFDFDF</color>
     <color name="textSub">#ACACAC</color>
+    <color name="eventDetailsSchedDate">#E53935</color>
+    <color name="eventDetailsSchedTime">#43A047</color>
     <color name="cardStroke">#383838</color>
     <color name="divider">#0BFFFFFF</color>
     <color name="iconFill">#B8B8B8</color>
+    <color name="icCall">#1E88E5</color>
+    <color name="icWhatsapp">#43A047</color>
 </resources>

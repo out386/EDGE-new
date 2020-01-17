@@ -11,10 +11,14 @@
     <color name="toolbarText2">#585858</color>
     <color name="textHeader">#050505</color>
     <color name="textBodyLarge">#050505</color>
-    <color name="textSub">#626262</color>
+    <color name="textSub">#585858</color>
     <color name="iconFill">#141414</color>
     <color name="iconFillRed">#D61A20</color>
+    <color name="eventDetailsSchedDate">#DF2A26</color>
+    <color name="eventDetailsSchedTime">#1A851C</color>
     <color name="cardStroke">#DBDBDB</color>
     <color name="divider">#0B000000</color>
     <color name="rippleColor">#337E7E7E</color>
+    <color name="icCall">#2196F3</color>
+    <color name="icWhatsapp">#4CAF50</color>
 </resources>

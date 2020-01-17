@@ -24,5 +24,6 @@
     <dimen name="allevents_quick_ic_size">60dp</dimen>
     <dimen name="allevents_quick_size_h">250dp</dimen>
     <dimen name="event_cat_events_margin">8dp</dimen>
+    <dimen name="eventdetails_header_img_w_h">70dp</dimen>
     <dimen name="item_animate_h_offset">-20dp</dimen>
 </resources>

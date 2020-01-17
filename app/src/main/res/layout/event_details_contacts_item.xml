@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/contacts_name"
+        style="@style/TextBodyLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Some Name" />
+
+    <TextView
+        android:id="@+id/contacts_number"
+        style="@style/TextSmallSub"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/contacts_name"
+        android:layout_marginTop="@dimen/margin"
+        android:gravity="center_vertical"
+        tools:text="9012345678" />
+
+    <ImageView
+        android:id="@+id/contacts_whatsapp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_whatsapp" />
+
+    <ImageView
+        android:id="@+id/contacts_phone"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="@dimen/margin_huge"
+        android:layout_marginEnd="@dimen/margin_huge"
+        android:layout_toStartOf="@id/contacts_whatsapp"
+        android:src="@drawable/ic_phone" />
+
+    <View
+        android:id="@+id/contacts_divider"
+        android:layout_width="200dp"
+        android:layout_height="1dp"
+        android:layout_below="@id/contacts_number"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/margin_large"
+        android:layout_marginBottom="@dimen/margin_large"
+        android:background="@color/cardStroke"
+        android:visibility="gone" />
+
+</RelativeLayout>

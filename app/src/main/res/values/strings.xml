@@ -10,5 +10,9 @@
     <string name="action_theme_day">Light theme</string>
     <string name="action_theme_battery">Based on battery saver</string>
     <string name="action_theme_system">Based on system theme</string>
-    <string name="num_sub_events">%d event%s</string>
+    <string name="sub_events_num">%d event%s</string>
+    <string name="event_details_overview">Overview</string>
+    <string name="event_details_schedule">Schedule</string>
+    <string name="event_details_rules">Rules</string>
+    <string name="event_details_contacts">Contacts</string>
 </resources>
