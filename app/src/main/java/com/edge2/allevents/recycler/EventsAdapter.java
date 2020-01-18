@@ -64,9 +64,10 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsView
         ImageView imageView = holder.eventImage;
         holder.eventName.setText(item.getName());
         holder.eventSubCount.setText(item.getNumEvents());
-        Glide.with(imageView.getContext())
+        /*Glide.with(imageView.getContext())
                 .load(item.getImage())
-                .into(imageView);
+                .into(imageView);*/
+        imageView.setImageResource(item.getImage());
 
         ViewCompat.setTransitionName(imageView, "img" + position);
         ViewCompat.setTransitionName(name, "name" + position);

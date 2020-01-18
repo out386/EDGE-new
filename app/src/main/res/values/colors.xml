@@ -14,6 +14,8 @@
     <color name="textSub">#585858</color>
     <color name="iconFill">#141414</color>
     <color name="iconFillRed">#D61A20</color>
+    <color name="lIconFillRed">#B4252A</color>
+    <color name="lIconFillRedTransparent">#4DD61A20</color>
     <color name="eventDetailsSchedDate">#DF2A26</color>
     <color name="eventDetailsSchedTime">#1A851C</color>
     <color name="cardStroke">#DBDBDB</color>

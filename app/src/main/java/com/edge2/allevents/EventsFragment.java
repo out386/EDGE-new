@@ -229,20 +229,23 @@ public class EventsFragment extends Fragment {
             String template;
             String desc;
             String name;
-            int iconRes;
+            int iconRes = R.drawable.ic_rrc;
+            int iconRes2 = R.drawable.ic_rrc;
             if (isIntra) {
                 template = context.getString(R.string.sub_events_num);
                 name = "Robotics";
                 desc = "Some (hopefully) long description to fill this space with, but not long enough to overflow on some devices.";
-                iconRes = R.drawable.ic_rrc;
             } else {
                 template = context.getString(R.string.sub_events_num);
                 name = "ComputeAid";
                 desc = "Anyone can write code that a computer can understand, but good programmers write code that humans can understand.";
-                iconRes = R.drawable.computeaid;
             }
             for (int j = 0; j < 12; j++) {
-                EventModel event = new EventModel(name, iconRes, 4, template, desc);
+                EventModel event;
+                if (j % 2 == 0)
+                    event = new EventModel(name, iconRes, 4, template, desc);
+                else
+                    event = new EventModel(name, iconRes2, 4, template, desc);
                 allEventsList.add(event);
             }
             eventsAdapter = new EventsAdapter(allEventsList, this::onEventClicked);

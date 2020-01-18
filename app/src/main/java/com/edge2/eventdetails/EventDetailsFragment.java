@@ -41,7 +41,6 @@ import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.transition.Transition;
 
-import com.bumptech.glide.Glide;
 import com.edge2.OnFragmentScrollListener;
 import com.edge2.R;
 import com.edge2.allevents.EventsFragment;
@@ -127,9 +126,7 @@ public class EventDetailsFragment extends Fragment {
         if (args != null) {
             nameTv.setText(args.getString(KEY_EVENT_NAME));
             shortDescTv.setText(args.getString(KEY_EVENT_DESC));
-            Glide.with(image.getContext()).
-                    load(args.getInt(KEY_EVENT_IMAGE))
-                    .into(image);
+            image.setImageResource(args.getInt(KEY_EVENT_IMAGE));
         }
     }
 

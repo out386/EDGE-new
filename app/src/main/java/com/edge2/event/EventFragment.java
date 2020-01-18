@@ -41,7 +41,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.Transition;
 
-import com.bumptech.glide.Glide;
 import com.edge2.allevents.EventsFragment;
 import com.edge2.transitions.MoveTransition;
 import com.edge2.OnFragmentScrollListener;
@@ -142,9 +141,7 @@ public class EventFragment extends Fragment {
         if (args != null) {
             nameTv.setText(args.getString(KEY_CAT_NAME));
             desc.setText(args.getString(KEY_CAT_DESC));
-            Glide.with(image.getContext()).
-                    load(args.getInt(KEY_CAT_IMAGE))
-                    .into(image);
+            image.setImageResource(args.getInt(KEY_CAT_IMAGE));
         }
     }
 
@@ -196,11 +193,11 @@ public class EventFragment extends Fragment {
                 EventCategoryModel event;
                 if (j % 2 == 0)
                     event = new EventCategoryModel("Crypto Quest",
-                            R.drawable.event_icon,
+                            R.drawable.ic_computeaid,
                             "Put your cryptography and deciphering skills to the test by proving yourself while solving the clues.");
                 else
                     event = new EventCategoryModel("Bug Hunt",
-                            R.drawable.event_icon,
+                            R.drawable.ic_computeaid,
                             "Some dummy short description");
                 eventList.add(event);
             }

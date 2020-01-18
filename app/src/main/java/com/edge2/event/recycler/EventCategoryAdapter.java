@@ -72,10 +72,7 @@ public class EventCategoryAdapter extends RecyclerView.Adapter<EventCategoryAdap
         ViewCompat.setTransitionName(root, "catroot" + position);
         ViewCompat.setTransitionName(button, "catbutton" + position);
 
-        Glide.with(imageView.getContext())
-                .load(item.getIcon())
-                .into(imageView);
-
+        imageView.setImageResource(item.getIcon());
         root.setOnClickListener(view ->
                 listener.onClick(position, root, imageView, name, desc, button)
         );
