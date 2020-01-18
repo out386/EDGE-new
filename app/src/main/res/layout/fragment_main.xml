@@ -17,7 +17,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:id="@+id/top_view">
+            android:id="@+id/top_view_edge"
+            android:visibility="gone"
+            tools:visibility="visible">
 
             <ir.apend.slider.ui.Slider
                 android:id="@+id/top_banner"
@@ -53,6 +55,15 @@
                 android:background="@color/divider" />
 
         </LinearLayout>
+
+        <com.edge2.views.GeneralHeaderView
+            android:id="@+id/top_view_intra"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_intra"
+            app:name="Intra Events"
+            app:desc="Intra College Events"
+            android:visibility="gone"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/main_recycler"

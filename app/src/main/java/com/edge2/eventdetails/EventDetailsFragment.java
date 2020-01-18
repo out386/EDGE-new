@@ -44,6 +44,7 @@ import androidx.transition.Transition;
 import com.bumptech.glide.Glide;
 import com.edge2.OnFragmentScrollListener;
 import com.edge2.R;
+import com.edge2.allevents.EventsFragment;
 import com.edge2.eventdetails.html.RulesTagHandler;
 import com.edge2.eventdetails.html.ScheduleTagHandler;
 import com.edge2.transitions.MoveTransition;
@@ -60,6 +61,7 @@ public class EventDetailsFragment extends Fragment {
     private OnSharedElementListener sharedElementListener;
     private Transition transition;
     private TextView nameTv;
+    private boolean isIntra;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -73,6 +75,9 @@ public class EventDetailsFragment extends Fragment {
                              Bundle savedInstanceState) {
         postponeEnterTransition();
         View rootView = inflater.inflate(R.layout.fragment_event_details, container, false);
+        Bundle args = getArguments();
+        if (args != null)
+            isIntra = args.getBoolean(EventsFragment.KEY_IS_INTRA);
         nameTv = rootView.findViewById(R.id.eventdetails_name);
 
         transition = new MoveTransition(nameTv);

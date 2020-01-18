@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">EDGE \'20</string>
     <string name="app_name1">EDGE</string>
-    <string name="title_home">Home</string>
+    <string name="title_home">EDGE \'20</string>
+    <string name="title_intra">Intra</string>
     <string name="title_sett">Settings</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>

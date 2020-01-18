@@ -60,20 +60,26 @@ import ir.apend.slider.model.Slide;
 import ir.apend.slider.ui.Slider;
 
 public class EventsFragment extends Fragment {
-
+    public static final String KEY_IS_INTRA = "isIntra";
     private static final String KEY_APPBAR_OFFSET = "appBarOffset";
 
     private RecyclerView mainReycler;
+    @Nullable
     private RecyclerView quickReycler;
-    private EventsViewModel viewModel;
+    @Nullable
     private Slider banner;
     private Context context;
     private OnFragmentScrollListener listener;
     private ItemDecoration itemDecoration;
     private int appBarOffset;
-    private View topView;
+    private boolean isIntra;
+    @Nullable
+    private View topViewEdge;
+    @Nullable
+    private View topViewIntra;
     private ArrayList<EventModel> allEventsList;
     private EventsAdapter eventsAdapter;
+    @Nullable
     private QuickItemsAdapter quickAdapter;
 
     @Override
@@ -88,17 +94,30 @@ public class EventsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         postponeEnterTransition();
-
+        Bundle args = getArguments();
+        if (args != null)
+            isIntra = args.getBoolean(KEY_IS_INTRA);
         if (savedInstanceState != null) {
             appBarOffset = savedInstanceState.getInt(KEY_APPBAR_OFFSET);
         }
 
-        topView = rootView.findViewById(R.id.top_view);
+        if (isIntra) {
+            topViewIntra = rootView.findViewById(R.id.top_view_intra);
+            topViewIntra.setVisibility(View.VISIBLE);
+        } else {
+            topViewEdge = rootView.findViewById(R.id.top_view_edge);
+            topViewEdge.setVisibility(View.VISIBLE);
+            banner = rootView.findViewById(R.id.top_banner);
+            banner.setTargetWidth(getResources().getDimensionPixelSize(R.dimen.allevents_banner_w));
+            quickReycler = rootView.findViewById(R.id.quick_recycler);
+            quickReycler.setHasFixedSize(true);
+            RecyclerView.LayoutManager quickLayoutManager = new LinearLayoutManager(
+                    context, RecyclerView.HORIZONTAL, false);
+            quickReycler.setLayoutManager(quickLayoutManager);
+
+        }
         mainReycler = rootView.findViewById(R.id.main_recycler);
-        quickReycler = rootView.findViewById(R.id.quick_recycler);
         new GravitySnapHelper(Gravity.START).attachToRecyclerView(quickReycler);
-        banner = rootView.findViewById(R.id.top_banner);
-        banner.setTargetWidth(getResources().getDimensionPixelSize(R.dimen.allevents_banner_w));
 
         float itemSize = getResources().getDimensionPixelSize(R.dimen.allevents_main_events_img_w) +
                 2 * getResources().getDimension(R.dimen.allevents_main_events_padding_h);
@@ -106,11 +125,6 @@ public class EventsFragment extends Fragment {
         RecyclerView.LayoutManager mainLayoutManager = new GridLayoutManager(context, columnCount);
         mainReycler.setHasFixedSize(true);
         mainReycler.setLayoutManager(mainLayoutManager);
-
-        RecyclerView.LayoutManager quickLayoutManager = new LinearLayoutManager(
-                context, RecyclerView.HORIZONTAL, false);
-        quickReycler.setHasFixedSize(true);
-        quickReycler.setLayoutManager(quickLayoutManager);
 
         // Show the toolbar and bottomnav
         listener.onListScrolled(-1, Integer.MAX_VALUE);
@@ -125,6 +139,14 @@ public class EventsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         NestedScrollView scrollView = view.findViewById(R.id.scroll_view);
+        @NonNull
+        View topView;
+        if (isIntra)
+            //noinspection ConstantConditions
+            topView = topViewIntra;
+        else
+            //noinspection ConstantConditions
+            topView = topViewEdge;
         scrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener)
                 (v, scrollX, scrollY, oldScrollX, oldScrollY) ->
                         listener.onListScrolled(
@@ -140,7 +162,24 @@ public class EventsFragment extends Fragment {
             int bottomInset = insets.getSystemWindowInsetBottom();
 
             mainReycler.setPadding(leftInset, 0, rightInset, 0);
-            quickReycler.setPadding(leftInset, 0, rightInset, 0);
+            @NonNull
+            View topView;
+            if (isIntra) {
+                //noinspection ConstantConditions
+                topView = topViewIntra;
+            } else {
+                //noinspection ConstantConditions
+                quickReycler.setPadding(leftInset, 0, rightInset, 0);
+                //noinspection ConstantConditions
+                topView = topViewEdge;
+            }
+            topView.post(() -> {
+                int toolbarHeight = DimenUtils.getActionbarHeight(context);
+                LinearLayout.LayoutParams topViewParams =
+                        (LinearLayout.LayoutParams) topView.getLayoutParams();
+                topViewParams.topMargin = toolbarHeight + topInset;
+                topView.setLayoutParams(topViewParams);
+            });
 
             if (itemDecoration != null)
                 mainReycler.removeItemDecoration(itemDecoration);
@@ -150,13 +189,7 @@ public class EventsFragment extends Fragment {
                     new ItemDecoration(mainReycler.getLayoutManager(), bottomInset, itemMargins);
             mainReycler.addItemDecoration(itemDecoration);
 
-            topView.post(() -> {
-                int toolbarHeight = DimenUtils.getActionbarHeight(context);
-                LinearLayout.LayoutParams topViewParams =
-                        (LinearLayout.LayoutParams) topView.getLayoutParams();
-                topViewParams.topMargin = toolbarHeight + topInset;
-                topView.setLayoutParams(topViewParams);
-            });
+
             return insets;
         });
 
@@ -193,46 +226,63 @@ public class EventsFragment extends Fragment {
     private void prototype() {
         if (eventsAdapter == null) {
             allEventsList = new ArrayList<>();
-            String template = context.getString(R.string.sub_events_num);
-            String desc = "Anyone can write code that a computer can understand, but good programmers write code that humans can understand.";
+            String template;
+            String desc;
+            String name;
+            int iconRes;
+            if (isIntra) {
+                template = context.getString(R.string.sub_events_num);
+                name = "Robotics";
+                desc = "Some (hopefully) long description to fill this space with, but not long enough to overflow on some devices.";
+                iconRes = R.drawable.ic_rrc;
+            } else {
+                template = context.getString(R.string.sub_events_num);
+                name = "ComputeAid";
+                desc = "Anyone can write code that a computer can understand, but good programmers write code that humans can understand.";
+                iconRes = R.drawable.computeaid;
+            }
             for (int j = 0; j < 12; j++) {
-                EventModel event = new EventModel("ComputeAid",
-                        R.drawable.computeaid, 4, template, desc);
+                EventModel event = new EventModel(name, iconRes, 4, template, desc);
                 allEventsList.add(event);
             }
             eventsAdapter = new EventsAdapter(allEventsList, this::onEventClicked);
         }
         mainReycler.setAdapter(eventsAdapter);
 
-        if (quickAdapter == null) {
-            ArrayList<QuickItemModel> quickItems = new ArrayList<>();
-            for (int j = 0; j < 5; j++) {
-                QuickItemModel item = new QuickItemModel("Accommodations",
-                        context.getDrawable(R.drawable.quick_accomodation),
-                        "Registrations are now open");
-                quickItems.add(item);
+        if (!isIntra) {
+            if (quickAdapter == null) {
+                ArrayList<QuickItemModel> quickItems = new ArrayList<>();
+                for (int j = 0; j < 5; j++) {
+                    QuickItemModel item = new QuickItemModel("Accommodations",
+                            context.getDrawable(R.drawable.quick_accomodation),
+                            "Registrations are now open");
+                    quickItems.add(item);
+                }
+                quickAdapter = new QuickItemsAdapter(quickItems,
+                        (position, v1, v2, v3, v4, v5) ->
+                                Logger.log("EventListener", "onQuickClicked: " + position));
             }
-            quickAdapter = new QuickItemsAdapter(quickItems,
-                    (position, v1, v2, v3, v4, v5) ->
-                            Logger.log("EventListener", "onQuickClicked: " + position));
+            //noinspection ConstantConditions
+            quickReycler.setAdapter(quickAdapter);
+            quickReycler.addItemDecoration(new QuickItemDecorator());
         }
-        quickReycler.setAdapter(quickAdapter);
-        quickReycler.addItemDecoration(new QuickItemDecorator());
     }
 
     private void setupObservers() {
-        OnBannerItemClickedListener bannerListener = new OnBannerItemClickedListener();
-        viewModel = ViewModelProviders.of(this)
-                .get(EventsViewModel.class);
-
-        viewModel.getBanner().observe(this, eventNameModels -> {
-            List<Slide> list = new ArrayList<>(eventNameModels.size());
-            for (int i = 0; i < eventNameModels.size(); i++) {
-                list.add(new Slide(i, eventNameModels.get(i).getImg(), 0));
-            }
-            banner.setItemClickListener(bannerListener);
-            banner.addSlides(list);
-        });
+        if (!isIntra) {
+            OnBannerItemClickedListener bannerListener = new OnBannerItemClickedListener();
+            EventsViewModel viewModel = ViewModelProviders.of(this)
+                    .get(EventsViewModel.class);
+            viewModel.getBanner().observe(this, eventNameModels -> {
+                List<Slide> list = new ArrayList<>(eventNameModels.size());
+                for (int i = 0; i < eventNameModels.size(); i++) {
+                    list.add(new Slide(i, eventNameModels.get(i).getImg(), 0));
+                }
+                //noinspection ConstantConditions
+                banner.setItemClickListener(bannerListener);
+                banner.addSlides(list);
+            });
+        }
     }
 
     private int getRecyclerColumnCount(View parent, View child, float pxWidth) {
@@ -287,6 +337,7 @@ public class EventsFragment extends Fragment {
         args.putString(EventFragment.KEY_CAT_NAME, item.getName());
         args.putString(EventFragment.KEY_CAT_DESC, item.getDesc());
         args.putInt(EventFragment.KEY_CAT_IMAGE, item.getImage());
+        args.putBoolean(KEY_IS_INTRA, isIntra);
 
         NavHostFragment.findNavController(EventsFragment.this)
                 .navigate(R.id.action_events_to_subEvents, args, null, extras);

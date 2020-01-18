@@ -31,6 +31,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.edge2.allevents.EventsFragment;
 import com.edge2.utils.DimenUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -69,9 +70,15 @@ public class MainActivity extends ThemeActivity implements OnFragmentScrollListe
         NavController navController = Navigation.findNavController(this, R.id.content_frame);
         bottomNavAnimator = bottomNav.animate();
         bottomNav.setOnNavigationItemSelectedListener(item -> {
+            Bundle args = new Bundle();
             switch (item.getItemId()) {
                 case R.id.nav_events:
-                    navController.navigate(R.id.events_dest);
+                    args.putBoolean(EventsFragment.KEY_IS_INTRA, false);
+                    navController.navigate(R.id.events_dest, args);
+                    break;
+                case R.id.nav_intra:
+                    args.putBoolean(EventsFragment.KEY_IS_INTRA, true);
+                    navController.navigate(R.id.events_dest, args);
                     break;
                 case R.id.nav_sett:
                     navController.navigate(R.id.placeholder_dest);

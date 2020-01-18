@@ -42,6 +42,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.Transition;
 
 import com.bumptech.glide.Glide;
+import com.edge2.allevents.EventsFragment;
 import com.edge2.transitions.MoveTransition;
 import com.edge2.OnFragmentScrollListener;
 import com.edge2.R;
@@ -69,6 +70,7 @@ public class EventFragment extends Fragment {
     private boolean isTransitionFinished;
     private ArrayList<EventCategoryModel> eventList;
     private TextView nameTv;
+    private boolean isIntra;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -81,6 +83,9 @@ public class EventFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         postponeEnterTransition();
+        Bundle args = getArguments();
+        if (args != null)
+            isIntra = args.getBoolean(EventsFragment.KEY_IS_INTRA);
         if (savedInstanceState != null)
             isTransitionFinished = savedInstanceState.getBoolean(KEY_TRANSITION_FINISHED);
 
@@ -217,6 +222,7 @@ public class EventFragment extends Fragment {
         args.putString(EventDetailsFragment.KEY_EVENT_NAME, item.getName());
         args.putString(EventDetailsFragment.KEY_EVENT_DESC, item.getDesc());
         args.putInt(EventDetailsFragment.KEY_EVENT_IMAGE, item.getIcon());
+        args.putBoolean(EventsFragment.KEY_IS_INTRA, isIntra);
 
         // To add more shared views here, call "setTransitionName" in the adapter
         String transitionImgName = getString(R.string.sub_to_details_img_transition);
