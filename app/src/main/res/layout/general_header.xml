@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/general_img"
+        android:layout_width="@dimen/general_header_img_w"
+        android:layout_height="@dimen/general_header_img_h"
+        android:src="@drawable/intra_header"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/general_icon"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        app:layout_constraintBottom_toTopOf="@+id/general_name"
+        app:layout_constraintEnd_toEndOf="@+id/general_name"
+        app:layout_constraintStart_toStartOf="@+id/general_name"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:src="@drawable/ic_intra" />
+
+    <TextView
+        android:id="@+id/general_name"
+        style="@style/TextHeaderLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin"
+        app:layout_constraintBottom_toTopOf="@+id/general_desc"
+        app:layout_constraintEnd_toEndOf="@+id/general_desc"
+        app:layout_constraintStart_toStartOf="@+id/general_desc"
+        app:layout_constraintTop_toBottomOf="@+id/general_icon"
+        tools:text="Intra Events" />
+
+    <TextView
+        android:id="@+id/general_desc"
+        style="@style/TextSmallSub"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_large"
+        android:layout_marginTop="@dimen/margin"
+        android:gravity="center_horizontal"
+        android:justificationMode="inter_word"
+        app:layout_constraintBottom_toTopOf="@+id/divider"
+        app:layout_constraintEnd_toStartOf="@+id/general_img"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/general_name"
+        tools:text="Intra College Events" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:layout_below="@id/general_img"
+        android:background="@color/divider"
+        app:layout_constraintTop_toBottomOf="@id/general_img" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

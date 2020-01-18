@@ -20,6 +20,7 @@
 
     <style name="TextSmallSub" parent="TextBody">
         <item name="android:textSize">15sp</item>
+        <item name="android:lineSpacingMultiplier">1.0</item>
     </style>
 
     <style name="TextBody" parent="TextAppearance.AppCompat">

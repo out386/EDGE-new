@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="GeneralHeaderView">
+        <attr name="name" format="string" />
+        <attr name="desc" format="string" />
+        <attr name="icon" format="reference" />
+        <attr name="flip" format="boolean" />
+    </declare-styleable>
+</resources>
