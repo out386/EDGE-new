@@ -36,13 +36,19 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import static com.edge2.MainApplication.KEY_THEME_TYPE;
 
-public class ThemeActivity extends AppCompatActivity {
+public abstract class ThemeActivity extends AppCompatActivity {
     private SharedPreferences prefs;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        // Check if theme preferences were changed
+        int mode = prefs.getInt(KEY_THEME_TYPE, Integer.MAX_VALUE);
+        if (mode == Integer.MAX_VALUE)
+            setThemeType(AppCompatDelegate.MODE_NIGHT_YES);
+
         setSystemUIFlags();
     }
 
@@ -132,7 +138,7 @@ public class ThemeActivity extends AppCompatActivity {
     }
 
     private int getThemeAsIndex() {
-        int currentTheme = prefs.getInt(KEY_THEME_TYPE, AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
+        int currentTheme = prefs.getInt(KEY_THEME_TYPE, AppCompatDelegate.MODE_NIGHT_YES);
         switch (currentTheme) {
             case AppCompatDelegate.MODE_NIGHT_NO:
                 return 0;
