@@ -73,14 +73,17 @@ public class MainActivity extends ThemeActivity implements OnFragmentScrollListe
             Bundle args = new Bundle();
             switch (item.getItemId()) {
                 case R.id.nav_events:
+                    navController.popBackStack(R.id.events_dest, true);
                     args.putBoolean(EventsFragment.KEY_IS_INTRA, false);
                     navController.navigate(R.id.events_dest, args);
                     break;
                 case R.id.nav_intra:
+                    navController.popBackStack(R.id.events_dest, true);
                     args.putBoolean(EventsFragment.KEY_IS_INTRA, true);
                     navController.navigate(R.id.events_dest, args);
                     break;
                 case R.id.nav_sett:
+                    navController.popBackStack(R.id.events_dest, true);
                     navController.navigate(R.id.placeholder_dest);
                     break;
             }
