@@ -29,12 +29,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.FragmentNavigator;
 import androidx.navigation.fragment.NavHostFragment;
@@ -42,6 +40,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.edge2.BaseFragment;
 import com.edge2.OnFragmentScrollListener;
 import com.edge2.R;
 import com.edge2.allevents.models.EventModel;
@@ -59,7 +58,7 @@ import java.util.List;
 import ir.apend.slider.model.Slide;
 import ir.apend.slider.ui.Slider;
 
-public class EventsFragment extends Fragment {
+public class EventsFragment extends BaseFragment {
     public static final String KEY_IS_INTRA = "isIntra";
     private static final String KEY_APPBAR_OFFSET = "appBarOffset";
 
@@ -139,64 +138,36 @@ public class EventsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         NestedScrollView scrollView = view.findViewById(R.id.scroll_view);
-        @NonNull
-        View topView;
-        if (isIntra)
-            //noinspection ConstantConditions
-            topView = topViewIntra;
-        else
-            //noinspection ConstantConditions
-            topView = topViewEdge;
-        scrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener)
-                (v, scrollX, scrollY, oldScrollX, oldScrollY) ->
-                        listener.onListScrolled(
-                                scrollY - oldScrollY, topView.getHeight() - scrollY));
-        setupInsets(view);
+        setupInsets(view, scrollView);
     }
 
-    private void setupInsets(View v) {
-        v.setOnApplyWindowInsetsListener((v1, insets) -> {
-            int topInset = insets.getSystemWindowInsetTop();
-            int leftInset = insets.getSystemWindowInsetLeft();
-            int rightInset = insets.getSystemWindowInsetRight();
-            int bottomInset = insets.getSystemWindowInsetBottom();
+    private void setupInsets(View v, NestedScrollView scrollView) {
+        View topView;
+        if (isIntra) {
+            topView = topViewIntra;
+        } else {
+            topView = topViewEdge;
+        }
+        setupWindowInsets(v, mainReycler, topView, true,
+                true, (l, t, r, b) -> {
 
-            mainReycler.setPadding(leftInset, 0, rightInset, 0);
-            @NonNull
-            View topView;
-            if (isIntra) {
-                //noinspection ConstantConditions
-                topView = topViewIntra;
-            } else {
-                //noinspection ConstantConditions
-                quickReycler.setPadding(leftInset, 0, rightInset, 0);
-                //noinspection ConstantConditions
-                topView = topViewEdge;
-            }
-            topView.post(() -> {
-                int toolbarHeight = DimenUtils.getActionbarHeight(context);
-                LinearLayout.LayoutParams topViewParams =
-                        (LinearLayout.LayoutParams) topView.getLayoutParams();
-                topViewParams.topMargin = toolbarHeight + topInset;
-                topView.setLayoutParams(topViewParams);
-            });
+                    if (!isIntra) {
+                        //noinspection ConstantConditions
+                        quickReycler.setPadding(l, 0, r, 0);
+                    }
+                    //noinspection ConstantConditions
+                    topView.post(() -> {
+                        setupScrollListener(scrollView, topView.getHeight());
+                    });
 
-            if (itemDecoration != null)
-                mainReycler.removeItemDecoration(itemDecoration);
-            int itemMargins = context.getResources()
-                    .getDimensionPixelSize(R.dimen.margin_huge);
-            itemDecoration =
-                    new ItemDecoration(mainReycler.getLayoutManager(), bottomInset, itemMargins);
-            mainReycler.addItemDecoration(itemDecoration);
-
-
-            return insets;
-        });
-
-        // Required if other fragments are transacted.
-        // No idea why that makes onApplyWindowInsets never fire.
-        if (v.getRootWindowInsets() != null)
-            v.dispatchApplyWindowInsets(v.getRootWindowInsets());
+                    if (itemDecoration != null)
+                        mainReycler.removeItemDecoration(itemDecoration);
+                    int itemMargins = context.getResources()
+                            .getDimensionPixelSize(R.dimen.margin_huge);
+                    itemDecoration =
+                            new ItemDecoration(mainReycler.getLayoutManager(), b, itemMargins);
+                    mainReycler.addItemDecoration(itemDecoration);
+                });
     }
 
     @Override

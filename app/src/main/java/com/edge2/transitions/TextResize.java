@@ -42,18 +42,14 @@ import androidx.transition.Transition;
 import androidx.transition.TransitionValues;
 
 /**
- * Transitions a TextView from one font size to another. This does not
- * do any animation of TextView content and if the text changes, this
- * transition will not run.
+ * Transitions a TextView from one font size to another. This does not do any animation of TextView
+ * content and if the text changes, this transition will not run.
  * <p>
- * The animation works by capturing a bitmap of the text at the start
- * and end states. It then scales the start bitmap until it reaches
- * a threshold and switches to the scaled end bitmap for the remainder
- * of the animation. This keeps the jump in bitmaps in the middle of
- * the animation, where it is less noticeable than at the beginning
- * or end of the animation. This transition does not work well with
- * cropped text. TextResize also does not work with changes in
- * TextView gravity.
+ * The animation works by capturing a bitmap of the text at the start and end states. It then scales
+ * the start bitmap until it reaches a threshold and switches to the scaled end bitmap for the
+ * remainder of the animation. This keeps the jump in bitmaps in the middle of the animation, where
+ * it is less noticeable than at the beginning or end of the animation. This transition does not
+ * work well with cropped text. TextResize also does not work with changes in TextView gravity.
  */
 public class TextResize extends Transition {
     private static final String FONT_SIZE = "TextResize:fontSize";
@@ -255,8 +251,8 @@ public class TextResize extends Transition {
     }
 
     /**
-     * This Drawable is used to scale the start and end bitmaps and switch between them
-     * at the appropriate progress.
+     * This Drawable is used to scale the start and end bitmaps and switch between them at the
+     * appropriate progress.
      */
     private static class SwitchBitmapDrawable extends Drawable {
         private final TextView view;
@@ -468,10 +464,9 @@ public class TextResize extends Transition {
     }
 
     /**
-     * Contains all the non-font-size data used by the TextResize transition.
-     * None of these values should trigger the transition, so they are not listed
-     * in PROPERTIES. These are captured together to avoid boxing of all the
-     * primitives while adding to TransitionValues.
+     * Contains all the non-font-size data used by the TextResize transition. None of these values
+     * should trigger the transition, so they are not listed in PROPERTIES. These are captured
+     * together to avoid boxing of all the primitives while adding to TransitionValues.
      */
     static class TextResizeData {
         public final int paddingLeft;

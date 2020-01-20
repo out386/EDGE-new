@@ -30,7 +30,6 @@ import androidx.annotation.NonNull;
 import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.edge2.R;
 import com.edge2.allevents.models.EventModel;
 import com.edge2.views.CustomViewOnClickedListener;

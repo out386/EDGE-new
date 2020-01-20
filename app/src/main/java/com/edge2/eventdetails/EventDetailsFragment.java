@@ -38,24 +38,22 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.text.HtmlCompat;
 import androidx.core.widget.NestedScrollView;
-import androidx.fragment.app.Fragment;
 import androidx.transition.Transition;
 
+import com.edge2.BaseFragment;
 import com.edge2.OnFragmentScrollListener;
 import com.edge2.R;
 import com.edge2.allevents.EventsFragment;
 import com.edge2.eventdetails.html.RulesTagHandler;
 import com.edge2.eventdetails.html.ScheduleTagHandler;
 import com.edge2.transitions.MoveTransition;
-import com.edge2.utils.DimenUtils;
 
-public class EventDetailsFragment extends Fragment {
+public class EventDetailsFragment extends BaseFragment {
     public static final String KEY_EVENT_IMAGE = "eventImage";
     public static final String KEY_EVENT_NAME = "eventName";
     public static final String KEY_EVENT_DESC = "eventDesc";
 
     private OnFragmentScrollListener listener;
-    private int topViewHeight;
     private Context context;
     private OnSharedElementListener sharedElementListener;
     private Transition transition;
@@ -132,36 +130,17 @@ public class EventDetailsFragment extends Fragment {
 
     private void setupInsets(View v, View divider, View topView, NestedScrollView scrollView,
                              View content) {
-        v.setOnApplyWindowInsetsListener((v1, insets) -> {
-            int topInset = insets.getSystemWindowInsetTop();
-            int leftInset = insets.getSystemWindowInsetLeft();
-            int rightInset = insets.getSystemWindowInsetRight();
-            int bottomInset = insets.getSystemWindowInsetBottom();
-
-            content.setPadding(leftInset, 0, rightInset, bottomInset);
-
-            topView.post(() -> {
-                RelativeLayout.LayoutParams topViewParams =
-                        (RelativeLayout.LayoutParams) topView.getLayoutParams();
-                int toolbarHeight = DimenUtils.getActionbarHeight(context);
-                int dividerHeight = ((RelativeLayout.LayoutParams) divider.getLayoutParams()).topMargin
-                        + divider.getHeight();
-
-                topViewParams.setMargins(leftInset, toolbarHeight + topInset, rightInset, 0);
-                topView.setLayoutParams(topViewParams);
-
-                // Hide the toolbar
-                listener.onListScrolled(0, Integer.MAX_VALUE);
-                topViewHeight = topView.getHeight() + dividerHeight;
-                startPostponedEnterTransition();
-            });
-            setupScrollListener(scrollView);
-            return insets;
-        });
-
-        // No idea why onApplyWindowInsets never fires without this.
-        if (v.getRootWindowInsets() != null)
-            v.dispatchApplyWindowInsets(v.getRootWindowInsets());
+        // Hide the toolbar
+        listener.onListScrolled(0, Integer.MAX_VALUE);
+        setupWindowInsets(v, content, topView, true, false,
+                (l, t, r, b) -> {
+                    startPostponedEnterTransition();
+                    int dividerHeight = ((RelativeLayout.LayoutParams)
+                            divider.getLayoutParams()).topMargin + divider.getHeight();
+                    topView.post(() ->
+                            setupScrollListener(scrollView,
+                                    topView.getHeight() + dividerHeight));
+                });
     }
 
     private void prototype(TextView longDesc, TextView rules, LinearLayout contacts, TextView schedule) {
@@ -197,13 +176,6 @@ public class EventDetailsFragment extends Fragment {
                 requireContext(), R.color.eventDetailsSchedDate, R.color.eventDetailsSchedTime);
         return HtmlCompat.fromHtml(schedule, HtmlCompat.FROM_HTML_MODE_COMPACT, null,
                 tagHandler);
-    }
-
-    private void setupScrollListener(NestedScrollView scrollView) {
-        scrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener)
-                (v, scrollX, scrollY, oldScrollX, oldScrollY) ->
-                        listener.onListScrolled(
-                                scrollY - oldScrollY, topViewHeight - scrollY));
     }
 
     private class OnSharedElementListener implements Transition.TransitionListener {

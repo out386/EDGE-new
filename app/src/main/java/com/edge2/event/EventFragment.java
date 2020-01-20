@@ -34,25 +34,24 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.FragmentNavigator;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.Transition;
 
-import com.edge2.allevents.EventsFragment;
-import com.edge2.transitions.MoveTransition;
+import com.edge2.BaseFragment;
 import com.edge2.OnFragmentScrollListener;
 import com.edge2.R;
+import com.edge2.allevents.EventsFragment;
 import com.edge2.event.recycler.EventCategoryAdapter;
 import com.edge2.event.recycler.ItemDecoration;
 import com.edge2.eventdetails.EventDetailsFragment;
-import com.edge2.utils.DimenUtils;
+import com.edge2.transitions.MoveTransition;
 
 import java.util.ArrayList;
 
-public class EventFragment extends Fragment {
+public class EventFragment extends BaseFragment {
     private static final String KEY_TRANSITION_FINISHED = "transitionFinished";
     public static final String KEY_CAT_IMAGE = "catImage";
     public static final String KEY_CAT_NAME = "catName";
@@ -61,7 +60,6 @@ public class EventFragment extends Fragment {
     private OnFragmentScrollListener listener;
     private RecyclerView mainReycler;
     private EventCategoryAdapter mainAdapter;
-    private int topViewHeight;
     private ItemDecoration itemDecoration;
     private Context context;
     private OnSharedElementListener sharedElementListener;
@@ -146,44 +144,28 @@ public class EventFragment extends Fragment {
     }
 
     private void setupInsets(View v, View divider, View topView, NestedScrollView scrollView) {
-        v.setOnApplyWindowInsetsListener((v1, insets) -> {
-            int topInset = insets.getSystemWindowInsetTop();
-            int leftInset = insets.getSystemWindowInsetLeft();
-            int rightInset = insets.getSystemWindowInsetRight();
-            int bottomInset = insets.getSystemWindowInsetBottom();
+        // Hide the toolbar
+        listener.onListScrolled(0, Integer.MAX_VALUE);
+        setupWindowInsets(v, mainReycler, topView, false,
+                true, (l, t, r, b) -> {
 
-            mainReycler.setPadding(leftInset, 0, rightInset, 0);
-            int itemMargin = context.getResources()
-                    .getDimensionPixelSize(R.dimen.margin_huge);
-            int itemPadding = context.getResources()
-                    .getDimensionPixelSize(R.dimen.margin_large);
-            if (itemDecoration != null)
-                mainReycler.removeItemDecoration(itemDecoration);
-            itemDecoration = new ItemDecoration(bottomInset, itemMargin - itemPadding);
-            mainReycler.addItemDecoration(itemDecoration);
+                    int itemMargin = context.getResources()
+                            .getDimensionPixelSize(R.dimen.margin_huge);
+                    int itemPadding = context.getResources()
+                            .getDimensionPixelSize(R.dimen.margin_large);
+                    if (itemDecoration != null)
+                        mainReycler.removeItemDecoration(itemDecoration);
+                    itemDecoration = new ItemDecoration(b, itemMargin - itemPadding);
+                    mainReycler.addItemDecoration(itemDecoration);
 
-            topView.post(() -> {
-                RelativeLayout.LayoutParams topViewParams =
-                        (RelativeLayout.LayoutParams) topView.getLayoutParams();
-                int toolbarHeight = DimenUtils.getActionbarHeight(context);
-                int dividerHeight = ((RelativeLayout.LayoutParams) divider.getLayoutParams()).topMargin
-                        + divider.getHeight();
-
-                topViewParams.setMargins(leftInset, toolbarHeight + topInset, rightInset, 0);
-                topView.setLayoutParams(topViewParams);
-
-                // Hide the toolbar
-                listener.onListScrolled(0, Integer.MAX_VALUE);
-                topViewHeight = topView.getHeight() + dividerHeight;
-                startPostponedEnterTransition();
-            });
-            setupScrollListener(scrollView);
-            return insets;
-        });
-
-        // No idea why onApplyWindowInsets never fires without this.
-        if (v.getRootWindowInsets() != null)
-            v.dispatchApplyWindowInsets(v.getRootWindowInsets());
+                    topView.post(() -> {
+                        int dividerHeight = ((RelativeLayout.LayoutParams)
+                                divider.getLayoutParams()).topMargin + divider.getHeight();
+                        setupScrollListener(
+                                scrollView, topView.getHeight() + dividerHeight);
+                        startPostponedEnterTransition();
+                    });
+                });
     }
 
     private void prototype() {
@@ -237,13 +219,6 @@ public class EventFragment extends Fragment {
 
         NavHostFragment.findNavController(EventFragment.this)
                 .navigate(R.id.action_subEvents_to_eventDetails, args, null, extras);
-    }
-
-    private void setupScrollListener(NestedScrollView scrollView) {
-        scrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener)
-                (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-                    listener.onListScrolled(scrollY - oldScrollY, topViewHeight - scrollY);
-                });
     }
 
     private class OnSharedElementListener implements Transition.TransitionListener {
