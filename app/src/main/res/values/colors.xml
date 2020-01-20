@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#FFFFFF</color>
     <color name="colorPrimaryDark">#FFFFFF</color>
-    <color name="colorAccent">#F44336</color>
+    <color name="colorAccent">#D61A20</color>
     <color name="windowBackground">#FFFFFF</color>
     <color name="systemBars">#B3FFFFFF</color>
     <color name="carouselHeroBgOverlayStart">#56000000</color>
@@ -13,6 +13,7 @@
     <color name="textBodyLarge">#050505</color>
     <color name="textSub">#585858</color>
     <color name="iconFill">#141414</color>
+    <color name="windowBackgroundContrast">#E9E9E9</color>
     <color name="iconFillRed">#D61A20</color>
     <color name="lIconFillRed">#B4252A</color>
     <color name="lIconFillRedTransparent">#4DD61A20</color>

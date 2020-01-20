@@ -9,7 +9,7 @@
         android:id="@+id/events_dest"
         android:name="com.edge2.allevents.EventsFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_main" >
+        tools:layout="@layout/fragment_main">
         <action
             android:id="@+id/action_events_to_subEvents"
             app:destination="@id/subEventsFragment"
@@ -19,13 +19,15 @@
             app:popExitAnim="@anim/fade_out" />
     </fragment>
     <fragment
-        android:id="@+id/placeholder_dest"
-        android:name="com.edge2.PlaceholderFragment" />
+        android:id="@+id/settings_dest"
+        android:name="com.edge2.settings.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
     <fragment
         android:id="@+id/subEventsFragment"
         android:name="com.edge2.event.EventFragment"
         android:label="fragment_sub_events"
-        tools:layout="@layout/fragment_event" >
+        tools:layout="@layout/fragment_event">
         <action
             android:id="@+id/action_subEvents_to_eventDetails"
             app:destination="@id/eventDetailsFragment"

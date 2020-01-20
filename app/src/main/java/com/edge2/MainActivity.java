@@ -84,7 +84,7 @@ public class MainActivity extends ThemeActivity implements OnFragmentScrollListe
                     break;
                 case R.id.nav_sett:
                     navController.popBackStack(R.id.events_dest, true);
-                    navController.navigate(R.id.placeholder_dest);
+                    navController.navigate(R.id.settings_dest);
                     break;
             }
             return true;

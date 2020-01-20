@@ -68,7 +68,10 @@ public class GeneralHeaderView extends ConstraintLayout {
         ImageView iconView = findViewById(R.id.general_icon);
 
         nameTv.setText(name);
-        descTv.setText(desc);
+        if (desc == null || desc.isEmpty())
+            descTv.setVisibility(GONE);
+        else
+            descTv.setText(desc);
         iconView.setImageDrawable(icon);
     }
 }

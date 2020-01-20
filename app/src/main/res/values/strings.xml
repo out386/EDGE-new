@@ -4,7 +4,6 @@
     <string name="title_home">EDGE \'20</string>
     <string name="title_intra">Intra</string>
     <string name="title_sett">Settings</string>
-    <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="action_theme">Theme</string>
     <string name="action_theme_night">Dark theme</string>
@@ -16,4 +15,17 @@
     <string name="event_details_schedule">Schedule</string>
     <string name="event_details_rules">Rules</string>
     <string name="event_details_contacts">Contacts</string>
+    <string name="sett_user_ic">User image</string>
+    <string name="sett_sign_in">SIGN IN</string>
+    <string name="sett_not_signed_in">Not signed in</string>
+    <string name="sett_signin_message">Feature will be implemented after the API is done</string>
+    <string name="sett_theme">Change app theme</string>
+    <string name="sett_event_update_notif_title">show update notifications</string>
+    <string name="sett_event_update_notif_desc">Show notifications when details for any event
+        updates
+    </string>
+    <string name="sett_upcoming_notif_title">show event start notifications</string>
+    <string name="sett_upcoming_notif_desc">If you are following any events, show notifications
+        before it starts
+    </string>
 </resources>

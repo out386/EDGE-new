@@ -16,6 +16,7 @@
     <color name="cardStroke">#383838</color>
     <color name="divider">#0BFFFFFF</color>
     <color name="iconFill">#B8B8B8</color>
+    <color name="windowBackgroundContrast">#222222</color>
     <color name="icCall">#1E88E5</color>
     <color name="icWhatsapp">#43A047</color>
 </resources>

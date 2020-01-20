@@ -99,7 +99,7 @@ public abstract class ThemeActivity extends AppCompatActivity {
         return getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
     }
 
-    void showThemeDialog() {
+    public void showThemeDialog() {
         String[] options = new String[3];
         options[0] = getString(R.string.action_theme_day);
         options[1] = getString(R.string.action_theme_night);

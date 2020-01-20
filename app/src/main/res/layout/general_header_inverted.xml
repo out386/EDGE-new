@@ -23,7 +23,8 @@
         app:layout_constraintStart_toStartOf="@+id/general_name"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        tools:src="@drawable/ic_intra" />
+        tools:src="@drawable/ic_intra"
+        android:tint="@color/iconFillRed" />
 
     <TextView
         android:id="@+id/general_name"
