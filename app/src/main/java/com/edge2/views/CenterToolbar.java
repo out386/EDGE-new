@@ -83,7 +83,8 @@ public class CenterToolbar extends Toolbar {
 
         imageLogo.getLocationInWindow(arr);
         targetPos = arr[0];
-        imageLogo.setTranslationX(imageLogo.getTranslationX() - targetPos + paddingLeftLogo);
+        int totalPaddingLeft = paddingLeftLogo + getPaddingLeft();
+        imageLogo.setTranslationX(imageLogo.getTranslationX() - targetPos + totalPaddingLeft);
     }
 
     public ImageView getToolbarTextImageView() {
