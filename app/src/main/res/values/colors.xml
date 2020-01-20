@@ -14,6 +14,7 @@
     <color name="textSub">#585858</color>
     <color name="iconFill">#141414</color>
     <color name="windowBackgroundContrast">#E9E9E9</color>
+    <color name="windowBackgroundTransparent">#4DFFFFFF</color>
     <color name="iconFillRed">#D61A20</color>
     <color name="lIconFillRed">#B4252A</color>
     <color name="lIconFillRedTransparent">#4DD61A20</color>

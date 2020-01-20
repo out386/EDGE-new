@@ -22,21 +22,31 @@ package com.edge2.allevents.models;
 
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.io.Serializable;
 import java.util.Map;
 
-public class BannerItemsModel {
+public class BannerItemsModel implements Serializable {
     private String id;
     private String img;
+    private String name;
+    private String sched;
+    private String desc;
 
     public BannerItemsModel(QueryDocumentSnapshot documentSnapshot) {
         Map<String, Object> data = documentSnapshot.getData();
         id = (String) data.get("id");
         img = (String) data.get("img");
+        name = (String) data.get("name");
+        sched = (String) data.get("sched");
+        desc = (String) data.get("desc");
     }
 
-    public BannerItemsModel(String id, String img) {
+    public BannerItemsModel(String id, String img, String name, String sched, String desc) {
         this.id = id;
         this.img = img;
+        this.name = name;
+        this.sched = sched;
+        this.desc = desc;
     }
 
     public String getId() {
@@ -45,5 +55,17 @@ public class BannerItemsModel {
 
     public String getImg() {
         return img;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getSched() {
+        return sched;
+    }
+
+    public String getDesc() {
+        return desc;
     }
 }

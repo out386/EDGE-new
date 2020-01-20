@@ -17,6 +17,13 @@
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_events_to_genericEvent"
+            app:destination="@id/genericEventFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/settings_dest"
@@ -41,4 +48,9 @@
         android:name="com.edge2.eventdetails.EventDetailsFragment"
         android:label="fragment_event_details"
         tools:layout="@layout/fragment_event_details" />
+    <fragment
+        android:id="@+id/genericEventFragment"
+        android:name="com.edge2.genericevents.GenericEventFragment"
+        android:label="fragment_generic_event"
+        tools:layout="@layout/fragment_generic_event" />
 </navigation>

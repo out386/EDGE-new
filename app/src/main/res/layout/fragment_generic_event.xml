@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <!--Needed to apply padding for window insets-->
+            <LinearLayout
+                android:id="@+id/genericevent_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/divider"
+                android:paddingBottom="@dimen/margin_huge"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/genericevent_overview_header"
+                    style="@style/TextHeaderMid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    android:text="@string/event_details_overview" />
+
+                <TextView
+                    android:id="@+id/genericevent_long_desc"
+                    style="@style/TextBodyLarge"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    android:background="@color/windowBackground"
+                    tools:text="@sample/details_long_desc" />
+
+                <View
+                    android:id="@+id/divider1"
+                    android:layout_width="match_parent"
+                    android:layout_height="6dp"
+                    android:layout_marginTop="@dimen/margin_huge"
+                    android:layout_marginBottom="@dimen/margin_huge"
+                    android:background="@color/divider" />
+
+                <TextView
+                    android:id="@+id/genericevent_schedule_header"
+                    style="@style/TextHeaderMid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    android:background="@color/windowBackground"
+                    android:text="@string/event_details_schedule" />
+
+                <TextView
+                    android:id="@+id/genericevent_schedule"
+                    style="@style/TextBodyLarge"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    tools:text="01/20/20, 10:00pm: some round 1\n02/20/20, 10:00pm: some round 2" />
+
+                <View
+                    android:id="@+id/divider2"
+                    android:layout_width="match_parent"
+                    android:layout_height="6dp"
+                    android:layout_marginTop="@dimen/margin_huge"
+                    android:layout_marginBottom="@dimen/margin_huge"
+                    android:background="@color/divider" />
+
+                <TextView
+                    android:id="@+id/genericevent_contacts_header"
+                    style="@style/TextHeaderMid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    android:background="@color/windowBackground"
+                    android:text="@string/event_details_contacts" />
+
+                <LinearLayout
+                    android:id="@+id/genericevent_contacts"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    android:background="@color/windowBackground"
+                    android:orientation="vertical" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/genericevent_top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/windowBackground"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/genericevent_image_blur"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/allevents_banner_h"
+                        android:layout_marginTop="@dimen/margin_huge"
+                        android:transitionName="@string/sub_to_details_img_transition"
+                        tools:src="@color/colorPrimaryDark"
+                        android:scaleType="fitXY" />
+
+                    <ImageView
+                        android:id="@+id/genericevent_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/allevents_banner_h"
+                        android:layout_marginTop="@dimen/margin_huge"
+                        android:transitionName="@string/sub_to_details_img_transition"
+                        tools:src="@color/colorAccent" />
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/genericevent_name"
+                    style="@style/TextHeaderLarge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_huge"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    android:transitionName="@string/sub_to_details_name_transition"
+                    android:layout_gravity="center_horizontal"
+                    tools:text="EDGE Deeds" />
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="6dp"
+                android:layout_below="@id/genericevent_top"
+                android:layout_marginTop="@dimen/margin_huge"
+                android:layout_marginBottom="@dimen/margin_huge"
+                android:background="@color/divider" />
+
+
+        </RelativeLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</RelativeLayout>

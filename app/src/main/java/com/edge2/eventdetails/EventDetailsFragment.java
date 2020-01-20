@@ -44,9 +44,10 @@ import com.edge2.BaseFragment;
 import com.edge2.OnFragmentScrollListener;
 import com.edge2.R;
 import com.edge2.allevents.EventsFragment;
-import com.edge2.eventdetails.html.RulesTagHandler;
-import com.edge2.eventdetails.html.ScheduleTagHandler;
+import com.edge2.html.RulesTagHandler;
+import com.edge2.html.ScheduleTagHandler;
 import com.edge2.transitions.MoveTransition;
+import com.edge2.views.ContactsView;
 
 public class EventDetailsFragment extends BaseFragment {
     public static final String KEY_EVENT_IMAGE = "eventImage";
@@ -198,7 +199,7 @@ public class EventDetailsFragment extends BaseFragment {
                     schedule, divider2, rulesHeader, rules, divider3, contactsHeader, contacts};
 
             anims = new Animation[4];
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 4; i++) {
                 anims[i] = AnimationUtils.loadAnimation(divider.getContext(),
                         R.anim.view_fall_down);
                 anims[i].setStartOffset(i * 100);
@@ -218,7 +219,7 @@ public class EventDetailsFragment extends BaseFragment {
 
             for (int i = 0; i < allViews.length; i++) {
                 allViews[i].setVisibility(View.VISIBLE);
-                allViews[i].startAnimation(anims[i / 4]);
+                allViews[i].startAnimation(anims[i / 3]);
             }
         }
 

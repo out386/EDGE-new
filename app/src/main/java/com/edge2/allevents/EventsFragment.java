@@ -43,11 +43,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.edge2.BaseFragment;
 import com.edge2.OnFragmentScrollListener;
 import com.edge2.R;
+import com.edge2.allevents.models.BannerItemsModel;
 import com.edge2.allevents.models.EventModel;
 import com.edge2.allevents.models.QuickItemModel;
 import com.edge2.allevents.recycler.EventsAdapter;
 import com.edge2.allevents.recycler.ItemDecoration;
 import com.edge2.event.EventFragment;
+import com.edge2.genericevents.GenericEventFragment;
 import com.edge2.utils.DimenUtils;
 import com.edge2.utils.Logger;
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
@@ -80,6 +82,7 @@ public class EventsFragment extends BaseFragment {
     private EventsAdapter eventsAdapter;
     @Nullable
     private QuickItemsAdapter quickAdapter;
+    private List<BannerItemsModel> bannerItemsModels;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -248,6 +251,7 @@ public class EventsFragment extends BaseFragment {
             EventsViewModel viewModel = ViewModelProviders.of(this)
                     .get(EventsViewModel.class);
             viewModel.getBanner().observe(this, eventNameModels -> {
+                bannerItemsModels = eventNameModels;
                 List<Slide> list = new ArrayList<>(eventNameModels.size());
                 for (int i = 0; i < eventNameModels.size(); i++) {
                     list.add(new Slide(i, eventNameModels.get(i).getImg(), 0));
@@ -271,7 +275,26 @@ public class EventsFragment extends BaseFragment {
     class OnBannerItemClickedListener implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Logger.log("BannerListener", "onItemClick: " + position);
+            if (bannerItemsModels != null) {
+                BannerItemsModel item = bannerItemsModels.get(position);
+                String transitionImgName = getString(R.string.events_to_sub_img_transition);
+                String transitionNameName = getString(R.string.events_to_sub_name_transition);
+                String transitionRootName = getString(R.string.events_to_sub_root_transition);
+
+                // To add more shared views here, call "setTransitionName" in the adapter
+                /*FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
+                        .addSharedElement(imageView, transitionImgName)
+                        .addSharedElement(nameView, transitionNameName)
+                        .addSharedElement(rootView, transitionRootName)
+                        .build();*/
+
+                Bundle args = new Bundle();
+                args.putSerializable(GenericEventFragment.KEY_EVENT_MODEL, item);
+
+                NavHostFragment.findNavController(EventsFragment.this)
+                        .navigate(R.id.action_events_to_genericEvent, args, null, null);
+
+            }
         }
     }
 

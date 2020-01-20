@@ -1,4 +1,4 @@
-package com.edge2.eventdetails;
+package com.edge2.views;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.edge2.R;
 
 @SuppressWarnings("ViewConstructor")
-class ContactsView extends RelativeLayout {
+public class ContactsView extends RelativeLayout {
     private Context context;
     private String name;
     private long number;
