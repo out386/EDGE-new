@@ -29,6 +29,7 @@ import android.view.ViewPropertyAnimator;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 
 import com.edge2.allevents.EventsFragment;
@@ -73,17 +74,17 @@ public class MainActivity extends ThemeActivity implements OnFragmentScrollListe
             Bundle args = new Bundle();
             switch (item.getItemId()) {
                 case R.id.nav_events:
-                    navController.popBackStack(R.id.events_dest, true);
+                    clearBackStack(navController);
                     args.putBoolean(EventsFragment.KEY_IS_INTRA, false);
                     navController.navigate(R.id.events_dest, args);
                     break;
                 case R.id.nav_intra:
-                    navController.popBackStack(R.id.events_dest, true);
+                    clearBackStack(navController);
                     args.putBoolean(EventsFragment.KEY_IS_INTRA, true);
                     navController.navigate(R.id.events_dest, args);
                     break;
                 case R.id.nav_sett:
-                    navController.popBackStack(R.id.events_dest, true);
+                    clearBackStack(navController);
                     navController.navigate(R.id.settings_dest);
                     break;
             }
@@ -92,6 +93,13 @@ public class MainActivity extends ThemeActivity implements OnFragmentScrollListe
         bottomNav.setOnNavigationItemReselectedListener(item -> {
         });
         bottomNav.setItemIconTintList(null);
+    }
+
+    // Don't judge - had no other option.
+    private void clearBackStack(NavController navController) {
+        for (NavDestination navDestination : navController.getGraph()) {
+            navController.popBackStack();
+        }
     }
 
     @Override
