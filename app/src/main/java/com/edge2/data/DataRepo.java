@@ -1,4 +1,4 @@
-package com.edge2.allevents;
+package com.edge2.data;
 
 /*
  * Copyright (C) 2019 Ritayan Chakraborty <ritayanout@gmail.com>
@@ -23,30 +23,25 @@ package com.edge2.allevents;
 import androidx.lifecycle.MutableLiveData;
 
 import com.edge2.allevents.models.BannerItemsModel;
-import com.edge2.utils.Logger;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
-class EventsRepo {
-    private String collection;
+class DataRepo {
     private FirebaseFirestore db;
     private MutableLiveData<List<BannerItemsModel>> eventNamesData;
 
-    EventsRepo(String collection) {
-        this.collection = collection;
+    DataRepo() {
         db = FirebaseFirestore.getInstance();
     }
 
     MutableLiveData<List<BannerItemsModel>> loadBanner() {
-        Logger.log("EventsRepo", "loadBanner");
-
         if (eventNamesData == null)
             eventNamesData = new MutableLiveData<>();
 
-        db.collection(collection)
+        db.collection("banner")
                 .get()
                 .addOnSuccessListener(snapshot -> {
                     List<BannerItemsModel> results = new ArrayList<>();

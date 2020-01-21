@@ -27,7 +27,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 
 import androidx.annotation.NonNull;
@@ -44,10 +43,11 @@ import com.edge2.BaseFragment;
 import com.edge2.OnFragmentScrollListener;
 import com.edge2.R;
 import com.edge2.allevents.models.BannerItemsModel;
-import com.edge2.allevents.models.EventModel;
+import com.edge2.allevents.models.GroupsModel;
 import com.edge2.allevents.models.QuickItemModel;
 import com.edge2.allevents.recycler.EventsAdapter;
 import com.edge2.allevents.recycler.ItemDecoration;
+import com.edge2.data.DataViewModel;
 import com.edge2.event.EventFragment;
 import com.edge2.genericevents.GenericEventFragment;
 import com.edge2.utils.DimenUtils;
@@ -78,7 +78,7 @@ public class EventsFragment extends BaseFragment {
     private View topViewEdge;
     @Nullable
     private View topViewIntra;
-    private ArrayList<EventModel> allEventsList;
+    private List<GroupsModel> allEventsList;
     private EventsAdapter eventsAdapter;
     @Nullable
     private QuickItemsAdapter quickAdapter;
@@ -131,9 +131,7 @@ public class EventsFragment extends BaseFragment {
         // Show the toolbar and bottomnav
         listener.onListScrolled(-1, Integer.MAX_VALUE);
 
-        setupRecyclerListeners();
         setupObservers();
-        prototype();
         return rootView;
     }
 
@@ -161,6 +159,11 @@ public class EventsFragment extends BaseFragment {
                     //noinspection ConstantConditions
                     topView.post(() -> {
                         setupScrollListener(scrollView, topView.getHeight());
+
+                        // Needed because the shared element transition doesn't work on return unless
+                        // postponeEnterTransition() is called. And postponeEnterTransition needs
+                        // a corresponding startPostponedEnterTransition().
+                        startPostponedEnterTransition();
                     });
 
                     if (itemDecoration != null)
@@ -179,50 +182,10 @@ public class EventsFragment extends BaseFragment {
         outState.putInt(KEY_APPBAR_OFFSET, appBarOffset);
     }
 
-    private void setupRecyclerListeners() {
-        // Needed because the shared element transition doesn't work on return unless
-        // postponeEnterTransition() is called. And postponeEnterTransition needs a corresponding
-        // startPostponedEnterTransition()
-        ViewTreeObserver viewTreeObserver = mainReycler.getViewTreeObserver();
-        viewTreeObserver
-                .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                        if (mainReycler.getMeasuredWidth() > 0 && mainReycler.getMeasuredHeight() > 0) {
-                            if (viewTreeObserver.isAlive())
-                                viewTreeObserver.removeOnGlobalLayoutListener(this);
-                            startPostponedEnterTransition();
-                        }
-                    }
-                });
-    }
-
-    private void prototype() {
+    private void showData(List<GroupsModel> events) {
         if (eventsAdapter == null) {
-            allEventsList = new ArrayList<>();
-            String template;
-            String desc;
-            String name;
-            int iconRes = R.drawable.ic_rrc;
-            int iconRes2 = R.drawable.ic_rrc;
-            if (isIntra) {
-                template = context.getString(R.string.sub_events_num);
-                name = "Robotics";
-                desc = "Some (hopefully) long description to fill this space with, but not long enough to overflow on some devices.";
-            } else {
-                template = context.getString(R.string.sub_events_num);
-                name = "ComputeAid";
-                desc = "Anyone can write code that a computer can understand, but good programmers write code that humans can understand.";
-            }
-            for (int j = 0; j < 12; j++) {
-                EventModel event;
-                if (j % 2 == 0)
-                    event = new EventModel(name, iconRes, 4, template, desc);
-                else
-                    event = new EventModel(name, iconRes2, 4, template, desc);
-                allEventsList.add(event);
-            }
-            eventsAdapter = new EventsAdapter(allEventsList, this::onEventClicked);
+            allEventsList = events;
+            eventsAdapter = new EventsAdapter(allEventsList, isIntra, this::onEventClicked);
         }
         mainReycler.setAdapter(eventsAdapter);
 
@@ -246,10 +209,10 @@ public class EventsFragment extends BaseFragment {
     }
 
     private void setupObservers() {
+        DataViewModel viewModel = ViewModelProviders.of(this)
+                .get(DataViewModel.class);
         if (!isIntra) {
             OnBannerItemClickedListener bannerListener = new OnBannerItemClickedListener();
-            EventsViewModel viewModel = ViewModelProviders.of(this)
-                    .get(EventsViewModel.class);
             viewModel.getBanner().observe(this, eventNameModels -> {
                 bannerItemsModels = eventNameModels;
                 List<Slide> list = new ArrayList<>(eventNameModels.size());
@@ -261,6 +224,7 @@ public class EventsFragment extends BaseFragment {
                 banner.addSlides(list);
             });
         }
+        viewModel.getGroups(isIntra).observe(this, this::showData);
     }
 
     private int getRecyclerColumnCount(View parent, View child, float pxWidth) {
@@ -318,7 +282,7 @@ public class EventsFragment extends BaseFragment {
 
     private void onEventClicked(int position, View rootView, View imageView,
                                 View nameView, View countView, View v5) {
-        EventModel item = allEventsList.get(position);
+        GroupsModel item = allEventsList.get(position);
         String transitionImgName = getString(R.string.events_to_sub_img_transition);
         String transitionNameName = getString(R.string.events_to_sub_name_transition);
         String transitionRootName = getString(R.string.events_to_sub_root_transition);

@@ -20,9 +20,6 @@ package com.edge2.genericevents.models;
  *
  */
 
-import androidx.annotation.DrawableRes;
-
-import java.util.List;
 import java.util.Map;
 
 public class GenericEventModel {

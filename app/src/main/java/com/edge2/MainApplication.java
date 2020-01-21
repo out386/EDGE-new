@@ -20,19 +20,25 @@ package com.edge2;
  *
  */
 
+import android.annotation.SuppressLint;
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.PreferenceManager;
 
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatDelegate;
 
 public class MainApplication extends Application {
     static final String KEY_THEME_TYPE = "themeSetting";
+    @SuppressLint("StaticFieldLeak")
+    private static Context context;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        context = this;
 
         int theme;
         if (Build.VERSION.SDK_INT > 28)
@@ -44,6 +50,15 @@ public class MainApplication extends Application {
         theme = prefs.getInt(KEY_THEME_TYPE, theme);
 
         AppCompatDelegate.setDefaultNightMode(theme);
+    }
+
+    public static String getResString(@StringRes int id) {
+        return context.getString(id);
+    }
+
+    public static int getIdForDrawable(String name) {
+        return context
+                .getResources().getIdentifier(name, "drawable", context.getPackageName());
     }
 }
 

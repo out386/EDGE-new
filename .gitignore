@@ -13,8 +13,8 @@
 bin/
 gen/
 out/
-app/release
-
+app/release/
+app/debug/
 # Gradle files
 .gradle/
 build/
@@ -48,3 +48,5 @@ google-services.json
 freeline.py
 freeline/
 freeline_project_description.json
+
+*.jks

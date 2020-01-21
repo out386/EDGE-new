@@ -1,7 +1,7 @@
-package com.edge2.allevents;
+package com.edge2.data;
 
 /*
- * Copyright (C) 2019 Ritayan Chakraborty <ritayanout@gmail.com>
+ * Copyright (C) 2020 Ritayan Chakraborty <ritayanout@gmail.com>
  *
  * This file is part of EDGE-new
  *
@@ -21,18 +21,18 @@ package com.edge2.allevents;
  */
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModel;
+import androidx.room.Dao;
+import androidx.room.Query;
 
-import com.edge2.allevents.models.BannerItemsModel;
+import com.edge2.allevents.models.GroupsModel;
 
 import java.util.List;
 
-public class EventsViewModel extends ViewModel {
-    private EventsRepo bannerData;
+@Dao
+public interface RunningOutOfNamesDao {
+    @Query("select * from Groups where countEventsEdge > 0")
+    LiveData<List<GroupsModel>> getGroupsEdge();
 
-    LiveData<List<BannerItemsModel>> getBanner() {
-        if (bannerData == null)
-            bannerData = new EventsRepo("banner");
-        return bannerData.loadBanner();
-    }
+    @Query("select * from Groups where countEventsIntra > 0")
+    LiveData<List<GroupsModel>> getGroupsIntra();
 }

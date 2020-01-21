@@ -31,18 +31,20 @@ import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.edge2.R;
-import com.edge2.allevents.models.EventModel;
+import com.edge2.allevents.models.GroupsModel;
 import com.edge2.views.CustomViewOnClickedListener;
 import com.edge2.views.OnClickListener;
 
 import java.util.List;
 
 public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsViewHolder> {
-    private List<EventModel> items;
+    private List<GroupsModel> items;
+    private boolean isIntra;
     private CustomViewOnClickedListener listener;
 
-    public EventsAdapter(List<EventModel> items, @NonNull OnClickListener listener) {
+    public EventsAdapter(List<GroupsModel> items, boolean isIntra, @NonNull OnClickListener listener) {
         this.items = items;
+        this.isIntra = isIntra;
         this.listener = new CustomViewOnClickedListener(listener);
     }
 
@@ -56,16 +58,14 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsView
 
     @Override
     public void onBindViewHolder(@NonNull EventsViewHolder holder, int position) {
-        EventModel item = items.get(position);
+        GroupsModel item = items.get(position);
         View root = holder.rootView;
         TextView name = holder.eventName;
         TextView count = holder.eventSubCount;
         ImageView imageView = holder.eventImage;
         holder.eventName.setText(item.getName());
-        holder.eventSubCount.setText(item.getNumEvents());
-        /*Glide.with(imageView.getContext())
-                .load(item.getImage())
-                .into(imageView);*/
+        String countStr = isIntra ? item.getNumEventsIntra() : item.getNumEventsEdge();
+        holder.eventSubCount.setText(countStr);
         imageView.setImageResource(item.getImage());
 
         ViewCompat.setTransitionName(imageView, "img" + position);
