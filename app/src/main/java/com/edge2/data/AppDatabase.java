@@ -30,7 +30,8 @@ import com.edge2.allevents.models.GroupsModel;
 import com.edge2.event.EventCategoryModel;
 import com.edge2.eventdetails.models.EventDetailsModel;
 
-@Database(entities = {GroupsModel.class, EventCategoryModel.class, EventDetailsModel.class}, version = 1)
+@Database(entities = {GroupsModel.class, EventCategoryModel.class, EventDetailsModel.class},
+        exportSchema = false, version = 1)
 abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase appDatabase;
 
