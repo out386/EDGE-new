@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "62f197645ebe976ada4f81cc57bdcf2c",
+    "identityHash": "6340ae3e0f7535f83c5950cce2acd027",
     "entities": [
       {
         "tableName": "Groups",
@@ -47,12 +47,62 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "EventCategories",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name` TEXT NOT NULL, `groupName` TEXT, `desc` TEXT, `iconName` TEXT, `isInEdge` INTEGER NOT NULL, `isInIntra` INTEGER NOT NULL, PRIMARY KEY(`name`))",
+        "fields": [
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "groupName",
+            "columnName": "groupName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "desc",
+            "columnName": "desc",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "iconName",
+            "columnName": "iconName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isInEdge",
+            "columnName": "isInEdge",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isInIntra",
+            "columnName": "isInIntra",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "name"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '62f197645ebe976ada4f81cc57bdcf2c')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6340ae3e0f7535f83c5950cce2acd027')"
     ]
   }
 }

@@ -34,6 +34,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.FragmentNavigator;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -44,15 +45,15 @@ import com.edge2.BaseFragment;
 import com.edge2.OnFragmentScrollListener;
 import com.edge2.R;
 import com.edge2.allevents.EventsFragment;
+import com.edge2.data.DataViewModel;
 import com.edge2.event.recycler.EventCategoryAdapter;
 import com.edge2.event.recycler.ItemDecoration;
 import com.edge2.eventdetails.EventDetailsFragment;
 import com.edge2.transitions.MoveTransition;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class EventFragment extends BaseFragment {
-    private static final String KEY_TRANSITION_FINISHED = "transitionFinished";
     public static final String KEY_CAT_IMAGE = "catImage";
     public static final String KEY_CAT_NAME = "catName";
     public static final String KEY_CAT_DESC = "catDesc";
@@ -65,9 +66,10 @@ public class EventFragment extends BaseFragment {
     private OnSharedElementListener sharedElementListener;
     private Transition transition;
     private boolean isTransitionFinished;
-    private ArrayList<EventCategoryModel> eventList;
+    private List<EventCategoryModel> categoriesList;
     private TextView nameTv;
     private boolean isIntra;
+    private String groupName;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -84,16 +86,13 @@ public class EventFragment extends BaseFragment {
         if (args != null)
             isIntra = args.getBoolean(EventsFragment.KEY_IS_INTRA);
         if (savedInstanceState != null)
-            isTransitionFinished = savedInstanceState.getBoolean(KEY_TRANSITION_FINISHED);
+            isTransitionFinished = true; // The forward transition anim only runs when the fragment is first created
 
         View rootView = inflater.inflate(R.layout.fragment_event, container, false);
         mainReycler = rootView.findViewById(R.id.eventcat_content);
         mainReycler.setHasFixedSize(true);
         mainReycler.setLayoutManager(new LinearLayoutManager(context));
         nameTv = rootView.findViewById(R.id.eventcat_name);
-
-        if (isTransitionFinished)
-            prototype();
 
         transition = new MoveTransition(nameTv);
         setSharedElementEnterTransition(transition);
@@ -118,13 +117,10 @@ public class EventFragment extends BaseFragment {
         transition.addListener(sharedElementListener);
 
         setupInsets(view, divider, topView, scrollView);
-        setData(desc, image);
-    }
+        setGroupData(desc, image);
 
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean(KEY_TRANSITION_FINISHED, isTransitionFinished);
+        if (isTransitionFinished)
+            setData();
     }
 
     @Override
@@ -134,10 +130,11 @@ public class EventFragment extends BaseFragment {
             transition.removeListener(sharedElementListener);
     }
 
-    private void setData(TextView desc, ImageView image) {
+    private void setGroupData(TextView desc, ImageView image) {
         Bundle args = getArguments();
         if (args != null) {
-            nameTv.setText(args.getString(KEY_CAT_NAME));
+            groupName = args.getString(KEY_CAT_NAME);
+            nameTv.setText(groupName);
             desc.setText(args.getString(KEY_CAT_DESC));
             image.setImageResource(args.getInt(KEY_CAT_IMAGE));
         }
@@ -168,35 +165,32 @@ public class EventFragment extends BaseFragment {
                 });
     }
 
-    private void prototype() {
+    private void setData() {
         if (mainAdapter == null) {
-            eventList = new ArrayList<>();
-            for (int j = 0; j < 10; j++) {
-                EventCategoryModel event;
-                if (j % 2 == 0)
-                    event = new EventCategoryModel("Crypto Quest",
-                            R.drawable.ic_computeaid,
-                            "Put your cryptography and deciphering skills to the test by proving yourself while solving the clues.");
-                else
-                    event = new EventCategoryModel("Bug Hunt",
-                            R.drawable.ic_computeaid,
-                            "Some dummy short description");
-                eventList.add(event);
-            }
-            mainAdapter = new EventCategoryAdapter(eventList, this::onEventClicked);
+            DataViewModel viewModel = ViewModelProviders.of(this)
+                    .get(DataViewModel.class);
+            viewModel.getCategories(isIntra, groupName).observe(this, categories -> {
+                categoriesList = categories;
+                mainAdapter = new EventCategoryAdapter(categories, this::onEventClicked);
+                // Only play the animation when this fragment is first started (not on backstack pop)
+                if (isTransitionFinished)
+                    mainReycler.setLayoutAnimation(null);
+                mainReycler.setAdapter(mainAdapter);
+                mainReycler.scheduleLayoutAnimation();
+            });
+        } else {
+            // Only play the animation when this fragment is first started (not on backstack pop)
+            if (isTransitionFinished)
+                mainReycler.setLayoutAnimation(null);
+            mainReycler.setAdapter(mainAdapter);
+            mainReycler.scheduleLayoutAnimation();
         }
-
-        // Only play the animation when this fragment is first started (not on backstack pop)
-        if (isTransitionFinished)
-            mainReycler.setLayoutAnimation(null);
-        mainReycler.setAdapter(mainAdapter);
-        mainReycler.scheduleLayoutAnimation();
     }
 
     private void onEventClicked(int position, View rootView, View imageView, View nameView,
                                 View descView, View button) {
 
-        EventCategoryModel item = eventList.get(position);
+        EventCategoryModel item = categoriesList.get(position);
         Bundle args = new Bundle();
         args.putString(EventDetailsFragment.KEY_EVENT_NAME, item.getName());
         args.putString(EventDetailsFragment.KEY_EVENT_DESC, item.getDesc());
@@ -259,7 +253,7 @@ public class EventFragment extends BaseFragment {
                     .alpha(1);
 
             // The recyclerview is populated here, so that the item animation plays after the transition
-            prototype();
+            setData();
             isTransitionFinished = true;
         }
 

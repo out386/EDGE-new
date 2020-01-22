@@ -21,18 +21,38 @@ package com.edge2.event;
  */
 
 import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
+import com.edge2.MainApplication;
+
+@Entity(tableName = "EventCategories")
 public class EventCategoryModel {
-    private String name;
-    private int icon;
-    private String desc;
+    @PrimaryKey
+    @NonNull
+    public String name;
+    public String groupName;
+    @Ignore
+    @DrawableRes
+    public int icon;
+    public String desc;
+    public String iconName;
+    public boolean isInEdge;
+    public boolean isInIntra;
 
-    EventCategoryModel(String name, @DrawableRes int icon, String desc) {
+    public EventCategoryModel(@NonNull String name, String groupName, String iconName, String desc,
+                              boolean isInEdge, boolean isInIntra) {
         this.name = name;
-        this.icon = icon;
+        this.groupName = groupName;
+        this.icon = MainApplication.getIdForDrawable(iconName);
         this.desc = desc;
+        this.isInEdge = isInEdge;
+        this.isInIntra = isInIntra;
     }
 
+    @NonNull
     public String getName() {
         return name;
     }

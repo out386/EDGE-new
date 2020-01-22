@@ -28,6 +28,7 @@ import androidx.lifecycle.LiveData;
 
 import com.edge2.allevents.models.BannerItemsModel;
 import com.edge2.allevents.models.GroupsModel;
+import com.edge2.event.EventCategoryModel;
 
 import java.util.List;
 
@@ -51,5 +52,13 @@ public class DataViewModel extends AndroidViewModel {
             return dao.getGroupsIntra();
         else
             return dao.getGroupsEdge();
+    }
+
+    public LiveData<List<EventCategoryModel>> getCategories(boolean isIntra, String groupName) {
+        RunningOutOfNamesDao dao = AppDatabase.getDatabase(context).getDao();
+        if (isIntra)
+            return dao.getCategoriesIntra(groupName);
+        else
+            return dao.getCategoriesEdge(groupName);
     }
 }

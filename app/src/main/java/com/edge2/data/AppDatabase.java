@@ -27,8 +27,9 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import com.edge2.allevents.models.GroupsModel;
+import com.edge2.event.EventCategoryModel;
 
-@Database(entities = {GroupsModel.class}, version = 1)
+@Database(entities = {GroupsModel.class, EventCategoryModel.class}, version = 1)
 abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase appDatabase;
 

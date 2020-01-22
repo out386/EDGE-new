@@ -25,14 +25,21 @@ import androidx.room.Dao;
 import androidx.room.Query;
 
 import com.edge2.allevents.models.GroupsModel;
+import com.edge2.event.EventCategoryModel;
 
 import java.util.List;
 
 @Dao
 public interface RunningOutOfNamesDao {
-    @Query("select * from Groups where countEventsEdge > 0")
+    @Query("SELECT * FROM Groups WHERE countEventsEdge > 0")
     LiveData<List<GroupsModel>> getGroupsEdge();
 
-    @Query("select * from Groups where countEventsIntra > 0")
+    @Query("SELECT * FROM Groups WHERE countEventsIntra > 0")
     LiveData<List<GroupsModel>> getGroupsIntra();
+
+    @Query("SELECT * FROM EventCategories WHERE groupName = :groupName AND isInEdge = 1")
+    LiveData<List<EventCategoryModel>> getCategoriesEdge(String groupName);
+
+    @Query("SELECT * FROM EventCategories WHERE groupName = :groupName AND isInIntra = 1")
+    LiveData<List<EventCategoryModel>> getCategoriesIntra(String groupName);
 }
