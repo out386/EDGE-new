@@ -143,6 +143,8 @@ public class EventFragment extends BaseFragment {
     private void setupInsets(View v, View divider, View topView, NestedScrollView scrollView) {
         // Hide the toolbar
         listener.onListScrolled(0, Integer.MAX_VALUE);
+        mainReycler.postDelayed(this::startPostponedEnterTransition, 150);
+
         setupWindowInsets(v, mainReycler, topView, false,
                 true, (l, t, r, b) -> {
 
@@ -160,7 +162,6 @@ public class EventFragment extends BaseFragment {
                                 divider.getLayoutParams()).topMargin + divider.getHeight();
                         setupScrollListener(
                                 scrollView, topView.getHeight() + dividerHeight);
-                        startPostponedEnterTransition();
                     });
                 });
     }

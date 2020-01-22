@@ -159,11 +159,6 @@ public class EventsFragment extends BaseFragment {
                     //noinspection ConstantConditions
                     topView.post(() -> {
                         setupScrollListener(scrollView, topView.getHeight());
-
-                        // Needed because the shared element transition doesn't work on return unless
-                        // postponeEnterTransition() is called. And postponeEnterTransition needs
-                        // a corresponding startPostponedEnterTransition().
-                        startPostponedEnterTransition();
                     });
 
                     if (itemDecoration != null)
@@ -174,6 +169,11 @@ public class EventsFragment extends BaseFragment {
                             new ItemDecoration(mainReycler.getLayoutManager(), b, itemMargins);
                     mainReycler.addItemDecoration(itemDecoration);
                 });
+
+        // Needed because the shared element transition doesn't work on return unless
+        // postponeEnterTransition() is called. And postponeEnterTransition needs
+        // a corresponding startPostponedEnterTransition().
+        mainReycler.postDelayed(this::startPostponedEnterTransition, 150);
     }
 
     @Override
