@@ -35,9 +35,9 @@ public class RulesTagHandler implements Html.TagHandler {
                 start(output, new ColourTag());
                 start(output, new FontTag());
             } else {
-                end(output, ColourTag.class, new ForegroundColorSpan(textColour));
-                end(output, SizeTag.class, new AbsoluteSizeSpan(textSize));
-                end(output, FontTag.class, new CustomTypefaceSpan(typeface));
+                end(output, ColourTag.class, new ForegroundColorSpan(textColour), false);
+                end(output, SizeTag.class, new AbsoluteSizeSpan(textSize), false);
+                end(output, FontTag.class, new CustomTypefaceSpan(typeface), true);
             }
         }
     }
@@ -64,12 +64,19 @@ public class RulesTagHandler implements Html.TagHandler {
     }
 
     // This method was copied from android.text.Html
-    private void end(Editable text, Class kind, Object repl) {
+    private void end(Editable text, Class kind, Object repl, boolean insertSpace) {
         Object obj = getLast(text, kind);
         if (obj != null) {
             int where = text.getSpanStart(obj);
             text.removeSpan(obj);
             int len = text.length();
+            if (insertSpace) {
+                text.insert(where, "\n");
+                len++;
+                where++;
+                text.insert(len, "\n");
+            }
+
             if (where != len) {
                 text.setSpan(repl, where, len, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
