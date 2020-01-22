@@ -29,7 +29,7 @@ public class RulesTagHandler implements Html.TagHandler {
 
     @Override
     public void handleTag(boolean opening, String tag, Editable output, XMLReader xmlReader) {
-        if (tag.equals("he3")) {
+        if (tag.equals("h")) {
             if (opening) {
                 start(output, new SizeTag());
                 start(output, new ColourTag());

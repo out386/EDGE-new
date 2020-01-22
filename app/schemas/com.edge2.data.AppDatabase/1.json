@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "6340ae3e0f7535f83c5950cce2acd027",
+    "identityHash": "f9142407818121b5c4904b8b0043f97e",
     "entities": [
       {
         "tableName": "Groups",
@@ -97,12 +97,98 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "EventDetails",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name` TEXT NOT NULL, `longDesc` TEXT, `rules` TEXT, `schedule` TEXT, `cN1` TEXT, `cNo1` INTEGER NOT NULL, `cN2` TEXT, `cNo2` INTEGER NOT NULL, `cN3` TEXT, `cNo3` INTEGER NOT NULL, `cN4` TEXT, `cNo4` INTEGER NOT NULL, PRIMARY KEY(`name`))",
+        "fields": [
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "longDesc",
+            "columnName": "longDesc",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "rules",
+            "columnName": "rules",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "schedule",
+            "columnName": "schedule",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "cN1",
+            "columnName": "cN1",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "cNo1",
+            "columnName": "cNo1",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cN2",
+            "columnName": "cN2",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "cNo2",
+            "columnName": "cNo2",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cN3",
+            "columnName": "cN3",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "cNo3",
+            "columnName": "cNo3",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cN4",
+            "columnName": "cN4",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "cNo4",
+            "columnName": "cNo4",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "name"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6340ae3e0f7535f83c5950cce2acd027')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f9142407818121b5c4904b8b0043f97e')"
     ]
   }
 }

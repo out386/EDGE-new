@@ -26,6 +26,7 @@ import androidx.room.Query;
 
 import com.edge2.allevents.models.GroupsModel;
 import com.edge2.event.EventCategoryModel;
+import com.edge2.eventdetails.models.EventDetailsModel;
 
 import java.util.List;
 
@@ -42,4 +43,7 @@ public interface RunningOutOfNamesDao {
 
     @Query("SELECT * FROM EventCategories WHERE groupName = :groupName AND isInIntra = 1")
     LiveData<List<EventCategoryModel>> getCategoriesIntra(String groupName);
+
+    @Query("SELECT * FROM EventDetails WHERE name = :name")
+    LiveData<EventDetailsModel> getDetails(String name);
 }

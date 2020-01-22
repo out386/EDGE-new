@@ -20,41 +20,59 @@ package com.edge2.eventdetails.models;
  *
  */
 
-import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
+import androidx.core.util.Pair;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
+@Entity(tableName = "EventDetails")
 public class EventDetailsModel {
-    private String name;
-    private int icon;
-    private String desc;
-    private String longDesc;
-    private String rules;
-    private List<ScheduleModel> schedule;
-    private Map<String, Long> contacts;
+    @PrimaryKey
+    @NonNull
+    public String name;
+    public String longDesc;
+    public String rules;
+    public String schedule;
+    public String cN1;
+    public long cNo1;
+    public String cN2;
+    public long cNo2;
+    public String cN3;
+    public long cNo3;
+    public String cN4;
+    public long cNo4;
+    @Ignore
+    private List<Pair<String, Long>> contacts;
 
-    EventDetailsModel(String name, @DrawableRes int icon, String desc, String longDesc,
-                      String rules, List<ScheduleModel> schedule, Map<String, Long> contacts) {
+    public EventDetailsModel(@NonNull String name, String longDesc, String rules, String schedule,
+                             String cN1, long cNo1, String cN2, long cNo2, String cN3, long cNo3,
+                             String cN4, long cNo4) {
         this.name = name;
-        this.icon = icon;
-        this.desc = desc;
         this.longDesc = longDesc;
         this.rules = rules;
         this.schedule = schedule;
-        this.contacts = contacts;
+        contacts = new ArrayList<>(4);
+        if (cN1 != null && !cN1.isEmpty()) {
+            contacts.add(new Pair<>(cN1, cNo1));
+        }
+        if (cN2 != null && !cN2.isEmpty()) {
+            contacts.add(new Pair<>(cN2, cNo2));
+        }
+        if (cN3 != null && !cN3.isEmpty()) {
+            contacts.add(new Pair<>(cN3, cNo3));
+        }
+        if (cN4 != null && !cN4.isEmpty()) {
+            contacts.add(new Pair<>(cN4, cNo4));
+        }
     }
 
+    @NonNull
     public String getName() {
         return name;
-    }
-
-    public int getIcon() {
-        return icon;
-    }
-
-    public String getDesc() {
-        return desc;
     }
 
     public String getLongDesc() {
@@ -65,11 +83,11 @@ public class EventDetailsModel {
         return rules;
     }
 
-    public List<ScheduleModel> getSchedule() {
+    public String getSchedule() {
         return schedule;
     }
 
-    public Map<String, Long> getContacts() {
+    public List<Pair<String, Long>> getContacts() {
         return contacts;
     }
 
