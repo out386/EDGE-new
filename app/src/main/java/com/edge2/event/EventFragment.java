@@ -173,9 +173,6 @@ public class EventFragment extends BaseFragment {
             viewModel.getCategories(isIntra, groupName).observe(this, categories -> {
                 categoriesList = categories;
                 mainAdapter = new EventCategoryAdapter(categories, this::onEventClicked);
-                // Only play the animation when this fragment is first started (not on backstack pop)
-                if (isTransitionFinished)
-                    mainReycler.setLayoutAnimation(null);
                 mainReycler.setAdapter(mainAdapter);
                 mainReycler.scheduleLayoutAnimation();
             });
