@@ -64,6 +64,9 @@ public class EventDetailsFragment extends BaseFragment {
     private Transition transition;
     private TextView nameTv;
     private String eventName;
+    private boolean hasSchedule;
+    private boolean hasRules;
+    private boolean hasContacts;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -90,6 +93,9 @@ public class EventDetailsFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         View divider = view.findViewById(R.id.divider);
+        View divider1 = view.findViewById(R.id.divider1);
+        View divider2 = view.findViewById(R.id.divider2);
+        View divider3 = view.findViewById(R.id.divider3);
         View topView = view.findViewById(R.id.eventdetails_top);
         View contentView = view.findViewById(R.id.eventdetails_content);
         NestedScrollView scrollView = view.findViewById(R.id.scroll_view);
@@ -99,19 +105,23 @@ public class EventDetailsFragment extends BaseFragment {
         TextView longDesc = view.findViewById(R.id.eventdetails_long_desc);
         TextView schedule = view.findViewById(R.id.eventdetails_schedule);
         TextView rules = view.findViewById(R.id.eventdetails_rules);
+        TextView scheduleHeader = view.findViewById(R.id.eventdetails_schedule_header);
+        TextView rulesHeader = view.findViewById(R.id.eventdetails_rules_header);
+        TextView contactsHeader = view.findViewById(R.id.eventdetails_contacts_header);
         LinearLayout contacts = view.findViewById(R.id.eventdetails_contacts);
 
         if (sharedElementListener != null) {
             transition.removeListener(sharedElementListener);
         }
-        sharedElementListener = new OnSharedElementListener(view, dummy, divider, schedule, longDesc,
-                rules, contacts);
+        sharedElementListener = new OnSharedElementListener(view, dummy, divider, divider1, divider2,
+                divider3, schedule, longDesc, rules, contacts, scheduleHeader, rulesHeader, contactsHeader);
         transition.addListener(sharedElementListener);
 
         setupInsets(view, divider, topView, scrollView, contentView);
         setHeaderData(shortDescTv, image);
 
-        prototype(longDesc, rules, contacts, schedule);
+        setData(longDesc, rules, contacts, schedule, divider1, divider2, divider3,
+                scheduleHeader, rulesHeader, contactsHeader);
     }
 
     @Override
@@ -125,8 +135,12 @@ public class EventDetailsFragment extends BaseFragment {
         Bundle args = getArguments();
         if (args != null) {
             eventName = args.getString(KEY_EVENT_NAME);
+            String desc = args.getString(KEY_EVENT_DESC);
             nameTv.setText(eventName);
-            shortDescTv.setText(args.getString(KEY_EVENT_DESC));
+            if (desc == null)
+                shortDescTv.setVisibility(View.GONE);
+            else
+                shortDescTv.setText(desc);
             image.setImageResource(args.getInt(KEY_EVENT_IMAGE));
         }
     }
@@ -146,14 +160,47 @@ public class EventDetailsFragment extends BaseFragment {
                 });
     }
 
-    private void prototype(TextView longDesc, TextView rules, LinearLayout contacts, TextView schedule) {
+    private void setData(TextView longDesc, TextView rules, LinearLayout contacts, TextView schedule,
+                         View schedDiv, View rulesDiv, View contDiv,
+                         TextView schedHead, TextView rulesHead, TextView contHead) {
         DataViewModel viewModel = ViewModelProviders.of(this)
                 .get(DataViewModel.class);
+
         viewModel.getDetails(eventName).observe(this, item -> {
-            schedule.setText(processSched(item.getSchedule()));
-            longDesc.setText(item.getLongDesc());
-            rules.setText(processRule(item.getRules()));
-            setContacts(contacts, item.getContacts());
+            String sched = item.getSchedule();
+            if (sched == null || sched.isEmpty()) {
+                schedDiv.setVisibility(View.GONE);
+                schedHead.setVisibility(View.GONE);
+                schedule.setVisibility(View.GONE);
+            } else {
+                schedule.setText(processSched(sched));
+                hasSchedule = true;
+            }
+            String desc = item.getLongDesc();
+            if (desc == null || desc.isEmpty())
+                longDesc.setText(R.string.event_details_pending);
+            else
+                longDesc.setText(item.getLongDesc());
+
+            String r = item.getRules();
+            if (r == null || r.isEmpty()) {
+                rulesDiv.setVisibility(View.GONE);
+                rulesHead.setVisibility(View.GONE);
+                rules.setVisibility(View.GONE);
+            } else {
+                rules.setText(processRule(item.getRules()));
+                hasRules = true;
+            }
+
+            List<Pair<String, Long>> cont = item.getContacts();
+            if (cont == null || cont.size() == 0) {
+                contDiv.setVisibility(View.GONE);
+                contHead.setVisibility(View.GONE);
+                contacts.setVisibility(View.GONE);
+            } else {
+                setContacts(contacts, cont);
+                hasContacts = true;
+            }
         });
     }
 
@@ -187,17 +234,14 @@ public class EventDetailsFragment extends BaseFragment {
         private View[] allViews;
         private Animation[] anims;
 
-        OnSharedElementListener(View root, View dummy, View divider, TextView schedule, TextView longDesc,
-                                TextView rules, View contacts) {
+        // TODO: WHAT. THE. HECK!? Just group them in LinearLayouts!
+        OnSharedElementListener(View root, View dummy, View divider, View divider1, View divider2,
+                                View divider3, TextView schedule, TextView longDesc,
+                                TextView rules, View contacts, TextView scheduleHeader,
+                                TextView rulesHeader, TextView contactsHeader) {
             int animTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
             this.dummy = dummy;
-            View divider1 = root.findViewById(R.id.divider1);
-            View divider2 = root.findViewById(R.id.divider2);
-            View divider3 = root.findViewById(R.id.divider3);
             View overviewHeader = root.findViewById(R.id.eventdetails_overview_header);
-            View scheduleHeader = root.findViewById(R.id.eventdetails_schedule_header);
-            View rulesHeader = root.findViewById(R.id.eventdetails_rules_header);
-            View contactsHeader = root.findViewById(R.id.eventdetails_contacts_header);
             allViews = new View[]{divider, overviewHeader, longDesc, divider1, scheduleHeader,
                     schedule, divider2, rulesHeader, rules, divider3, contactsHeader, contacts};
 
@@ -221,8 +265,13 @@ public class EventDetailsFragment extends BaseFragment {
             dummy.setVisibility(View.GONE);
 
             for (int i = 0; i < allViews.length; i++) {
-                allViews[i].setVisibility(View.VISIBLE);
-                allViews[i].startAnimation(anims[i / 3]);
+                int group = i / 3;
+
+                // TODO: No.
+                if ((group != 1 || hasSchedule) && (group != 2 || hasRules) && (group != 3 || hasContacts)) {
+                    allViews[i].setVisibility(View.VISIBLE);
+                    allViews[i].startAnimation(anims[group]);
+                }
             }
         }
 
