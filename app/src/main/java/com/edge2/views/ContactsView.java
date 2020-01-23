@@ -3,11 +3,13 @@ package com.edge2.views;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.edge2.R;
 
@@ -29,7 +31,7 @@ public class ContactsView extends RelativeLayout {
 
     private void init() {
         View v = inflate(context, R.layout.event_details_contacts_item, this);
-        ImageView wpView = v.findViewById(R.id.contacts_whatsapp);
+        ImageView waView = v.findViewById(R.id.contacts_whatsapp);
         ImageView phView = v.findViewById(R.id.contacts_phone);
         TextView nameTv = v.findViewById(R.id.contacts_name);
         TextView numberTv = v.findViewById(R.id.contacts_number);
@@ -38,16 +40,26 @@ public class ContactsView extends RelativeLayout {
         String numStr = "+91 " + number;
         numberTv.setText(numStr);
 
-        wpView.setOnClickListener(view -> {
-            Intent sendIntent = new Intent("android.intent.action.MAIN");
-            sendIntent.setComponent(
+        waView.setOnClickListener(view -> {
+            Intent i = new Intent("android.intent.action.MAIN");
+            i.setComponent(
                     new ComponentName("com.whatsapp", "com.whatsapp.Conversation"));
-            sendIntent.putExtra("jid", "91" + number + "@s.whatsapp.net");
-            context.startActivity(sendIntent);
+            i.putExtra("jid", "91" + number + "@s.whatsapp.net");
+            PackageManager pm = context.getPackageManager();
+            if (pm.resolveActivity(i, PackageManager.MATCH_DEFAULT_ONLY) != null)
+                context.startActivity(i);
+            else
+                Toast.makeText(context, "WhatsApp is not installed.", Toast.LENGTH_SHORT)
+                        .show();
         });
         phView.setOnClickListener(view -> {
-            Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + number));
-            context.startActivity(intent);
+            Intent i = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + number));
+            PackageManager pm = context.getPackageManager();
+            if (i.resolveActivity(pm) != null)
+                context.startActivity(i);
+            else
+                Toast.makeText(context, "No phone app found.", Toast.LENGTH_SHORT)
+                        .show();
         });
 
         if (isNotLast) {
