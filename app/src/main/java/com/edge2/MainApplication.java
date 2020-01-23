@@ -22,6 +22,8 @@ package com.edge2;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -29,6 +31,7 @@ import android.preference.PreferenceManager;
 
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.app.NotificationManagerCompat;
 
 public class MainApplication extends Application {
     static final String KEY_THEME_TYPE = "themeSetting";
@@ -50,6 +53,13 @@ public class MainApplication extends Application {
         theme = prefs.getInt(KEY_THEME_TYPE, theme);
 
         AppCompatDelegate.setDefaultNightMode(theme);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationManagerCompat nm = NotificationManagerCompat.from(this);
+            NotificationChannel nc = new NotificationChannel("Updates", "Event Data Updates",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            nm.createNotificationChannel(nc);
+        }
     }
 
     public static String getResString(@StringRes int id) {
