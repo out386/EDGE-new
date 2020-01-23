@@ -131,7 +131,7 @@ public class EventsFragment extends BaseFragment {
         // Show the toolbar and bottomnav
         listener.onListScrolled(-1, Integer.MAX_VALUE);
 
-        setupObservers();
+        showData();
         return rootView;
     }
 
@@ -182,13 +182,24 @@ public class EventsFragment extends BaseFragment {
         outState.putInt(KEY_APPBAR_OFFSET, appBarOffset);
     }
 
-    private void showData(List<GroupsModel> events) {
-        if (eventsAdapter == null) {
-            allEventsList = events;
-            eventsAdapter = new EventsAdapter(allEventsList, isIntra, this::onEventClicked);
-        }
-        mainReycler.setAdapter(eventsAdapter);
+    private void showData() {
+        DataViewModel viewModel = ViewModelProviders.of(this).get(DataViewModel.class);
 
+        if (eventsAdapter == null) {
+            viewModel.getGroups(isIntra).observe(this, events -> {
+                allEventsList = events;
+                eventsAdapter = new EventsAdapter(allEventsList, isIntra, this::onEventClicked);
+                mainReycler.setAdapter(eventsAdapter);
+            });
+        } else {
+            mainReycler.setAdapter(eventsAdapter);
+        }
+
+        setupObservers(viewModel);
+        setQuickItems();
+    }
+
+    private void setQuickItems() {
         if (!isIntra) {
             if (quickAdapter == null) {
                 ArrayList<QuickItemModel> quickItems = new ArrayList<>();
@@ -208,9 +219,7 @@ public class EventsFragment extends BaseFragment {
         }
     }
 
-    private void setupObservers() {
-        DataViewModel viewModel = ViewModelProviders.of(this)
-                .get(DataViewModel.class);
+    private void setupObservers(DataViewModel viewModel) {
         if (!isIntra) {
             OnBannerItemClickedListener bannerListener = new OnBannerItemClickedListener();
             viewModel.getBanner().observe(this, eventNameModels -> {
@@ -224,7 +233,6 @@ public class EventsFragment extends BaseFragment {
                 banner.addSlides(list);
             });
         }
-        viewModel.getGroups(isIntra).observe(this, this::showData);
     }
 
     private int getRecyclerColumnCount(View parent, View child, float pxWidth) {
