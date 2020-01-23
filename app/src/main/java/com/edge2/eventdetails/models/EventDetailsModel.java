@@ -26,6 +26,9 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +51,9 @@ public class EventDetailsModel {
     @Ignore
     private List<Pair<String, Long>> contacts;
 
+    private EventDetailsModel() {
+    }
+
     public EventDetailsModel(@NonNull String name, String longDesc, String rules, String schedule,
                              String cN1, long cNo1, String cN2, long cNo2, String cN3, long cNo3,
                              String cN4, long cNo4) {
@@ -55,18 +61,30 @@ public class EventDetailsModel {
         this.longDesc = longDesc;
         this.rules = rules;
         this.schedule = schedule;
-        contacts = new ArrayList<>(4);
-        if (cN1 != null && !cN1.isEmpty()) {
-            contacts.add(new Pair<>(cN1, cNo1));
+        this.cN1 = cN1;
+        this.cNo1 = cNo1;
+        this.cN2 = cN2;
+        this.cNo2 = cNo2;
+        this.cN3 = cN3;
+        this.cNo3 = cNo3;
+        this.cN4 = cN4;
+        this.cNo4 = cNo4;
+        setContacts(this);
+    }
+
+    private static void setContacts(EventDetailsModel item) {
+        item.contacts = new ArrayList<>(4);
+        if (item.cN1 != null && !item.cN1.isEmpty()) {
+            item.contacts.add(new Pair<>(item.cN1, item.cNo1));
         }
-        if (cN2 != null && !cN2.isEmpty()) {
-            contacts.add(new Pair<>(cN2, cNo2));
+        if (item.cN2 != null && !item.cN2.isEmpty()) {
+            item.contacts.add(new Pair<>(item.cN2, item.cNo2));
         }
-        if (cN3 != null && !cN3.isEmpty()) {
-            contacts.add(new Pair<>(cN3, cNo3));
+        if (item.cN3 != null && !item.cN3.isEmpty()) {
+            item.contacts.add(new Pair<>(item.cN3, item.cNo3));
         }
-        if (cN4 != null && !cN4.isEmpty()) {
-            contacts.add(new Pair<>(cN4, cNo4));
+        if (item.cN4 != null && !item.cN4.isEmpty()) {
+            item.contacts.add(new Pair<>(item.cN4, item.cNo4));
         }
     }
 
@@ -89,6 +107,40 @@ public class EventDetailsModel {
 
     public List<Pair<String, Long>> getContacts() {
         return contacts;
+    }
+
+    public static EventDetailsModel getFromJson(JSONObject ob) throws JSONException {
+        EventDetailsModel item = new EventDetailsModel();
+        item.name = ob.getString("name");
+        if (item.name == null || item.name.isEmpty())
+            return null;
+        item.longDesc = ob.getString("longDesc");
+        if (item.longDesc.isEmpty())
+            item.longDesc = null;
+        item.rules = ob.getString("rules");
+        if (item.rules.isEmpty())
+            item.rules = null;
+        item.schedule = ob.getString("schedule");
+        if (item.schedule.isEmpty())
+            item.schedule = null;
+        item.cN1 = ob.getString("cN1");
+        if (item.cN1.isEmpty())
+            item.cN1 = null;
+        item.cN2 = ob.getString("cN2");
+        if (item.cN2.isEmpty())
+            item.cN2 = null;
+        item.cN3 = ob.getString("cN3");
+        if (item.cN3.isEmpty())
+            item.cN3 = null;
+        item.cN4 = ob.getString("cN4");
+        if (item.cN4.isEmpty())
+            item.cN4 = null;
+        item.cNo1 = ob.getLong("cNo1");
+        item.cNo2 = ob.getLong("cNo2");
+        item.cNo3 = ob.getLong("cNo3");
+        item.cNo4 = ob.getLong("cNo4");
+        setContacts(item);
+        return item;
     }
 
 }

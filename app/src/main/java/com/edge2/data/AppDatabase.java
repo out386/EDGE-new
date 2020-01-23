@@ -31,11 +31,12 @@ import com.edge2.event.EventCategoryModel;
 import com.edge2.eventdetails.models.EventDetailsModel;
 
 @Database(entities = {GroupsModel.class, EventCategoryModel.class, EventDetailsModel.class},
-        exportSchema = false, version = 1)
+        exportSchema = false, version = AppDatabase.DB_VERSION)
 abstract class AppDatabase extends RoomDatabase {
+    public static final int DB_VERSION = 1;
     private static AppDatabase appDatabase;
 
-    static AppDatabase getDatabase(Context context) {
+    static synchronized AppDatabase getDatabase(Context context) {
         if (appDatabase == null)
             appDatabase = Room.databaseBuilder(context.getApplicationContext(),
                     AppDatabase.class, "events.db")

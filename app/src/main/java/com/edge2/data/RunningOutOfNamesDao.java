@@ -22,6 +22,8 @@ package com.edge2.data;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import com.edge2.allevents.models.GroupsModel;
@@ -46,4 +48,7 @@ public interface RunningOutOfNamesDao {
 
     @Query("SELECT * FROM EventDetails WHERE name = :name")
     LiveData<EventDetailsModel> getDetails(String name);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void putDetails(List<EventDetailsModel> items);
 }

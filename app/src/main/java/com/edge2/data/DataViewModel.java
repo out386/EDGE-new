@@ -44,6 +44,7 @@ public class DataViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<BannerItemsModel>> getBanner() {
+        bannerData.updateDb(context);
         return bannerData.loadBanner();
     }
 
