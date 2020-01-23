@@ -22,10 +22,12 @@ package com.edge2.data;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
@@ -46,13 +48,25 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-class DataRepo {
+public class DataRepo {
     private static final String KEY_DB_VERSION = "dbVersion";
+    private static final long UPDATE_INTERVAL = 1800000; // 30 minutes
+    private static DataRepo repo;
+
     private FirebaseFirestore db;
     private MutableLiveData<List<BannerItemsModel>> eventNamesData;
+    private boolean isUpdating;
+    private long lastUpdateTime;
 
-    DataRepo() {
+    private DataRepo() {
         db = FirebaseFirestore.getInstance();
+    }
+
+    public static DataRepo getInstance() {
+        if (repo == null) {
+            repo = new DataRepo();
+        }
+        return repo;
     }
 
     MutableLiveData<List<BannerItemsModel>> loadBanner() {
@@ -74,19 +88,34 @@ class DataRepo {
     }
 
     // TODO: Might be a good idea to hold all requests that are made while this is updating.
-    void updateDb(Context context) {
+
+    /**
+     * Check if an update to event details is available. If yes, download it and update the offline
+     * db. Warning: db requests that are already in-flight will get outdated data. It's safe to call
+     * this method multiple times. It only checks once every {@link #UPDATE_INTERVAL} seconds. Don't
+     * use a JobService or similar for updates, as that'll use up server bandwidth. It's better to
+     * serve some users slightly old data than have updates go down for the month.
+     */
+    public void updateDb(Context c) {
+        if (isUpdating || SystemClock.uptimeMillis() - lastUpdateTime < UPDATE_INTERVAL)
+            return;
+
+        isUpdating = true;
+        Context context = c.getApplicationContext();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         int currentVersion = updateVersionInCache(prefs);
-        RequestQueue queue = Volley.newRequestQueue(context.getApplicationContext());
+        RequestQueue queue = Volley.newRequestQueue(context);
 
         getRemoteDbVersion(queue, availableVersion -> {
             if (availableVersion < 0) {
                 Logger.log("DataRepo", "updateDb: Failed to get new version number");
+                isUpdating = false;
                 return;
             }
             if (availableVersion > currentVersion) {
                 Logger.log("DataRepo", "updateDb: update found: " + availableVersion);
                 downloadUpdate(queue, items -> {
+                    isUpdating = false;
                     if (items == null) {
                         Logger.log("DataRepo", "updateDb: Failed to fetch update");
                     } else {
@@ -94,9 +123,13 @@ class DataRepo {
                                 .putInt(KEY_DB_VERSION, availableVersion)
                                 .apply();
                         Logger.log("DataRepo", "updateDb: Items: " + items.size());
+                        lastUpdateTime = SystemClock.uptimeMillis();
                         updateOfflineDb(context, items);
                     }
                 });
+            } else {
+                lastUpdateTime = SystemClock.uptimeMillis();
+                isUpdating = false;
             }
         });
     }
@@ -114,7 +147,8 @@ class DataRepo {
                 },
                 error -> listener.onVersionFetched(null));
 
-        req.setShouldCache(false);
+        req.setShouldCache(false).setRetryPolicy(
+                new DefaultRetryPolicy(15000, 3, 1.5f));
         queue.add(req);
     }
 
@@ -153,7 +187,8 @@ class DataRepo {
                 },
                 error -> listener.onVersionAvailable(-1));
 
-        req.setShouldCache(false);
+        req.setShouldCache(false).setRetryPolicy(
+                new DefaultRetryPolicy(15000, 3, 1.5f));
         queue.add(req);
     }
 

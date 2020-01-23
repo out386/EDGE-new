@@ -34,18 +34,15 @@ import com.edge2.eventdetails.models.EventDetailsModel;
 import java.util.List;
 
 public class DataViewModel extends AndroidViewModel {
-    private DataRepo bannerData;
     private Context context;
 
     public DataViewModel(Application app) {
         super(app);
         context = app.getApplicationContext();
-        bannerData = new DataRepo();
     }
 
     public LiveData<List<BannerItemsModel>> getBanner() {
-        bannerData.updateDb(context);
-        return bannerData.loadBanner();
+        return DataRepo.getInstance().loadBanner();
     }
 
     public LiveData<List<GroupsModel>> getGroups(boolean isIntra) {

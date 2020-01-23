@@ -28,6 +28,7 @@ import androidx.annotation.NonNull;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 
+import com.edge2.data.DataRepo;
 import com.edge2.utils.DimenUtils;
 
 public abstract class BaseFragment extends Fragment {
@@ -45,6 +46,12 @@ public abstract class BaseFragment extends Fragment {
                 (v, scrollX, scrollY, oldScrollX, oldScrollY) ->
                         onFragmentScrollListener.onListScrolled(scrollY - oldScrollY,
                                 topViewHeight - scrollY));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        DataRepo.getInstance().updateDb(getContext());
     }
 
     protected void setupWindowInsets(View rootView, View contentView, View topView,
