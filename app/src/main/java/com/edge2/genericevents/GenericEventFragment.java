@@ -25,6 +25,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
@@ -53,7 +54,6 @@ import com.bumptech.glide.request.target.Target;
 import com.edge2.BaseFragment;
 import com.edge2.OnFragmentScrollListener;
 import com.edge2.R;
-import com.edge2.allevents.models.BannerItemsModel;
 import com.edge2.html.RulesTagHandler;
 import com.edge2.html.ScheduleTagHandler;
 import com.edge2.views.ContactsView;
@@ -61,7 +61,11 @@ import com.edge2.views.ContactsView;
 import jp.wasabeef.blurry.Blurry;
 
 public class GenericEventFragment extends BaseFragment {
-    public static final String KEY_EVENT_MODEL = "gEventModel";
+    public static final String KEY_EVENT_NAME = "gEventName";
+    public static final String KEY_EVENT_IMG = "gEventImg";
+    public static final String KEY_EVENT_SCHED = "gEventSched";
+    public static final String KEY_EVENT_DESC = "gEventDesc";
+    public static final String KEY_EVENT_IS_MEGA = "gEventIsMega";
 
     private OnFragmentScrollListener listener;
     private Context context;
@@ -108,25 +112,31 @@ public class GenericEventFragment extends BaseFragment {
                          LinearLayout contacts) {
         Bundle args = getArguments();
         if (args != null) {
-            BannerItemsModel item = (BannerItemsModel) args.getSerializable(KEY_EVENT_MODEL);
-            if (item == null) {
+            String name = args.getString(KEY_EVENT_NAME);
+            Uri img = Uri.parse(args.getString(KEY_EVENT_IMG));
+            String schedule = args.getString(KEY_EVENT_SCHED);
+            String desc = args.getString(KEY_EVENT_DESC);
+            boolean isMega = args.getBoolean(KEY_EVENT_IS_MEGA);
+            if (name == null || name.isEmpty()) {
                 NavHostFragment.findNavController(this).popBackStack();
                 return;
             }
-            nameTv.setText(item.getName());
+            if (isMega)
+                name = String.format(getString(R.string.mega_event_template), name);
+            nameTv.setText(name);
             Glide.with(context)
-                    .load(item.getImg())
+                    .load(img)
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .listener(new RequestListener<String, GlideDrawable>() {
+                    .listener(new RequestListener<Uri, GlideDrawable>() {
                         @Override
-                        public boolean onException(Exception e, String model,
+                        public boolean onException(Exception e, Uri model,
                                                    Target<GlideDrawable> target, boolean isFirstResource) {
                             return false;
                         }
 
                         @Override
                         public boolean onResourceReady(GlideDrawable resource,
-                                                       String model, Target<GlideDrawable> target,
+                                                       Uri model, Target<GlideDrawable> target,
                                                        boolean isFromMemoryCache, boolean isFirstResource) {
 
                             int filter = getResources()
@@ -139,8 +149,8 @@ public class GenericEventFragment extends BaseFragment {
                         }
                     })
                     .into(image);
-            sched.setText(processSched(item.getSched()));
-            longDesc.setText(processDesc(item.getDesc()));
+            sched.setText(processSched(schedule));
+            longDesc.setText(processDesc(desc));
             setContacts(contacts);
         }
     }

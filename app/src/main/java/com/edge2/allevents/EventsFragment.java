@@ -222,11 +222,11 @@ public class EventsFragment extends BaseFragment {
     private void setupObservers(DataViewModel viewModel) {
         if (!isIntra) {
             OnBannerItemClickedListener bannerListener = new OnBannerItemClickedListener();
-            viewModel.getBanner().observe(this, eventNameModels -> {
-                bannerItemsModels = eventNameModels;
-                List<Slide> list = new ArrayList<>(eventNameModels.size());
-                for (int i = 0; i < eventNameModels.size(); i++) {
-                    list.add(new Slide(i, eventNameModels.get(i).getImg(), 0));
+            viewModel.getBanner().observe(this, items -> {
+                this.bannerItemsModels = items;
+                List<Slide> list = new ArrayList<>(items.size());
+                for (int i = 0; i < items.size(); i++) {
+                    list.add(new Slide(i, items.get(i).getUri(), 0));
                 }
                 //noinspection ConstantConditions
                 banner.setItemClickListener(bannerListener);
@@ -261,7 +261,11 @@ public class EventsFragment extends BaseFragment {
                         .build();*/
 
                 Bundle args = new Bundle();
-                args.putSerializable(GenericEventFragment.KEY_EVENT_MODEL, item);
+                args.putString(GenericEventFragment.KEY_EVENT_NAME, item.getName());
+                args.putString(GenericEventFragment.KEY_EVENT_IMG, item.getUri().toString());
+                args.putString(GenericEventFragment.KEY_EVENT_SCHED, item.getSched());
+                args.putString(GenericEventFragment.KEY_EVENT_DESC, item.getDesc());
+                args.putBoolean(GenericEventFragment.KEY_EVENT_IS_MEGA, item.getMega());
 
                 NavHostFragment.findNavController(EventsFragment.this)
                         .navigate(R.id.action_events_to_genericEvent, args, null, null);

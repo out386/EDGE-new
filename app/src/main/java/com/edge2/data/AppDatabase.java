@@ -28,17 +28,18 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
+import com.edge2.allevents.models.BannerItemsModel;
 import com.edge2.allevents.models.GroupsModel;
 import com.edge2.event.EventCategoryModel;
 import com.edge2.eventdetails.models.EventDetailsModel;
 
-@Database(entities = {GroupsModel.class, EventCategoryModel.class, EventDetailsModel.class},
-        exportSchema = false, version = AppDatabase.DB_VERSION)
+@Database(entities = {GroupsModel.class, EventCategoryModel.class, EventDetailsModel.class,
+        BannerItemsModel.class}, exportSchema = false, version = AppDatabase.DB_VERSION)
 abstract class AppDatabase extends RoomDatabase {
     /**
      * Make sure that the online DB version and this always stays in sync.
      */
-    static final int DB_VERSION = 1;
+    static final int DB_VERSION = 2;
     private static final String KEY_DB_VERSION = "offlineDbVersion";
 
     private static AppDatabase appDatabase;

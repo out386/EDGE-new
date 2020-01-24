@@ -29,4 +29,5 @@
         before it starts
     </string>
     <string name="event_details_pending">Details for this event are unavailable right now.</string>
+    <string name="mega_event_template">%s - Mega Event</string>
 </resources>

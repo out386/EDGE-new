@@ -20,41 +20,43 @@ package com.edge2.allevents.models;
  *
  */
 
-import com.google.firebase.firestore.QueryDocumentSnapshot;
+import android.net.Uri;
+
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
-import java.util.Map;
 
+@Entity(tableName = "BannerItems")
 public class BannerItemsModel implements Serializable {
-    private String id;
-    private String img;
-    private String name;
-    private String sched;
-    private String desc;
+    @PrimaryKey
+    @NonNull
+    public String name;
+    public String imgName;
+    public String imgUrl;
+    @Ignore
+    private Uri uri;
+    public String sched;
+    public String desc;
+    public boolean isMega;
 
-    public BannerItemsModel(QueryDocumentSnapshot documentSnapshot) {
-        Map<String, Object> data = documentSnapshot.getData();
-        id = (String) data.get("id");
-        img = (String) data.get("img");
-        name = (String) data.get("name");
-        sched = (String) data.get("sched");
-        desc = (String) data.get("desc");
-    }
-
-    public BannerItemsModel(String id, String img, String name, String sched, String desc) {
-        this.id = id;
-        this.img = img;
+    public BannerItemsModel(@NonNull String name, String imgName, String imgUrl, String sched,
+                            String desc, boolean isMega) {
         this.name = name;
+        if (imgName != null && !imgName.isEmpty()) {
+            uri = Uri.parse("android.resource://com.edge2/drawable/" + imgName);
+        } else if (imgUrl != null && !imgUrl.isEmpty()) {
+            uri = Uri.parse(imgUrl);
+        }
         this.sched = sched;
         this.desc = desc;
+        this.isMega = isMega;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public String getImg() {
-        return img;
+    public Uri getUri() {
+        return uri;
     }
 
     public String getName() {
@@ -67,5 +69,9 @@ public class BannerItemsModel implements Serializable {
 
     public String getDesc() {
         return desc;
+    }
+
+    public boolean getMega() {
+        return isMega;
     }
 }

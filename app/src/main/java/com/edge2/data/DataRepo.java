@@ -26,7 +26,6 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -38,14 +37,11 @@ import com.edge2.allevents.models.GroupsModel;
 import com.edge2.event.EventCategoryModel;
 import com.edge2.eventdetails.models.EventDetailsModel;
 import com.edge2.utils.Logger;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -56,8 +52,6 @@ public class DataRepo {
     private static final long UPDATE_INTERVAL = 1800000; // 30 minutes
     private static DataRepo repo;
 
-    private FirebaseFirestore db;
-    private MutableLiveData<List<BannerItemsModel>> eventNamesData;
     private boolean isUpdating;
     private long lastUpdateTime;
     private RunningOutOfNamesDao dao;
@@ -65,7 +59,6 @@ public class DataRepo {
 
     private DataRepo(Context context) {
         this.context = context.getApplicationContext();
-        db = FirebaseFirestore.getInstance();
         dao = AppDatabase.getDatabase(this.context).getDao();
     }
 
@@ -76,22 +69,8 @@ public class DataRepo {
         return repo;
     }
 
-    MutableLiveData<List<BannerItemsModel>> loadBanner() {
-        if (eventNamesData == null)
-            eventNamesData = new MutableLiveData<>();
-
-        db.collection("banner")
-                .get()
-                .addOnSuccessListener(snapshot -> {
-                    List<BannerItemsModel> results = new ArrayList<>();
-                    for (QueryDocumentSnapshot document : snapshot) {
-                        BannerItemsModel model = new BannerItemsModel(document);
-                        results.add(model);
-                    }
-                    eventNamesData.setValue(results);
-                });
-
-        return eventNamesData;
+    LiveData<List<BannerItemsModel>> getBannerItems() {
+        return dao.getBannerItems();
     }
 
     LiveData<EventDetailsModel> getDetails(String name) {
@@ -112,8 +91,6 @@ public class DataRepo {
         else
             return dao.getGroupsEdge();
     }
-
-    // TODO: Might be a good idea to hold all requests that are made while this is updating.
 
     /**
      * Check if an update to event details is available. If yes, download it and update the offline

@@ -26,6 +26,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
+import com.edge2.allevents.models.BannerItemsModel;
 import com.edge2.allevents.models.GroupsModel;
 import com.edge2.event.EventCategoryModel;
 import com.edge2.eventdetails.models.EventDetailsModel;
@@ -51,4 +52,13 @@ public interface RunningOutOfNamesDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void putDetails(List<EventDetailsModel> items);
+
+    @Query("SELECT * FROM BannerItems")
+    LiveData<List<BannerItemsModel>> getBannerItems();
+
+    @Query("SELECT * FROM BannerItems WHERE isMega = 1")
+    LiveData<List<BannerItemsModel>> getMegaEvents();
+
+    @Query("SELECT * FROM BannerItems WHERE isMega = 0")
+    LiveData<List<BannerItemsModel>> getUpcomingEvents();
 }

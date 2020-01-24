@@ -121,7 +121,7 @@
                         android:layout_marginTop="@dimen/margin_huge"
                         android:transitionName="@string/sub_to_details_img_transition"
                         tools:src="@color/colorPrimaryDark"
-                        android:scaleType="fitXY" />
+                        android:scaleType="centerCrop" />
 
                     <ImageView
                         android:id="@+id/genericevent_image"
