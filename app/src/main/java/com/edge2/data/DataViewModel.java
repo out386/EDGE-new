@@ -21,7 +21,6 @@ package com.edge2.data;
  */
 
 import android.app.Application;
-import android.content.Context;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -34,35 +33,26 @@ import com.edge2.eventdetails.models.EventDetailsModel;
 import java.util.List;
 
 public class DataViewModel extends AndroidViewModel {
-    private Context context;
+    private DataRepo dataRepo;
 
     public DataViewModel(Application app) {
         super(app);
-        context = app.getApplicationContext();
+        dataRepo = DataRepo.getInstance(app);
     }
 
     public LiveData<List<BannerItemsModel>> getBanner() {
-        return DataRepo.getInstance().loadBanner();
+        return dataRepo.loadBanner();
     }
 
     public LiveData<List<GroupsModel>> getGroups(boolean isIntra) {
-        RunningOutOfNamesDao dao = AppDatabase.getDatabase(context).getDao();
-        if (isIntra)
-            return dao.getGroupsIntra();
-        else
-            return dao.getGroupsEdge();
+        return dataRepo.getGroups(isIntra);
     }
 
     public LiveData<List<EventCategoryModel>> getCategories(boolean isIntra, String groupName) {
-        RunningOutOfNamesDao dao = AppDatabase.getDatabase(context).getDao();
-        if (isIntra)
-            return dao.getCategoriesIntra(groupName);
-        else
-            return dao.getCategoriesEdge(groupName);
+        return dataRepo.getCategories(isIntra, groupName);
     }
 
     public LiveData<EventDetailsModel> getDetails(String name) {
-        RunningOutOfNamesDao dao = AppDatabase.getDatabase(context).getDao();
-        return dao.getDetails(name);
+        return dataRepo.getDetails(name);
     }
 }

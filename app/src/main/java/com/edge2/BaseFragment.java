@@ -51,7 +51,7 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        DataRepo.getInstance().updateDb(getContext());
+        DataRepo.getInstance(getContext()).updateDb();
     }
 
     protected void setupWindowInsets(View rootView, View contentView, View topView,

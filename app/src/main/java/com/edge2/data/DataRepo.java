@@ -25,6 +25,7 @@ import android.content.SharedPreferences;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -33,6 +34,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.edge2.allevents.models.BannerItemsModel;
+import com.edge2.allevents.models.GroupsModel;
+import com.edge2.event.EventCategoryModel;
 import com.edge2.eventdetails.models.EventDetailsModel;
 import com.edge2.utils.Logger;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -57,14 +60,18 @@ public class DataRepo {
     private MutableLiveData<List<BannerItemsModel>> eventNamesData;
     private boolean isUpdating;
     private long lastUpdateTime;
+    private RunningOutOfNamesDao dao;
+    private Context context;
 
-    private DataRepo() {
+    private DataRepo(Context context) {
+        this.context = context.getApplicationContext();
         db = FirebaseFirestore.getInstance();
+        dao = AppDatabase.getDatabase(this.context).getDao();
     }
 
-    public static DataRepo getInstance() {
+    public static DataRepo getInstance(Context context) {
         if (repo == null) {
-            repo = new DataRepo();
+            repo = new DataRepo(context);
         }
         return repo;
     }
@@ -87,6 +94,25 @@ public class DataRepo {
         return eventNamesData;
     }
 
+    LiveData<EventDetailsModel> getDetails(String name) {
+        return dao.getDetails(name);
+    }
+
+    LiveData<List<EventCategoryModel>> getCategories(boolean isIntra,
+                                                     String groupName) {
+        if (isIntra)
+            return dao.getCategoriesIntra(groupName);
+        else
+            return dao.getCategoriesEdge(groupName);
+    }
+
+    LiveData<List<GroupsModel>> getGroups(boolean isIntra) {
+        if (isIntra)
+            return dao.getGroupsIntra();
+        else
+            return dao.getGroupsEdge();
+    }
+
     // TODO: Might be a good idea to hold all requests that are made while this is updating.
 
     /**
@@ -96,12 +122,11 @@ public class DataRepo {
      * use a JobService or similar for updates, as that'll use up server bandwidth. It's better to
      * serve some users slightly old data than have updates go down for the month.
      */
-    public void updateDb(Context c) {
+    public void updateDb() {
         if (isUpdating || SystemClock.uptimeMillis() - lastUpdateTime < UPDATE_INTERVAL)
             return;
 
         isUpdating = true;
-        Context context = c.getApplicationContext();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         int currentVersion = updateVersionInCache(prefs);
         RequestQueue queue = Volley.newRequestQueue(context);
@@ -124,7 +149,7 @@ public class DataRepo {
                                 .apply();
                         Logger.log("DataRepo", "updateDb: Items: " + items.size());
                         lastUpdateTime = SystemClock.uptimeMillis();
-                        updateOfflineDb(context, items);
+                        updateOfflineDb(items);
                     }
                 });
             } else {
@@ -210,9 +235,9 @@ public class DataRepo {
         }
     }
 
-    private void updateOfflineDb(Context context, List<EventDetailsModel> items) {
+    private void updateOfflineDb(List<EventDetailsModel> items) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.submit(() -> AppDatabase.getDatabase(context).getDao().putDetails(items));
+        executor.submit(() -> dao.putDetails(items));
     }
 
     private interface OnVersionAvailableListener {
