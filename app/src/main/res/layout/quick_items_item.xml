@@ -12,6 +12,7 @@
         android:id="@+id/quick_image"
         android:layout_width="@dimen/allevents_quick_ic_size"
         android:layout_height="@dimen/allevents_quick_ic_size"
+        android:tint="@color/textBodyLarge"
         tools:src="@drawable/quick_accomodation" />
 
     <TextView

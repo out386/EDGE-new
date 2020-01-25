@@ -52,6 +52,7 @@ import com.edge2.event.EventFragment;
 import com.edge2.genericevents.GenericEventFragment;
 import com.edge2.utils.DimenUtils;
 import com.edge2.utils.Logger;
+import com.edge2.views.OnClickListener;
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 
 import java.util.ArrayList;
@@ -203,19 +204,32 @@ public class EventsFragment extends BaseFragment {
         if (!isIntra) {
             if (quickAdapter == null) {
                 ArrayList<QuickItemModel> quickItems = new ArrayList<>();
-                for (int j = 0; j < 5; j++) {
+                QuickItemModel team = new QuickItemModel(getString(R.string.team_title),
+                        context.getDrawable(R.drawable.ic_team),
+                        getString(R.string.team_desc));
+                quickItems.add(team);
+                for (int j = 0; j < 4; j++) {
                     QuickItemModel item = new QuickItemModel("Accommodations",
                             context.getDrawable(R.drawable.quick_accomodation),
                             "Registrations are now open");
                     quickItems.add(item);
                 }
-                quickAdapter = new QuickItemsAdapter(quickItems,
-                        (position, v1, v2, v3, v4, v5) ->
-                                Logger.log("EventListener", "onQuickClicked: " + position));
+                quickAdapter = new QuickItemsAdapter(quickItems, new OnQuickClickListener());
             }
             //noinspection ConstantConditions
             quickReycler.setAdapter(quickAdapter);
             quickReycler.addItemDecoration(new QuickItemDecorator());
+        }
+    }
+
+    private class OnQuickClickListener implements OnClickListener {
+        @Override
+        public void onClick(int position, @Nullable View root, @Nullable View view1,
+                            @Nullable View view2, @Nullable View view3, @Nullable View v4) {
+            if (position == 0) {
+                NavHostFragment.findNavController(EventsFragment.this)
+                        .navigate(R.id.action_events_to_team, null, null, null);
+            }
         }
     }
 

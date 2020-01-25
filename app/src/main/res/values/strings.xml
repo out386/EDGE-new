@@ -30,4 +30,7 @@
     </string>
     <string name="event_details_pending">Details for this event are unavailable right now.</string>
     <string name="mega_event_template">%s - Mega Event</string>
+    <string name="team_title">Team</string>
+    <string name="team_desc">The core members of Geekonix</string>
+    <string name="member_image">Member Image</string>
 </resources>
