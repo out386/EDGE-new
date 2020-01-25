@@ -19,7 +19,6 @@
         android:layout_width="@dimen/allevents_main_event_icon_wh"
         android:layout_height="@dimen/allevents_main_event_icon_wh"
         android:layout_marginEnd="@dimen/allevents_main_events_padding_h"
-        android:scaleType="centerCrop"
         tools:src="@drawable/event_icon" />
 
     <TextView
