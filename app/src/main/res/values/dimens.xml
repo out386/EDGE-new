@@ -12,8 +12,7 @@
     <dimen name="allevents_main_events_w">220dp</dimen>
     <dimen name="allevents_main_events_img_w">189.4739dp</dimen>
     <dimen name="allevents_main_events_img_h">120dp</dimen>
-    <dimen name="allevents_main_events_img_header_w">157.8947dp</dimen>
-    <dimen name="allevents_main_events_img_header_h">100dp</dimen>
+    <dimen name="allevents_main_events_img_header_wh">100dp</dimen>
     <dimen name="allevents_main_event_icon_wh">80dp</dimen>
     <dimen name="allevents_main_events_padding_h">24dp</dimen>
     <dimen name="allevents_main_events_padding_v">24dp</dimen>
