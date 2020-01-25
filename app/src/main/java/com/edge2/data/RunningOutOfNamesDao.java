@@ -61,4 +61,7 @@ public interface RunningOutOfNamesDao {
 
     @Query("SELECT * FROM BannerItems WHERE isMega = 0")
     LiveData<List<BannerItemsModel>> getUpcomingEvents();
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void putBanner(List<BannerItemsModel> items);
 }

@@ -48,11 +48,15 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class DataRepo {
-    private static final String KEY_DB_VERSION = "dbVersion";
+    private static final String KEY_DETAILS_DB_VERSION = "detailsDbVersion";
+    private static final String KEY_BANNER_DB_VERSION = "bannerDbVersion";
     private static final long UPDATE_INTERVAL = 1800000; // 30 minutes
     private static DataRepo repo;
 
     private boolean isUpdating;
+    // 0 = downloading, -1 = failed, 1 = succeeded
+    private int detailsCode;
+    private int bannerCode;
     private long lastUpdateTime;
     private RunningOutOfNamesDao dao;
     private Context context;
@@ -102,41 +106,120 @@ public class DataRepo {
     public void updateDb() {
         if (isUpdating || SystemClock.uptimeMillis() - lastUpdateTime < UPDATE_INTERVAL)
             return;
-
         isUpdating = true;
+        bannerCode = detailsCode = 0;
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        int currentVersion = updateVersionInCache(prefs);
         RequestQueue queue = Volley.newRequestQueue(context);
+        ExecutorService executor = Executors.newSingleThreadExecutor();
 
-        getRemoteDbVersion(queue, availableVersion -> {
-            if (availableVersion < 0) {
-                Logger.log("DataRepo", "updateDb: Failed to get new version number");
-                isUpdating = false;
-                return;
-            }
-            if (availableVersion > currentVersion) {
-                Logger.log("DataRepo", "updateDb: update found: " + availableVersion);
-                downloadUpdate(queue, items -> {
+        updateDetails(prefs, queue, executor, code -> {
+            if (code == -1) {
+                detailsCode = -1;
+                if (bannerCode != 0) {  // Both downloads are done
                     isUpdating = false;
-                    if (items == null) {
-                        Logger.log("DataRepo", "updateDb: Failed to fetch update");
-                    } else {
-                        prefs.edit()
-                                .putInt(KEY_DB_VERSION, availableVersion)
-                                .apply();
-                        Logger.log("DataRepo", "updateDb: Items: " + items.size());
-                        lastUpdateTime = SystemClock.uptimeMillis();
-                        updateOfflineDb(items);
-                    }
-                });
+                    lastUpdateTime = 0;  // This update failed, so allow retries
+                }   // Else let the listener for the other download handle this
             } else {
-                lastUpdateTime = SystemClock.uptimeMillis();
-                isUpdating = false;
+                detailsCode = 1;
+                if (bannerCode == 1) {  // Both downloads completed successfully
+                    lastUpdateTime = SystemClock.uptimeMillis();
+                    isUpdating = false;
+                } else if (bannerCode == -1) {  // The other download failed, so allow retries
+                    isUpdating = false;
+                    lastUpdateTime = 0;
+                }   // Else let the listener for the other download handle this
+            }
+        });
+
+        updateBanner(prefs, queue, executor, code -> {
+            if (code == -1) {
+                bannerCode = -1;
+                if (detailsCode != 0) {  // Both downloads are done
+                    isUpdating = false;
+                    lastUpdateTime = 0;  // This update failed, so allow retries
+                }   // Else let the listener for the other download handle this
+            } else {
+                bannerCode = 1;
+                if (detailsCode == 1) {  // Both downloads completed successfully
+                    lastUpdateTime = SystemClock.uptimeMillis();
+                    isUpdating = false;
+                } else if (detailsCode == -1) {  // The other download failed, so allow retries
+                    isUpdating = false;
+                    lastUpdateTime = 0;
+                }   // Else let the listener for the other download handle this
             }
         });
     }
 
-    private void downloadUpdate(RequestQueue queue, OnVersionFetchedListener listener) {
+    //TODO: Fix the race condition with lastUpdateTime in case just one of banner or details update fail
+
+    private void updateDetails(SharedPreferences prefs, RequestQueue queue, ExecutorService executor,
+                               OnDownloadCompleteListener completeListener) {
+        int currentVersion = updateDetailsVersionInCache(prefs);
+
+        getDetailsRemoteDbVersion(queue, availableVersion -> {
+            if (availableVersion < 0) {
+                Logger.log("DataRepo", "updateDb: Failed to get new version number");
+                completeListener.onDownloadComplete(-1);
+                //isUpdating = false;
+                return;
+            }
+            if (availableVersion > currentVersion) {
+                Logger.log("DataRepo", "updateDb: update found: " + availableVersion);
+                downloadUpdateDetails(queue, items -> {
+                    if (items == null) {
+                        Logger.log("DataRepo", "updateDb: Failed to fetch update");
+                        completeListener.onDownloadComplete(-1);
+                    } else {
+                        prefs.edit()
+                                .putInt(KEY_DETAILS_DB_VERSION, availableVersion)
+                                .apply();
+                        Logger.log("DataRepo", "updateDb: Items: " + items.size());
+                        //lastUpdateTime = SystemClock.uptimeMillis();
+                        updateOfflineDetailsDb(executor, items);
+                        completeListener.onDownloadComplete(1);
+                    }
+                });
+            } else {
+                //lastUpdateTime = SystemClock.uptimeMillis();
+                //isUpdating = false;
+                completeListener.onDownloadComplete(1);
+            }
+        });
+    }
+
+    private void updateBanner(SharedPreferences prefs, RequestQueue queue, ExecutorService executor,
+                              OnDownloadCompleteListener completeListener) {
+        int currentVersion = prefs.getInt(KEY_BANNER_DB_VERSION, 0);
+
+        getBannerRemoteDbVersion(queue, availableVersion -> {
+            if (availableVersion < 0) {
+                Logger.log("DataRepo", "updateDb: Failed to get new banner version number");
+                completeListener.onDownloadComplete(-1);
+                return;
+            }
+            if (availableVersion > currentVersion) {
+                Logger.log("DataRepo", "updateDb: banner update found: " + availableVersion);
+                downloadUpdateBanner(queue, items -> {
+                    if (items == null) {
+                        Logger.log("DataRepo", "updateDb: Failed to fetch banner update");
+                        completeListener.onDownloadComplete(-1);
+                    } else {
+                        prefs.edit()
+                                .putInt(KEY_BANNER_DB_VERSION, availableVersion)
+                                .apply();
+                        Logger.log("DataRepo", "updateDb: Banner items: " + items.size());
+                        updateOfflineBannerDb(executor, items);
+                        completeListener.onDownloadComplete(1);
+                    }
+                });
+            } else {
+                completeListener.onDownloadComplete(1);
+            }
+        });
+    }
+
+    private void downloadUpdateDetails(RequestQueue queue, OnDetailsVersionFetchedListener listener) {
         String url = "https://edge-new-a7306.firebaseapp.com/EventDetails.json";
         StringRequest req = new StringRequest(Request.Method.GET, url,
                 response -> {
@@ -150,7 +233,25 @@ public class DataRepo {
                 error -> listener.onVersionFetched(null));
 
         req.setShouldCache(false).setRetryPolicy(
-                new DefaultRetryPolicy(15000, 3, 1.5f));
+                new DefaultRetryPolicy(15000, 0, 1f));
+        queue.add(req);
+    }
+
+    private void downloadUpdateBanner(RequestQueue queue, OnBannerVersionFetchedListener listener) {
+        String url = "https://edge-new-a7306.web.app/BannerItems.json";
+        StringRequest req = new StringRequest(Request.Method.GET, url,
+                response -> {
+                    List<BannerItemsModel> items = processBannerJson(response);
+                    if (items == null || items.size() == 0) {
+                        listener.onVersionFetched(null);
+                    } else {
+                        listener.onVersionFetched(items);
+                    }
+                },
+                error -> listener.onVersionFetched(null));
+
+        req.setShouldCache(false).setRetryPolicy(
+                new DefaultRetryPolicy(15000, 0, 1f));
         queue.add(req);
     }
 
@@ -159,12 +260,12 @@ public class DataRepo {
      * sharedprefs, since the corresponding database version has already been included as a
      * prepackaged db for Room, and we don't need to download updates.
      */
-    private int updateVersionInCache(SharedPreferences prefs) {
-        int dbVersion = prefs.getInt(KEY_DB_VERSION, AppDatabase.DB_VERSION);
+    private int updateDetailsVersionInCache(SharedPreferences prefs) {
+        int dbVersion = prefs.getInt(KEY_DETAILS_DB_VERSION, AppDatabase.DB_VERSION);
         if (dbVersion < AppDatabase.DB_VERSION) {
             dbVersion = AppDatabase.DB_VERSION;
             prefs.edit()
-                    .putInt(KEY_DB_VERSION, AppDatabase.DB_VERSION)
+                    .putInt(KEY_DETAILS_DB_VERSION, AppDatabase.DB_VERSION)
                     .apply();
         }
         return dbVersion;
@@ -173,8 +274,8 @@ public class DataRepo {
     /**
      * Checks to see if a new database update is available
      */
-    private void getRemoteDbVersion(RequestQueue queue, OnVersionAvailableListener listener) {
-        String url = "https://edge-new-a7306.firebaseapp.com/db_version.txt";
+    private void getDetailsRemoteDbVersion(RequestQueue queue, OnVersionAvailableListener listener) {
+        String url = "https://edge-new-a7306.firebaseapp.com/details_db_version.txt";
 
         StringRequest req = new StringRequest(Request.Method.GET, url,
                 response -> {
@@ -190,7 +291,28 @@ public class DataRepo {
                 error -> listener.onVersionAvailable(-1));
 
         req.setShouldCache(false).setRetryPolicy(
-                new DefaultRetryPolicy(15000, 3, 1.5f));
+                new DefaultRetryPolicy(15000, 0, 1f));
+        queue.add(req);
+    }
+
+    private void getBannerRemoteDbVersion(RequestQueue queue, OnVersionAvailableListener listener) {
+        String url = "https://edge-new-a7306.firebaseapp.com/banner_db_version.txt";
+
+        StringRequest req = new StringRequest(Request.Method.GET, url,
+                response -> {
+                    int ver;
+                    response = response.trim();
+                    try {
+                        ver = Integer.parseInt(response);
+                    } catch (NumberFormatException e) {
+                        ver = -1;
+                    }
+                    listener.onVersionAvailable(ver);
+                },
+                error -> listener.onVersionAvailable(-1));
+
+        req.setShouldCache(false).setRetryPolicy(
+                new DefaultRetryPolicy(15000, 0, 1f));
         queue.add(req);
     }
 
@@ -212,16 +334,45 @@ public class DataRepo {
         }
     }
 
-    private void updateOfflineDb(List<EventDetailsModel> items) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
+    private List<BannerItemsModel> processBannerJson(String res) {
+        try {
+            JSONArray a = new JSONArray(res);
+            List<BannerItemsModel> items = new LinkedList<>();
+            for (int i = 0; i < a.length(); i++) {
+                JSONObject item = a.getJSONObject(i);
+                BannerItemsModel model = BannerItemsModel.getFromJson(item);
+                if (model != null) {
+                    items.add(model);
+                }
+            }
+            return items;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private void updateOfflineDetailsDb(ExecutorService executor, List<EventDetailsModel> items) {
         executor.submit(() -> dao.putDetails(items));
+    }
+
+    private void updateOfflineBannerDb(ExecutorService executor, List<BannerItemsModel> items) {
+        executor.submit(() -> dao.putBanner(items));
     }
 
     private interface OnVersionAvailableListener {
         void onVersionAvailable(int version);
     }
 
-    private interface OnVersionFetchedListener {
+    private interface OnDetailsVersionFetchedListener {
         void onVersionFetched(List<EventDetailsModel> items);
+    }
+
+    private interface OnBannerVersionFetchedListener {
+        void onVersionFetched(List<BannerItemsModel> items);
+    }
+
+    private interface OnDownloadCompleteListener {
+        void onDownloadComplete(int successCode);
     }
 }

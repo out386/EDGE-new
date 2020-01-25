@@ -112,7 +112,7 @@ public class EventDetailsModel {
     public static EventDetailsModel getFromJson(JSONObject ob) throws JSONException {
         EventDetailsModel item = new EventDetailsModel();
         item.name = ob.getString("name");
-        if (item.name == null || item.name.isEmpty())
+        if (item.name == null || item.name.isEmpty() || item.name.equals("null"))
             return null;
         item.longDesc = ob.getString("longDesc");
         if (item.longDesc.isEmpty())

@@ -27,6 +27,9 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
 
 @Entity(tableName = "BannerItems")
@@ -42,17 +45,26 @@ public class BannerItemsModel implements Serializable {
     public String desc;
     public boolean isMega;
 
+    private BannerItemsModel() {
+    }
+
     public BannerItemsModel(@NonNull String name, String imgName, String imgUrl, String sched,
                             String desc, boolean isMega) {
         this.name = name;
-        if (imgName != null && !imgName.isEmpty()) {
-            uri = Uri.parse("android.resource://com.edge2/drawable/" + imgName);
-        } else if (imgUrl != null && !imgUrl.isEmpty()) {
-            uri = Uri.parse(imgUrl);
-        }
+        this.imgName = imgName;
+        this.imgUrl = imgUrl;
+        setUri(this);
         this.sched = sched;
         this.desc = desc;
         this.isMega = isMega;
+    }
+
+    private static void setUri(BannerItemsModel item) {
+        if (item.imgName != null && !item.imgName.isEmpty()) {
+            item.uri = Uri.parse("android.resource://com.edge2/drawable/" + item.imgName);
+        } else if (item.imgUrl != null && !item.imgUrl.isEmpty()) {
+            item.uri = Uri.parse(item.imgUrl);
+        }
     }
 
     public Uri getUri() {
@@ -73,5 +85,29 @@ public class BannerItemsModel implements Serializable {
 
     public boolean getMega() {
         return isMega;
+    }
+
+    public static BannerItemsModel getFromJson(JSONObject ob) throws JSONException {
+        BannerItemsModel item = new BannerItemsModel();
+        item.name = ob.getString("name");
+
+        // Yes, the generated JSON I'm using can actually have a "null" string
+        if (item.name == null || item.name.isEmpty() || item.name.equals("null"))
+            return null;
+        item.imgName = ob.getString("imgName");
+        if (item.imgName == null || item.imgName.isEmpty() || item.imgName.equals("null"))
+            item.imgName = null;
+        item.imgUrl = ob.getString("imgUrl");
+        if (item.imgUrl == null || item.imgUrl.isEmpty() || item.imgUrl.equals("null"))
+            item.imgUrl = null;
+        item.sched = ob.getString("sched");
+        if (item.sched == null || item.sched.isEmpty() || item.sched.equals("null"))
+            item.sched = null;
+        item.desc = ob.getString("desc");
+        if (item.desc == null || item.desc.isEmpty() || item.desc.equals("null"))
+            item.desc = null;
+        item.isMega = ob.getInt("isMega") == 1;
+        setUri(item);
+        return item;
     }
 }
