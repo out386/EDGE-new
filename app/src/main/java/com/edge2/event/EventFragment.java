@@ -64,7 +64,7 @@ public class EventFragment extends BaseFragment {
     private ItemDecoration itemDecoration;
     private Context context;
     private OnSharedElementListener sharedElementListener;
-    private Transition transition;
+    private MoveTransition transition;
     private boolean isTransitionFinished;
     private List<EventCategoryModel> categoriesList;
     private TextView nameTv;
@@ -126,8 +126,25 @@ public class EventFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (sharedElementListener != null)
+        if (sharedElementListener != null) {
             transition.removeListener(sharedElementListener);
+            sharedElementListener.onDestroy();
+            sharedElementListener = null;
+        }
+        mainReycler.setAdapter(null);
+        mainReycler.removeItemDecoration(itemDecoration);
+        itemDecoration = null;
+        mainReycler = null;
+        transition.onDestroy();
+        transition = null;
+        nameTv = null;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        listener = null;
+        context = null;
     }
 
     private void setGroupData(TextView desc, ImageView image) {
@@ -228,6 +245,11 @@ public class EventFragment extends BaseFragment {
             this.desc = desc;
             this.divider = divider;
             interpolator = new DecelerateInterpolator();
+        }
+
+        void onDestroy() {
+            dummy = desc = divider = null;
+            interpolator = null;
         }
 
         @Override

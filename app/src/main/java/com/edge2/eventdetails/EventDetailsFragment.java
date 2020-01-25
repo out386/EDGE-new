@@ -61,7 +61,7 @@ public class EventDetailsFragment extends BaseFragment {
     private OnFragmentScrollListener listener;
     private Context context;
     private OnSharedElementListener sharedElementListener;
-    private Transition transition;
+    private MoveTransition transition;
     private TextView nameTv;
     private String eventName;
     private boolean hasSchedule;
@@ -73,6 +73,13 @@ public class EventDetailsFragment extends BaseFragment {
         super.onAttach(context);
         listener = (OnFragmentScrollListener) context;
         this.context = context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        listener = null;
+        context = null;
     }
 
     @Override
@@ -127,8 +134,14 @@ public class EventDetailsFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (sharedElementListener != null)
+        if (sharedElementListener != null) {
             transition.removeListener(sharedElementListener);
+            sharedElementListener.onDestroy();
+            sharedElementListener = null;
+        }
+        transition.onDestroy();
+        transition = null;
+        nameTv = null;
     }
 
     private void setHeaderData(TextView shortDescTv, ImageView image) {
@@ -252,6 +265,12 @@ public class EventDetailsFragment extends BaseFragment {
                 anims[i].setStartOffset(i * 100);
                 anims[i].setDuration(animTime);
             }
+        }
+
+        void onDestroy() {
+            for (View v : allViews)
+                v = null;
+            dummy = null;
         }
 
         @Override

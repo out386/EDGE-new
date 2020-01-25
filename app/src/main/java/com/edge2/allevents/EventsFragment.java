@@ -93,6 +93,13 @@ public class EventsFragment extends BaseFragment {
     }
 
     @Override
+    public void onDetach() {
+        super.onDetach();
+        context = null;
+        listener = null;
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
@@ -134,6 +141,25 @@ public class EventsFragment extends BaseFragment {
 
         showData();
         return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        topViewIntra = null;
+        topViewEdge = null;
+        if (banner != null) {
+            banner.setItemClickListener(null);
+            banner.onDestroy();
+            banner = null;
+        }
+        mainReycler.setAdapter(null);
+        mainReycler.removeItemDecoration(itemDecoration);
+        itemDecoration = null;
+        if (quickReycler != null)
+            quickReycler.setAdapter(null);
+        mainReycler = null;
+        quickReycler = null;
     }
 
     @Override

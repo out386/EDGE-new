@@ -43,7 +43,7 @@ import java.util.List;
 
 public class TeamFragment extends BaseFragment {
     private OnSharedElementListener sharedElementListener;
-    private Transition transition;
+    private MoveTransition transition;
     private GeneralHeaderView topView;
 
     @Override
@@ -98,8 +98,13 @@ public class TeamFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (sharedElementListener != null)
+        if (sharedElementListener != null) {
             transition.removeListener(sharedElementListener);
+            sharedElementListener = null;
+        }
+        transition.onDestroy();
+        transition = null;
+        topView = null;
     }
 
     private class OnSharedElementListener implements Transition.TransitionListener {

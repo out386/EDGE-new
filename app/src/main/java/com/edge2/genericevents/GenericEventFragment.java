@@ -83,12 +83,25 @@ public class GenericEventFragment extends BaseFragment {
     }
 
     @Override
+    public void onDetach() {
+        super.onDetach();
+        listener = null;
+        context = null;
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         postponeEnterTransition();
         View rootView = inflater.inflate(R.layout.fragment_generic_event, container, false);
         nameTv = rootView.findViewById(R.id.genericevent_name);
         return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        nameTv = null;
     }
 
     @Override
