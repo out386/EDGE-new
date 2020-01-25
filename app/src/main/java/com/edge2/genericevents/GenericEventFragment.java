@@ -60,6 +60,8 @@ import com.edge2.views.ContactsView;
 
 import jp.wasabeef.blurry.Blurry;
 
+import static android.view.View.GONE;
+
 public class GenericEventFragment extends BaseFragment {
     public static final String KEY_EVENT_NAME = "gEventName";
     public static final String KEY_EVENT_IMG = "gEventImg";
@@ -71,6 +73,7 @@ public class GenericEventFragment extends BaseFragment {
     private Context context;
     private Transition transition;
     private TextView nameTv;
+    private String schedule;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -99,22 +102,21 @@ public class GenericEventFragment extends BaseFragment {
         ImageView imageBlur = view.findViewById(R.id.genericevent_image_blur);
         TextView longDesc = view.findViewById(R.id.genericevent_long_desc);
         TextView schedule = view.findViewById(R.id.genericevent_schedule);
-        LinearLayout contacts = view.findViewById(R.id.genericevent_contacts);
+        //LinearLayout contacts = view.findViewById(R.id.genericevent_contacts);
 
         setupInsets(view, divider, topView, scrollView, contentView);
-        setData(image, imageBlur, longDesc, schedule, contacts);
+        setData(image, imageBlur, longDesc, schedule, divider);
 
-        new AnimationHolder(view, divider, schedule, longDesc,
-                contacts).animateViews();
+        new AnimationHolder(view, divider, schedule, longDesc).animateViews();
     }
 
     private void setData(ImageView image, ImageView imageBlur, TextView longDesc, TextView sched,
-                         LinearLayout contacts) {
+                         View divider1) {
         Bundle args = getArguments();
         if (args != null) {
             String name = args.getString(KEY_EVENT_NAME);
             Uri img = Uri.parse(args.getString(KEY_EVENT_IMG));
-            String schedule = args.getString(KEY_EVENT_SCHED);
+            schedule = args.getString(KEY_EVENT_SCHED);
             String desc = args.getString(KEY_EVENT_DESC);
             boolean isMega = args.getBoolean(KEY_EVENT_IS_MEGA);
             if (name == null || name.isEmpty()) {
@@ -149,9 +151,14 @@ public class GenericEventFragment extends BaseFragment {
                         }
                     })
                     .into(image);
-            sched.setText(processSched(schedule));
+            if (schedule == null || schedule.isEmpty()) {
+                sched.setVisibility(GONE);
+                divider1.setVisibility(GONE);
+            } else {
+                sched.setText(processSched(schedule));
+            }
             longDesc.setText(processDesc(desc));
-            setContacts(contacts);
+            //setContacts(contacts);
         }
     }
 
@@ -224,18 +231,18 @@ public class GenericEventFragment extends BaseFragment {
         private Animation[] anims;
 
         AnimationHolder(View root, View divider, TextView schedule,
-                        TextView longDesc, View contacts) {
+                        TextView longDesc) {
             int animTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
             View divider1 = root.findViewById(R.id.divider1);
-            View divider2 = root.findViewById(R.id.divider2);
+            //View divider2 = root.findViewById(R.id.divider2);
             View overviewHeader = root.findViewById(R.id.genericevent_overview_header);
             View scheduleHeader = root.findViewById(R.id.genericevent_schedule_header);
-            View contactsHeader = root.findViewById(R.id.genericevent_contacts_header);
+            //View contactsHeader = root.findViewById(R.id.genericevent_contacts_header);
             allViews = new View[]{divider, overviewHeader, longDesc, divider1, scheduleHeader,
-                    schedule, divider2, contactsHeader, contacts};
+                    schedule};
 
-            anims = new Animation[3];
-            for (int i = 0; i < 3; i++) {
+            anims = new Animation[2];
+            for (int i = 0; i < 2; i++) {
                 anims[i] = AnimationUtils.loadAnimation(divider.getContext(),
                         R.anim.view_fall_down);
                 anims[i].setStartOffset((i + 1) * 100);
@@ -245,8 +252,12 @@ public class GenericEventFragment extends BaseFragment {
 
         void animateViews() {
             for (int i = 0; i < allViews.length; i++) {
-                allViews[i].setVisibility(View.VISIBLE);
-                allViews[i].startAnimation(anims[i / 3]);
+                int group = i / 3;
+                if (group != 1 || (schedule != null && !schedule.isEmpty()))
+                    allViews[i].setVisibility(View.VISIBLE);
+                else
+                    allViews[i].setVisibility(GONE);
+                allViews[i].startAnimation(anims[group]);
             }
         }
     }

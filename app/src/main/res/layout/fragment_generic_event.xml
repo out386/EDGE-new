@@ -72,7 +72,7 @@
                     android:layout_marginEnd="@dimen/margin_large"
                     tools:text="01/20/20, 10:00pm: some round 1\n02/20/20, 10:00pm: some round 2" />
 
-                <View
+                <!--<View
                     android:id="@+id/divider2"
                     android:layout_width="match_parent"
                     android:layout_height="6dp"
@@ -99,7 +99,7 @@
                     android:layout_marginTop="@dimen/margin_large"
                     android:layout_marginEnd="@dimen/margin_large"
                     android:background="@color/windowBackground"
-                    android:orientation="vertical" />
+                    android:orientation="vertical" />-->
 
             </LinearLayout>
 
