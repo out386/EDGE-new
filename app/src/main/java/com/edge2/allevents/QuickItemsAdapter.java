@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.edge2.R;
@@ -57,11 +58,20 @@ public class QuickItemsAdapter extends RecyclerView.Adapter<QuickItemsAdapter.Qu
     public void onBindViewHolder(@NonNull QuickItemsViewHolder holder, int position) {
         QuickItemModel item = items.get(position);
         ImageView imageView = holder.itemImage;
+        TextView nameView = holder.itemName;
+        TextView descView = holder.itemDesc;
+        View root = holder.rootView;
+
+        ViewCompat.setTransitionName(imageView, "qimg" + position);
+        ViewCompat.setTransitionName(nameView, "qname" + position);
+        ViewCompat.setTransitionName(descView, "qdesc" + position);
+        ViewCompat.setTransitionName(root, "qroot" + position);
+
         imageView.setImageDrawable(item.getImage());
-        holder.itemName.setText(item.getName());
-        holder.itemDesc.setText(item.getDesc());
+        nameView.setText(item.getName());
+        descView.setText(item.getDesc());
         holder.rootView.setOnClickListener(view ->
-                listener.onClick(position)
+                listener.onClick(position, root, nameView, descView, imageView, null)
         );
     }
 

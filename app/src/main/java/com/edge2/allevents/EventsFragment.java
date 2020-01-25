@@ -224,11 +224,23 @@ public class EventsFragment extends BaseFragment {
 
     private class OnQuickClickListener implements OnClickListener {
         @Override
-        public void onClick(int position, @Nullable View root, @Nullable View view1,
-                            @Nullable View view2, @Nullable View view3, @Nullable View v4) {
+        public void onClick(int position, View root, View nameView, View descView,
+                            View imageView, @Nullable View view5) {
             if (position == 0) {
+                String transitionNameName = getString(R.string.events_to_quick_title_transition);
+                String transitionDescName = getString(R.string.events_to_quick_desc_transition);
+                String transitionImgName = getString(R.string.events_to_quick_icon_transition);
+                String transitionRootName = getString(R.string.events_to_quick_root_transition);
+
+                // To add more shared views here, call "setTransitionName" in the adapter
+                FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
+                        .addSharedElement(nameView, transitionNameName)
+                        .addSharedElement(descView, transitionDescName)
+                        .addSharedElement(imageView, transitionImgName)
+                        .addSharedElement(root, transitionRootName)
+                        .build();
                 NavHostFragment.findNavController(EventsFragment.this)
-                        .navigate(R.id.action_events_to_team, null, null, null);
+                        .navigate(R.id.action_events_to_team, null, null, extras);
             }
         }
     }

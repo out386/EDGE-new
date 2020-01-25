@@ -5,6 +5,7 @@
         <attr name="desc" format="string" />
         <attr name="icon" format="reference" />
         <attr name="flip" format="boolean" />
+        <attr name="hideImage" format="boolean" />
     </declare-styleable>
     <declare-styleable name="SwitchItem">
         <attr name="switchText" format="string" />

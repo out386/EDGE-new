@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:transitionName="@string/events_to_quick_root_transition"
+    android:background="@color/windowBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,14 +19,15 @@
             app:name="@string/team_title"
             app:icon="@drawable/ic_team"
             app:desc="@string/team_desc"
-            app:flip="true" />
+            app:flip="true"
+            app:hideImage="true" />
 
         <LinearLayout
             android:id="@+id/team_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:paddingTop="@dimen/margin_huge"/>
+            android:paddingTop="@dimen/margin_huge" />
 
     </LinearLayout>
 

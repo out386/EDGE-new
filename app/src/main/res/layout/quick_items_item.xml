@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/allevents_quick_size_h"
     android:layout_height="wrap_content"
-    android:background="@drawable/general_ripple"
-    android:foreground="@drawable/card_bg"
+    android:foreground="@drawable/quick_item_ripple"
+    android:background="@color/windowBackground"
     android:orientation="horizontal"
     android:padding="@dimen/margin_large">
 

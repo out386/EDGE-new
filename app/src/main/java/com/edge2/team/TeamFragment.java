@@ -25,37 +25,64 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
+import androidx.transition.Transition;
 
 import com.edge2.BaseFragment;
 import com.edge2.R;
+import com.edge2.transitions.MoveTransition;
+import com.edge2.views.GeneralHeaderView;
 
 import java.util.List;
 
 public class TeamFragment extends BaseFragment {
+    private OnSharedElementListener sharedElementListener;
+    private Transition transition;
+    private GeneralHeaderView topView;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_team, container, false);
+        postponeEnterTransition();
+        View v = inflater.inflate(R.layout.fragment_team, container, false);
+        topView = v.findViewById(R.id.top_view);
+        transition = new MoveTransition(topView.getNameTv());
+        setSharedElementEnterTransition(transition);
+        setSharedElementReturnTransition(transition);
+        return v;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        View topView = view.findViewById(R.id.top_view);
         LinearLayout contentView = view.findViewById(R.id.team_content);
+
+        topView.setNameTransition(getString(R.string.events_to_quick_title_transition));
+        topView.setDescTransition(getString(R.string.events_to_quick_desc_transition));
+        topView.setIconTransition(getString(R.string.events_to_quick_icon_transition));
+
+        if (sharedElementListener != null) {
+            transition.removeListener(sharedElementListener);
+        }
+        sharedElementListener = new OnSharedElementListener(topView, contentView);
+        transition.addListener(sharedElementListener);
+
         // Show the toolbar
         onFragmentScrollListener.onListScrolled(0, Integer.MAX_VALUE);
         setupWindowInsets(view, contentView, topView, false,
                 false, null);
         topView.post(() ->
                 setupScrollListener((NestedScrollView) view, topView.getHeight()));
+
         setData(contentView);
+        if (savedInstanceState != null)
+            topView.showImage(0);
     }
 
     private void setData(LinearLayout contentView) {
@@ -64,6 +91,61 @@ public class TeamFragment extends BaseFragment {
         for (Data.MemberModel member : team) {
             MemberView view = new MemberView(context, member);
             contentView.addView(view);
+        }
+        startPostponedEnterTransition();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (sharedElementListener != null)
+            transition.removeListener(sharedElementListener);
+    }
+
+    private class OnSharedElementListener implements Transition.TransitionListener {
+        private int animTime;
+        private int animOffset;
+        private GeneralHeaderView topView;
+        private View contentView;
+        private Interpolator interpolator;
+
+        OnSharedElementListener(GeneralHeaderView topView, View contentView) {
+            animTime = getResources().getInteger(android.R.integer.config_mediumAnimTime);
+            animOffset = getResources().getDimensionPixelOffset(R.dimen.item_animate_h_offset);
+            this.topView = topView;
+            this.contentView = contentView;
+            interpolator = new DecelerateInterpolator();
+        }
+
+        @Override
+        public void onTransitionStart(@NonNull Transition transition) {
+            contentView.setTranslationY(animOffset);
+            contentView.setAlpha(0);
+        }
+
+        @Override
+        public void onTransitionEnd(@NonNull Transition transition) {
+            contentView.animate()
+                    .setDuration(animTime)
+                    .translationY(0)
+                    .setInterpolator(interpolator)
+                    .alpha(1);
+            topView.showImage(animTime);
+        }
+
+        @Override
+        public void onTransitionCancel(@NonNull Transition transition) {
+
+        }
+
+        @Override
+        public void onTransitionPause(@NonNull Transition transition) {
+
+        }
+
+        @Override
+        public void onTransitionResume(@NonNull Transition transition) {
+
         }
     }
 

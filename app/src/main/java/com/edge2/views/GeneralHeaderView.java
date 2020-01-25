@@ -24,14 +24,24 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.view.ViewCompat;
 
 import com.edge2.R;
 
 public class GeneralHeaderView extends ConstraintLayout {
+    private boolean hideImage;
+    private TextView nameTv;
+    private TextView descTv;
+    private ImageView iconView;
+    private ImageView imageView;
+    private View divider;
+    private HideViewRunnable runnable;
+
     public GeneralHeaderView(Context context) {
         super(context);
         init(context, null);
@@ -55,6 +65,7 @@ public class GeneralHeaderView extends ConstraintLayout {
             inflate(context, R.layout.general_header_inverted, this);
         else
             inflate(context, R.layout.general_header, this);
+        hideImage = a.getBoolean(R.styleable.GeneralHeaderView_hideImage, false);
         String name = a.getString(R.styleable.GeneralHeaderView_name);
         String desc = a.getString(R.styleable.GeneralHeaderView_desc);
         Drawable icon = a.getDrawable(R.styleable.GeneralHeaderView_icon);
@@ -63,9 +74,16 @@ public class GeneralHeaderView extends ConstraintLayout {
     }
 
     private void setData(String name, String desc, Drawable icon) {
-        TextView nameTv = findViewById(R.id.general_name);
-        TextView descTv = findViewById(R.id.general_desc);
-        ImageView iconView = findViewById(R.id.general_icon);
+        nameTv = findViewById(R.id.general_name);
+        descTv = findViewById(R.id.general_desc);
+        iconView = findViewById(R.id.general_icon);
+        imageView = findViewById(R.id.general_img);
+        divider = findViewById(R.id.divider);
+
+        if (hideImage) {
+            runnable = new HideViewRunnable();
+            imageView.post(runnable);
+        }
 
         nameTv.setText(name);
         if (desc == null || desc.isEmpty())
@@ -73,5 +91,45 @@ public class GeneralHeaderView extends ConstraintLayout {
         else
             descTv.setText(desc);
         iconView.setImageDrawable(icon);
+    }
+
+    public void setNameTransition(String transitionName) {
+        ViewCompat.setTransitionName(nameTv, transitionName);
+    }
+
+    public void setDescTransition(String transitionName) {
+        ViewCompat.setTransitionName(descTv, transitionName);
+    }
+
+    public void setIconTransition(String transitionName) {
+        ViewCompat.setTransitionName(iconView, transitionName);
+    }
+
+    public TextView getNameTv() {
+        return nameTv;
+    }
+
+    public void showImage(int animDuration) {
+        if (hideImage) {
+            imageView.removeCallbacks(runnable);
+            imageView.setVisibility(VISIBLE);
+            imageView.animate()
+                    .setDuration(animDuration)
+                    .translationX(0);
+            divider.setVisibility(VISIBLE);
+            divider.animate()
+                    .setDuration(animDuration)
+                    .translationY(0);
+        }
+    }
+
+    class HideViewRunnable implements Runnable {
+        @Override
+        public void run() {
+            imageView.setTranslationX(-imageView.getWidth());
+            imageView.setVisibility(INVISIBLE);
+            divider.setTranslationY(-divider.getHeight());
+            divider.setVisibility(INVISIBLE);
+        }
     }
 }

@@ -9,4 +9,9 @@
     <string name="sub_to_details_desc_transition">subToDetailsDescTransition</string>
     <string name="sub_to_details_root_transition">subToDetailsRootTransition</string>
     <string name="sub_to_details_button_transition">subToDetailsButtonTransition</string>
+
+    <string name="events_to_quick_icon_transition">eventsToQuickIconTransition</string>
+    <string name="events_to_quick_title_transition">eventsToQuickTitleTransition</string>
+    <string name="events_to_quick_desc_transition">eventsToQuickDescTransition</string>
+    <string name="events_to_quick_root_transition">eventsToQuickRootTransition</string>
 </resources>
