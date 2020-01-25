@@ -161,7 +161,6 @@ public class DataRepo {
             if (availableVersion < 0) {
                 Logger.log("DataRepo", "updateDb: Failed to get new version number");
                 completeListener.onDownloadComplete(-1);
-                //isUpdating = false;
                 return;
             }
             if (availableVersion > currentVersion) {
@@ -175,14 +174,12 @@ public class DataRepo {
                                 .putInt(KEY_DETAILS_DB_VERSION, availableVersion)
                                 .apply();
                         Logger.log("DataRepo", "updateDb: Items: " + items.size());
-                        //lastUpdateTime = SystemClock.uptimeMillis();
-                        updateOfflineDetailsDb(executor, items);
+                        if (items.size() > 0)
+                            updateOfflineDetailsDb(executor, items);
                         completeListener.onDownloadComplete(1);
                     }
                 });
             } else {
-                //lastUpdateTime = SystemClock.uptimeMillis();
-                //isUpdating = false;
                 completeListener.onDownloadComplete(1);
             }
         });
@@ -209,7 +206,8 @@ public class DataRepo {
                                 .putInt(KEY_BANNER_DB_VERSION, availableVersion)
                                 .apply();
                         Logger.log("DataRepo", "updateDb: Banner items: " + items.size());
-                        updateOfflineBannerDb(executor, items);
+                        if (items.size() > 0)
+                            updateOfflineBannerDb(executor, items);
                         completeListener.onDownloadComplete(1);
                     }
                 });
@@ -224,7 +222,7 @@ public class DataRepo {
         StringRequest req = new StringRequest(Request.Method.GET, url,
                 response -> {
                     List<EventDetailsModel> items = processDetailsJson(response);
-                    if (items == null || items.size() == 0) {
+                    if (items == null) {
                         listener.onVersionFetched(null);
                     } else {
                         listener.onVersionFetched(items);
@@ -242,7 +240,7 @@ public class DataRepo {
         StringRequest req = new StringRequest(Request.Method.GET, url,
                 response -> {
                     List<BannerItemsModel> items = processBannerJson(response);
-                    if (items == null || items.size() == 0) {
+                    if (items == null) {
                         listener.onVersionFetched(null);
                     } else {
                         listener.onVersionFetched(items);
