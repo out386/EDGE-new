@@ -21,13 +21,12 @@ package com.edge2;
  */
 
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
@@ -39,7 +38,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class MainActivity extends ThemeActivity implements OnFragmentScrollListener {
 
     private BottomNavigationView bottomNav;
-    private Toolbar toolbar;
+    private ConstraintLayout toolbar;
     private int animTime;
     private int lastEventScrollDy = 0;
     private int lastToolbarScrollDy = 0;
@@ -56,7 +55,6 @@ public class MainActivity extends ThemeActivity implements OnFragmentScrollListe
         bottomNav = findViewById(R.id.navigation);
 
         toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         ActionBar bar = getSupportActionBar();
         if (bar != null) {
             bar.setDisplayShowTitleEnabled(false);
@@ -100,12 +98,6 @@ public class MainActivity extends ThemeActivity implements OnFragmentScrollListe
         for (NavDestination navDestination : navController.getGraph()) {
             navController.popBackStack();
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
     }
 
     private void setupInsets() {

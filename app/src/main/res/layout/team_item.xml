@@ -14,7 +14,7 @@
         android:layout_width="@dimen/team_img_wh"
         android:layout_height="@dimen/team_img_wh"
         android:contentDescription="@string/member_image"
-        tools:src="@drawable/ic_action_theme" />
+        tools:src="@drawable/ic_tmsl" />
 
     <View
         android:layout_width="match_parent"

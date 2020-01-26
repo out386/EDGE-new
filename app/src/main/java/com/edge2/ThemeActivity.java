@@ -25,7 +25,6 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -57,15 +56,6 @@ public abstract class ThemeActivity extends AppCompatActivity {
         prefs.edit()
                 .putInt(KEY_THEME_TYPE, theme)
                 .apply();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_theme) {
-            showThemeDialog();
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void setSystemUIFlags() {

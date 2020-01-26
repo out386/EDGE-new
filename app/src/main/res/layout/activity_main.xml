@@ -6,14 +6,11 @@
     android:id="@+id/main_root"
     android:orientation="vertical">
 
-    <com.edge2.views.CenterToolbar
+    <include
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        android:elevation="3dp"
-        app:layout_collapseMode="pin"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        layout="@layout/layout_centertoolbar" />
 
     <fragment
         android:id="@+id/content_frame"
