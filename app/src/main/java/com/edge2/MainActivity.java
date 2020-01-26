@@ -158,4 +158,9 @@ public class MainActivity extends ThemeActivity implements OnFragmentScrollListe
         }
         lastToolbarScrollDy = toolbarDy;
     }
+
+    @Override
+    public int getBottomNavHeight() {
+        return bottomNav.getHeight();
+    }
 }

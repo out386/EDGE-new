@@ -66,12 +66,23 @@ public abstract class BaseFragment extends Fragment {
             int toolbarHeight = DimenUtils.getActionbarHeight(requireContext());
 
             MarginLayoutParams contentParams = (MarginLayoutParams) contentView.getLayoutParams();
-            if (skipContentBottomMargin)
-                contentParams.setMargins(leftInset, 0, rightInset, 0);
-            else
-                contentParams.setMargins(leftInset, 0, rightInset, bottomInset);
-            contentView.setLayoutParams(contentParams);
+            int bottomNavHeight = onFragmentScrollListener.getBottomNavHeight();
+            int windowHeight = DimenUtils.getWindowHeight(rootView.getContext());
+            rootView.post(() -> {
+                int rootHeight = rootView.getHeight();
+                int baseMargin = 0;
+                if (rootHeight <= windowHeight) {
+                    int aboveNavHeight = windowHeight - bottomNavHeight;
+                    if (rootHeight > aboveNavHeight)    // Root bottom lies between bottomNav and screen bottom
+                        baseMargin = windowHeight - rootHeight + 2; // Extra 2px for safety
+                }
 
+                if (skipContentBottomMargin)
+                    contentParams.setMargins(leftInset, 0, rightInset, baseMargin);
+                else
+                    contentParams.setMargins(leftInset, 0, rightInset, baseMargin + bottomInset);
+                contentView.setLayoutParams(contentParams);
+            });
             MarginLayoutParams topViewParams = (MarginLayoutParams) topView.getLayoutParams();
             if (skipTopViewSideMargins) {
                 topViewParams.topMargin = toolbarHeight + topInset;

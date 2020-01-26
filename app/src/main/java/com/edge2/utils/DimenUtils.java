@@ -40,6 +40,18 @@ public class DimenUtils {
         return 0;
     }
 
+    public static int getWindowHeight(Context context) {
+        WindowManager windowManager =
+                (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display;
+        if (windowManager != null && (display = windowManager.getDefaultDisplay()) != null) {
+            Point size = new Point();
+            display.getSize(size);
+            return size.y;
+        }
+        return 0;
+    }
+
     public static int getActionbarHeight(Context context) {
         TypedValue tv = new TypedValue();
         if (context.getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
