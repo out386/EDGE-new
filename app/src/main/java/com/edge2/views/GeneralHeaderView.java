@@ -41,6 +41,7 @@ public class GeneralHeaderView extends ConstraintLayout {
     private ImageView imageView;
     private View divider;
     private HideViewRunnable runnable;
+    private boolean flip;
 
     public GeneralHeaderView(Context context) {
         super(context);
@@ -60,20 +61,21 @@ public class GeneralHeaderView extends ConstraintLayout {
     private void init(Context context, AttributeSet attrs) {
         TypedArray a = getContext().obtainStyledAttributes(attrs,
                 R.styleable.GeneralHeaderView, 0, 0);
-        boolean flip = a.getBoolean(R.styleable.GeneralHeaderView_flip, false);
+        flip = a.getBoolean(R.styleable.GeneralHeaderView_flip, false);
         if (flip)
             inflate(context, R.layout.general_header_inverted, this);
         else
             inflate(context, R.layout.general_header, this);
         hideImage = a.getBoolean(R.styleable.GeneralHeaderView_hideImage, false);
+        boolean skipTint = a.getBoolean(R.styleable.GeneralHeaderView_skipTint, false);
         String name = a.getString(R.styleable.GeneralHeaderView_name);
         String desc = a.getString(R.styleable.GeneralHeaderView_desc);
         Drawable icon = a.getDrawable(R.styleable.GeneralHeaderView_icon);
         a.recycle();
-        setData(name, desc, icon);
+        setData(name, desc, icon, skipTint);
     }
 
-    private void setData(String name, String desc, Drawable icon) {
+    private void setData(String name, String desc, Drawable icon, boolean skipTint) {
         nameTv = findViewById(R.id.general_name);
         descTv = findViewById(R.id.general_desc);
         iconView = findViewById(R.id.general_icon);
@@ -90,6 +92,8 @@ public class GeneralHeaderView extends ConstraintLayout {
             descTv.setVisibility(GONE);
         else
             descTv.setText(desc);
+        if (skipTint)
+            iconView.setImageTintList(null);
         iconView.setImageDrawable(icon);
     }
 
@@ -126,7 +130,10 @@ public class GeneralHeaderView extends ConstraintLayout {
     class HideViewRunnable implements Runnable {
         @Override
         public void run() {
-            imageView.setTranslationX(-imageView.getWidth());
+            if (flip)
+                imageView.setTranslationX(-imageView.getWidth());
+            else
+                imageView.setTranslationX(imageView.getWidth());
             imageView.setVisibility(INVISIBLE);
             divider.setTranslationY(-divider.getHeight());
             divider.setVisibility(INVISIBLE);

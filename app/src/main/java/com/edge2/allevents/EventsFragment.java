@@ -51,7 +51,6 @@ import com.edge2.data.DataViewModel;
 import com.edge2.event.EventFragment;
 import com.edge2.genericevents.GenericEventFragment;
 import com.edge2.utils.DimenUtils;
-import com.edge2.utils.Logger;
 import com.edge2.views.OnClickListener;
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 
@@ -234,7 +233,11 @@ public class EventsFragment extends BaseFragment {
                         context.getDrawable(R.drawable.ic_team),
                         getString(R.string.team_desc));
                 quickItems.add(team);
-                for (int j = 0; j < 4; j++) {
+                team = new QuickItemModel(getString(R.string.about_title),
+                        context.getDrawable(R.drawable.ic_about),
+                        getString(R.string.about_desc));
+                quickItems.add(team);
+                for (int j = 0; j < 3; j++) {
                     QuickItemModel item = new QuickItemModel("Accommodations",
                             context.getDrawable(R.drawable.quick_accomodation),
                             "Registrations are now open");
@@ -252,22 +255,32 @@ public class EventsFragment extends BaseFragment {
         @Override
         public void onClick(int position, View root, View nameView, View descView,
                             View imageView, @Nullable View view5) {
-            if (position == 0) {
-                String transitionNameName = getString(R.string.events_to_quick_title_transition);
-                String transitionDescName = getString(R.string.events_to_quick_desc_transition);
-                String transitionImgName = getString(R.string.events_to_quick_icon_transition);
-                String transitionRootName = getString(R.string.events_to_quick_root_transition);
-
-                // To add more shared views here, call "setTransitionName" in the adapter
-                FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
-                        .addSharedElement(nameView, transitionNameName)
-                        .addSharedElement(descView, transitionDescName)
-                        .addSharedElement(imageView, transitionImgName)
-                        .addSharedElement(root, transitionRootName)
-                        .build();
-                NavHostFragment.findNavController(EventsFragment.this)
-                        .navigate(R.id.action_events_to_team, null, null, extras);
+            int actionRes;
+            switch (position) {
+                case 0:
+                    actionRes = R.id.action_events_to_team;
+                    break;
+                case 2:
+                    actionRes = R.id.action_events_to_about;
+                    break;
+                default:
+                    actionRes = R.id.action_events_to_about;
             }
+
+            String transitionNameName = getString(R.string.events_to_quick_title_transition);
+            String transitionDescName = getString(R.string.events_to_quick_desc_transition);
+            String transitionImgName = getString(R.string.events_to_quick_icon_transition);
+            String transitionRootName = getString(R.string.events_to_quick_root_transition);
+
+            // To add more shared views here, call "setTransitionName" in the adapter
+            FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
+                    .addSharedElement(nameView, transitionNameName)
+                    .addSharedElement(descView, transitionDescName)
+                    .addSharedElement(imageView, transitionImgName)
+                    .addSharedElement(root, transitionRootName)
+                    .build();
+            NavHostFragment.findNavController(EventsFragment.this)
+                    .navigate(actionRes, null, null, extras);
         }
     }
 
