@@ -38,6 +38,8 @@ import com.edge2.BaseFragment;
 import com.edge2.R;
 import com.edge2.transitions.MoveTransition;
 import com.edge2.views.GeneralHeaderView;
+import com.google.android.material.button.MaterialButton;
+import com.mikepenz.aboutlibraries.LibsBuilder;
 
 public class AboutFragment extends BaseFragment {
 
@@ -102,6 +104,7 @@ public class AboutFragment extends BaseFragment {
         View yt = root.findViewById(R.id.about_img_yt);
         View insta = root.findViewById(R.id.about_img_insta);
         View twitter = root.findViewById(R.id.about_img_twitter);
+        MaterialButton aboutLicence = root.findViewById(R.id.about_licences);
 
         edge.setOnClickListener(view -> startActivity(new Intent(Intent.ACTION_VIEW,
                 Uri.parse("https://edg.co.in"))));
@@ -122,6 +125,9 @@ public class AboutFragment extends BaseFragment {
 
         twitter.setOnClickListener(view -> startActivity(new Intent(Intent.ACTION_VIEW,
                 Uri.parse("https://twitter.com/geekonixedge"))));
+
+        aboutLicence.setOnClickListener(view -> new LibsBuilder()
+                .start(requireContext()));
         startPostponedEnterTransition();
     }
 

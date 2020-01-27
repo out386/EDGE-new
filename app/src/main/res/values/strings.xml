@@ -17,6 +17,7 @@
     <string name="event_details_contacts">Contacts</string>
     <string name="sett_user_ic">User image</string>
     <string name="sett_sign_in">SIGN IN</string>
+    <string name="about_licences">OPEN SOURCE LICENCES</string>
     <string name="sett_not_signed_in">Not signed in</string>
     <string name="sett_signin_message">Feature will be implemented after the API is done</string>
     <string name="sett_theme">Change app theme</string>
