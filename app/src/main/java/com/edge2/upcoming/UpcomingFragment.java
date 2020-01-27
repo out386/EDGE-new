@@ -25,6 +25,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.Interpolator;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,14 +35,17 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.transition.Transition;
 
 import com.edge2.BaseFragment;
 import com.edge2.R;
 import com.edge2.allevents.models.BannerItemsModel;
 import com.edge2.data.DataViewModel;
 import com.edge2.genericevents.GenericEventFragment;
+import com.edge2.transitions.MoveTransition;
 import com.edge2.upcoming.recycler.ItemDecoration;
 import com.edge2.upcoming.recycler.UpcomingAdapter;
+import com.edge2.views.GeneralHeaderView;
 
 import java.util.List;
 
@@ -50,6 +55,10 @@ public class UpcomingFragment extends BaseFragment {
     private ItemDecoration itemDecoration;
     private Context context;
     private List<BannerItemsModel> eventsList;
+    private MoveTransition transition;
+    private boolean isTransitionFinished;
+    private OnSharedElementListener sharedElementListener;
+    private GeneralHeaderView topView;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -67,9 +76,15 @@ public class UpcomingFragment extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         postponeEnterTransition();
+        if (savedInstanceState != null)
+            isTransitionFinished = true;
         View view = inflater.inflate(R.layout.fragment_upcoming, container, false);
         mainRecycler = view.findViewById(R.id.upcoming_content);
+        topView = view.findViewById(R.id.top_view);
         mainRecycler.setLayoutManager(new LinearLayoutManager(context));
+        transition = new MoveTransition(null);
+        setSharedElementEnterTransition(transition);
+        setSharedElementReturnTransition(transition);
         return view;
     }
 
@@ -80,18 +95,42 @@ public class UpcomingFragment extends BaseFragment {
         mainRecycler.removeItemDecoration(itemDecoration);
         itemDecoration = null;
         mainRecycler = null;
+        if (sharedElementListener != null) {
+            transition.removeListener(sharedElementListener);
+            sharedElementListener = null;
+        }
+        transition.onDestroy();
+        transition = null;
+        topView = null;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        View topView = view.findViewById(R.id.top_view);
+
         // Show the toolbar
         onFragmentScrollListener.onListScrolled(0, Integer.MAX_VALUE);
+
+        topView.setNameTransition(getString(R.string.events_to_quick_title_transition));
+        topView.setDescTransition(getString(R.string.events_to_quick_desc_transition));
+        topView.setIconTransition(getString(R.string.events_to_quick_icon_transition));
+
+        if (sharedElementListener != null) {
+            transition.removeListener(sharedElementListener);
+        }
+        sharedElementListener = new OnSharedElementListener(topView);
+        transition.addListener(sharedElementListener);
+
         NestedScrollView scroll = view.findViewById(R.id.upcoming_scroll);
-        setupScrollListener(scroll, topView.getHeight());
+
+        topView.post(() ->
+                setupScrollListener(scroll, topView.getHeight()));
+
         setupInsets(view, topView);
-        setData();
+        if (isTransitionFinished) {
+            topView.showImage(0);
+            setData();
+        }
     }
 
     private void setupInsets(View v, View topView) {
@@ -121,9 +160,9 @@ public class UpcomingFragment extends BaseFragment {
                 mainRecycler.scheduleLayoutAnimation();
             });
         } else {
-            // Only play the animation when this fragment is first started (not on backstack pop)
-            //if (isTransitionFinished)
-            mainRecycler.setLayoutAnimation(null);
+            //Only play the animation when this fragment is first started (not on backstack pop)
+            if (isTransitionFinished)
+                mainRecycler.setLayoutAnimation(null);
             mainRecycler.setAdapter(mainAdapter);
             mainRecycler.scheduleLayoutAnimation();
         }
@@ -161,5 +200,43 @@ public class UpcomingFragment extends BaseFragment {
 
         NavHostFragment.findNavController(this)
                 .navigate(R.id.action_upcoming_to_genericEvent, args, null, null);
+    }
+
+
+    private class OnSharedElementListener implements Transition.TransitionListener {
+        private int animTime;
+        private GeneralHeaderView topView;
+
+        OnSharedElementListener(GeneralHeaderView topView) {
+            animTime = getResources().getInteger(android.R.integer.config_mediumAnimTime);
+            this.topView = topView;
+        }
+
+        @Override
+        public void onTransitionStart(@NonNull Transition transition) {
+        }
+
+        @Override
+        public void onTransitionEnd(@NonNull Transition transition) {
+            topView.showImage(animTime);
+            // The recyclerview is populated here, so that the item animation plays after the transition
+            setData();
+            isTransitionFinished = true;
+        }
+
+        @Override
+        public void onTransitionCancel(@NonNull Transition transition) {
+
+        }
+
+        @Override
+        public void onTransitionPause(@NonNull Transition transition) {
+
+        }
+
+        @Override
+        public void onTransitionResume(@NonNull Transition transition) {
+
+        }
     }
 }

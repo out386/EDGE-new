@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:transitionName="@string/events_to_quick_root_transition"
+    android:background="@color/windowBackground">
 
     <!--Can't have NestedScrollView as the parent. Causes Recycler position to be lost.-->
     <androidx.core.widget.NestedScrollView
@@ -25,7 +27,8 @@
                 app:name="@string/upcoming_title"
                 app:desc="@string/upcoming_desc"
                 app:icon="@drawable/ic_sett"
-                app:flip="true" />
+                app:flip="true"
+                app:hideImage="true"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/upcoming_content"
