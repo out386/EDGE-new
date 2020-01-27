@@ -45,6 +45,11 @@ public class DataViewModel extends AndroidViewModel {
         return dataRepo.getBannerItems();
     }
 
+    public LiveData<List<BannerItemsModel>> getUpcoming() {
+        //return dataRepo.loadBanner();
+        return dataRepo.getUpcomingEvents();
+    }
+
     public LiveData<List<GroupsModel>> getGroups(boolean isIntra) {
         return dataRepo.getGroups(isIntra);
     }

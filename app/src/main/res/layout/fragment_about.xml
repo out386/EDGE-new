@@ -16,7 +16,7 @@
             android:id="@+id/top_view"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            app:icon="@drawable/app_banner_icon"
+            app:icon="@drawable/ic_edge_large"
             app:name="@string/about_title"
             app:desc="@string/about_desc"
             app:skipTint="true"

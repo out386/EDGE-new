@@ -77,6 +77,10 @@ public class DataRepo {
         return dao.getBannerItems();
     }
 
+    LiveData<List<BannerItemsModel>> getUpcomingEvents() {
+        return dao.getUpcomingEvents();
+    }
+
     LiveData<EventDetailsModel> getDetails(String name) {
         return dao.getDetails(name);
     }

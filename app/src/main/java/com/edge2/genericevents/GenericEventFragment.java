@@ -128,7 +128,7 @@ public class GenericEventFragment extends BaseFragment {
         Bundle args = getArguments();
         if (args != null) {
             String name = args.getString(KEY_EVENT_NAME);
-            Uri img = Uri.parse(args.getString(KEY_EVENT_IMG));
+            String imgStr = args.getString(KEY_EVENT_IMG);
             schedule = args.getString(KEY_EVENT_SCHED);
             String desc = args.getString(KEY_EVENT_DESC);
             boolean isMega = args.getBoolean(KEY_EVENT_IS_MEGA);
@@ -136,34 +136,25 @@ public class GenericEventFragment extends BaseFragment {
                 NavHostFragment.findNavController(this).popBackStack();
                 return;
             }
-            if (isMega)
+            if (isMega) {
                 name = String.format(getString(R.string.mega_event_template), name);
+            }
             nameTv.setText(name);
-            Glide.with(context)
-                    .load(img)
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .listener(new RequestListener<Uri, GlideDrawable>() {
-                        @Override
-                        public boolean onException(Exception e, Uri model,
-                                                   Target<GlideDrawable> target, boolean isFirstResource) {
-                            return false;
-                        }
-
-                        @Override
-                        public boolean onResourceReady(GlideDrawable resource,
-                                                       Uri model, Target<GlideDrawable> target,
-                                                       boolean isFromMemoryCache, boolean isFirstResource) {
-
-                            int filter = getResources()
-                                    .getColor(R.color.windowBackgroundTransparent, null);
-                            Blurry.with(context)
-                                    .color(filter)
-                                    .from(drawableToBitmap(resource))
-                                    .into(imageBlur);
-                            return false;
-                        }
-                    })
-                    .into(image);
+            if (imgStr != null) {
+                Glide.with(context)
+                        .load(Uri.parse(imgStr))
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .listener(new BlurImageListener(imageBlur))
+                        .into(image);
+            } else {
+                Bitmap bitmap = drawableToBitmap(
+                        getResources().getDrawable(R.drawable.generic_banner, null));
+                image.setImageResource(R.drawable.generic_banner);
+                Blurry.with(context)
+                        .color(getResources().getColor(R.color.windowBackgroundTransparent, null))
+                        .from(bitmap)
+                        .into(imageBlur);
+            }
             if (schedule == null || schedule.isEmpty()) {
                 sched.setVisibility(GONE);
                 divider1.setVisibility(GONE);
@@ -272,6 +263,34 @@ public class GenericEventFragment extends BaseFragment {
                     allViews[i].setVisibility(GONE);
                 allViews[i].startAnimation(anims[group]);
             }
+        }
+    }
+
+    class BlurImageListener implements RequestListener<Object, GlideDrawable> {
+        private ImageView imageBlur;
+
+        public BlurImageListener(ImageView imageBlur) {
+            this.imageBlur = imageBlur;
+        }
+
+        @Override
+        public boolean onException(Exception e, Object model,
+                Target<GlideDrawable> target, boolean isFirstResource) {
+            return false;
+        }
+
+        @Override
+        public boolean onResourceReady(GlideDrawable resource,
+                                       Object model, Target<GlideDrawable> target,
+        boolean isFromMemoryCache, boolean isFirstResource) {
+
+            int filter = getResources()
+                    .getColor(R.color.windowBackgroundTransparent, null);
+            Blurry.with(context)
+                    .color(filter)
+                    .from(drawableToBitmap(resource))
+                    .into(imageBlur);
+            return false;
         }
     }
 }

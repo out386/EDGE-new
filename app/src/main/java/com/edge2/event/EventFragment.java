@@ -158,7 +158,7 @@ public class EventFragment extends BaseFragment {
     }
 
     private void setupInsets(View v, View divider, View topView, NestedScrollView scrollView) {
-        // Hide the toolbar
+        // Show the toolbar
         listener.onListScrolled(0, Integer.MAX_VALUE);
         mainReycler.postDelayed(this::startPostponedEnterTransition, 150);
 

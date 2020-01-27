@@ -83,7 +83,14 @@ public class EventsFragment extends BaseFragment {
     private EventsAdapter eventsAdapter;
     @Nullable
     private QuickItemsAdapter quickAdapter;
+    /**
+     * All available banner items.
+     */
     private List<BannerItemsModel> bannerItemsModels;
+    /**
+     * Items that are actually in the banner. Items with no image are skipped.
+     */
+    private List<BannerItemsModel> itemsInBanner;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -229,15 +236,20 @@ public class EventsFragment extends BaseFragment {
         if (!isIntra) {
             if (quickAdapter == null) {
                 ArrayList<QuickItemModel> quickItems = new ArrayList<>();
-                QuickItemModel team = new QuickItemModel(getString(R.string.team_title),
+                QuickItemModel quickItem = new QuickItemModel(getString(R.string.team_title),
                         context.getDrawable(R.drawable.ic_team),
                         getString(R.string.team_desc));
-                quickItems.add(team);
-                team = new QuickItemModel(getString(R.string.about_title),
+                quickItems.add(quickItem);
+                quickItem = new QuickItemModel(getString(R.string.about_title),
                         context.getDrawable(R.drawable.ic_about),
                         getString(R.string.about_desc));
-                quickItems.add(team);
-                for (int j = 0; j < 3; j++) {
+                quickItems.add(quickItem);
+                quickItem = new QuickItemModel(getString(R.string.upcoming_title),
+                        context.getDrawable(R.drawable.ic_about),
+                        getString(R.string.upcoming_desc));
+                quickItems.add(quickItem);
+
+                for (int j = 0; j < 2; j++) {
                     QuickItemModel item = new QuickItemModel("Accommodations",
                             context.getDrawable(R.drawable.quick_accomodation),
                             "Registrations are now open");
@@ -260,11 +272,14 @@ public class EventsFragment extends BaseFragment {
                 case 0:
                     actionRes = R.id.action_events_to_team;
                     break;
-                case 2:
+                case 1:
                     actionRes = R.id.action_events_to_about;
                     break;
+                case 2:
+                    actionRes = R.id.action_events_to_upcoming;
+                    break;
                 default:
-                    actionRes = R.id.action_events_to_about;
+                    return;
             }
 
             String transitionNameName = getString(R.string.events_to_quick_title_transition);
@@ -288,12 +303,16 @@ public class EventsFragment extends BaseFragment {
         if (!isIntra) {
             OnBannerItemClickedListener bannerListener = new OnBannerItemClickedListener();
             viewModel.getBanner().observe(this, items -> {
-                this.bannerItemsModels = items;
+                bannerItemsModels = items;
+                itemsInBanner = new ArrayList<>(items.size());
                 List<Slide> list = new ArrayList<>(items.size());
                 for (int i = 0; i < items.size(); i++) {
-                    Uri uri = items.get(i).getUri();
-                    if (uri != null)
+                    BannerItemsModel item = items.get(i);
+                    Uri uri = item.getImageUri();
+                    if (uri != null) {
                         list.add(new Slide(i, uri, 0));
+                        itemsInBanner.add(item);
+                    }
                 }
                 //noinspection ConstantConditions
                 banner.setItemClickListener(bannerListener);
@@ -314,8 +333,8 @@ public class EventsFragment extends BaseFragment {
     class OnBannerItemClickedListener implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            if (bannerItemsModels != null) {
-                BannerItemsModel item = bannerItemsModels.get(position);
+            if (itemsInBanner != null) {
+                BannerItemsModel item = itemsInBanner.get(position);
                 String transitionImgName = getString(R.string.events_to_sub_img_transition);
                 String transitionNameName = getString(R.string.events_to_sub_name_transition);
                 String transitionRootName = getString(R.string.events_to_sub_root_transition);
@@ -328,8 +347,14 @@ public class EventsFragment extends BaseFragment {
                         .build();*/
 
                 Bundle args = new Bundle();
+                if (item.getImageUri() == null) {
+                    if (item.getIconUri() != null) {
+                        args.putString(GenericEventFragment.KEY_EVENT_IMG, item.getIconUri().toString());
+                    }
+                } else {
+                    args.putString(GenericEventFragment.KEY_EVENT_IMG, item.getImageUri().toString());
+                }
                 args.putString(GenericEventFragment.KEY_EVENT_NAME, item.getName());
-                args.putString(GenericEventFragment.KEY_EVENT_IMG, item.getUri().toString());
                 args.putString(GenericEventFragment.KEY_EVENT_SCHED, item.getSched());
                 args.putString(GenericEventFragment.KEY_EVENT_DESC, item.getDesc());
                 args.putBoolean(GenericEventFragment.KEY_EVENT_IS_MEGA, item.getMega());
