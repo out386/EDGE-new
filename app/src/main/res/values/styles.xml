@@ -6,8 +6,8 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@color/windowBackground</item>
         <item name="bottomNavigationStyle">@style/BottomNav</item>
-        <item name="android:navigationBarColor">@color/systemBars</item>
-        <item name="android:statusBarColor">@color/systemBars</item>
+        <item name="android:navigationBarColor">@color/navBar</item>
+        <item name="android:statusBarColor">@color/statusBar</item>
     </style>
 
     <style name="BottomNav" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
