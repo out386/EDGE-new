@@ -22,6 +22,7 @@ package com.edge2.allevents;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -290,7 +291,9 @@ public class EventsFragment extends BaseFragment {
                 this.bannerItemsModels = items;
                 List<Slide> list = new ArrayList<>(items.size());
                 for (int i = 0; i < items.size(); i++) {
-                    list.add(new Slide(i, items.get(i).getUri(), 0));
+                    Uri uri = items.get(i).getUri();
+                    if (uri != null)
+                        list.add(new Slide(i, uri, 0));
                 }
                 //noinspection ConstantConditions
                 banner.setItemClickListener(bannerListener);
