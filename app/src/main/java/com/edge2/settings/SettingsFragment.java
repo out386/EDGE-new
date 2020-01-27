@@ -55,7 +55,8 @@ public class SettingsFragment extends BaseFragment {
         onFragmentScrollListener.onListScrolled(0, Integer.MAX_VALUE);
         setupWindowInsets(view, contentView, topView, false,
                 false, null);
-        setupScrollListener((NestedScrollView) view, topView.getHeight());
+        topView.post(() ->
+                setupScrollListener((NestedScrollView) view, topView.getHeight()));
         setupListeners(view);
     }
 
