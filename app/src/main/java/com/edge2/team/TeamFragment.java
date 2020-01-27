@@ -45,6 +45,7 @@ public class TeamFragment extends BaseFragment {
     private OnSharedElementListener sharedElementListener;
     private MoveTransition transition;
     private GeneralHeaderView topView;
+    private LinearLayout contentView;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -61,7 +62,7 @@ public class TeamFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        LinearLayout contentView = view.findViewById(R.id.team_content);
+        contentView = view.findViewById(R.id.team_content);
 
         topView.setNameTransition(getString(R.string.events_to_quick_title_transition));
         topView.setDescTransition(getString(R.string.events_to_quick_desc_transition));
@@ -104,6 +105,9 @@ public class TeamFragment extends BaseFragment {
         }
         transition.onDestroy();
         transition = null;
+        contentView.removeAllViews();
+        contentView = null;
+
         topView = null;
     }
 
