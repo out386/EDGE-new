@@ -41,6 +41,12 @@ public abstract class BaseFragment extends Fragment {
         onFragmentScrollListener = (OnFragmentScrollListener) context;
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        onFragmentScrollListener = null;
+    }
+
     protected void setupScrollListener(NestedScrollView scrollView, int topViewHeight) {
         scrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener)
                 (v, scrollX, scrollY, oldScrollX, oldScrollY) ->
