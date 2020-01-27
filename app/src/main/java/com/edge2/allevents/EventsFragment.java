@@ -123,10 +123,9 @@ public class EventsFragment extends BaseFragment {
             RecyclerView.LayoutManager quickLayoutManager = new LinearLayoutManager(
                     context, RecyclerView.HORIZONTAL, false);
             quickReycler.setLayoutManager(quickLayoutManager);
-
+            new GravitySnapHelper(Gravity.START).attachToRecyclerView(quickReycler);
         }
         mainReycler = rootView.findViewById(R.id.main_recycler);
-        new GravitySnapHelper(Gravity.START).attachToRecyclerView(quickReycler);
 
         float itemSize = getResources().getDimensionPixelSize(R.dimen.allevents_main_events_img_w) +
                 2 * getResources().getDimension(R.dimen.allevents_main_events_padding_h);
