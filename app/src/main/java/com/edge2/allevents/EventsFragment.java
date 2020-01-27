@@ -245,7 +245,7 @@ public class EventsFragment extends BaseFragment {
                         getString(R.string.about_desc));
                 quickItems.add(quickItem);
                 quickItem = new QuickItemModel(getString(R.string.upcoming_title),
-                        context.getDrawable(R.drawable.ic_about),
+                        context.getDrawable(R.drawable.ic_upcoming),
                         getString(R.string.upcoming_desc));
                 quickItems.add(quickItem);
 

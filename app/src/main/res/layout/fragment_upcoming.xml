@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 app:name="@string/upcoming_title"
                 app:desc="@string/upcoming_desc"
-                app:icon="@drawable/ic_sett"
+                app:icon="@drawable/ic_upcoming"
                 app:flip="true"
                 app:hideImage="true"/>
 

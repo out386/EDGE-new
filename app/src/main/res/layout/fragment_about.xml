@@ -335,7 +335,7 @@
                 android:paddingStart="@dimen/margin_large"
                 android:paddingEnd="@dimen/margin_large"
                 android:gravity="center_horizontal"
-                android:text="flaticon.com\nBiZkettE1 / Freepik"
+                android:text="flaticon.com\nBiZkettE1 / Freepik\nSrip"
                 android:lineSpacingMultiplier="1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
