@@ -236,17 +236,17 @@ public class EventsFragment extends BaseFragment {
         if (!isIntra) {
             if (quickAdapter == null) {
                 ArrayList<QuickItemModel> quickItems = new ArrayList<>();
-                QuickItemModel quickItem = new QuickItemModel(getString(R.string.team_title),
+                QuickItemModel quickItem = new QuickItemModel(getString(R.string.upcoming_title),
+                        context.getDrawable(R.drawable.ic_upcoming),
+                        getString(R.string.upcoming_desc));
+                quickItems.add(quickItem);
+                quickItem = new QuickItemModel(getString(R.string.team_title),
                         context.getDrawable(R.drawable.ic_team),
                         getString(R.string.team_desc));
                 quickItems.add(quickItem);
                 quickItem = new QuickItemModel(getString(R.string.about_title),
                         context.getDrawable(R.drawable.ic_about),
                         getString(R.string.about_desc));
-                quickItems.add(quickItem);
-                quickItem = new QuickItemModel(getString(R.string.upcoming_title),
-                        context.getDrawable(R.drawable.ic_upcoming),
-                        getString(R.string.upcoming_desc));
                 quickItems.add(quickItem);
                 quickItem = new QuickItemModel(getString(R.string.accommodation_title),
                         context.getDrawable(R.drawable.ic_accommodation),
@@ -274,13 +274,13 @@ public class EventsFragment extends BaseFragment {
             int actionRes;
             switch (position) {
                 case 0:
-                    actionRes = R.id.action_events_to_team;
+                    actionRes = R.id.action_events_to_upcoming;
                     break;
                 case 1:
                     actionRes = R.id.action_events_to_about;
                     break;
                 case 2:
-                    actionRes = R.id.action_events_to_upcoming;
+                    actionRes = R.id.action_events_to_team;
                     break;
                 case 3:
                     actionRes = R.id.action_events_to_accommodation;
