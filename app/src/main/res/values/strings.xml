@@ -70,4 +70,7 @@
         promises to be the unprecedented celebration of budding talent, technical excellence and
         innovative minds.
     </string>
+    <string name="placeholder_desc">Coming soon in a later update.</string>
+    <string name="accommodation_title">Accommodation</string>
+    <string name="accommodation_desc">Accommodation during edge</string>
 </resources>

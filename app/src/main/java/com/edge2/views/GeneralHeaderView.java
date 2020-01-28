@@ -21,6 +21,7 @@ package com.edge2.views;
  */
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
@@ -72,10 +73,12 @@ public class GeneralHeaderView extends ConstraintLayout {
         String desc = a.getString(R.styleable.GeneralHeaderView_desc);
         Drawable icon = a.getDrawable(R.styleable.GeneralHeaderView_icon);
         a.recycle();
+
+        setViews();
         setData(name, desc, icon, skipTint);
     }
 
-    private void setData(String name, String desc, Drawable icon, boolean skipTint) {
+    private void setViews() {
         nameTv = findViewById(R.id.general_name);
         descTv = findViewById(R.id.general_desc);
         iconView = findViewById(R.id.general_icon);
@@ -86,12 +89,24 @@ public class GeneralHeaderView extends ConstraintLayout {
             runnable = new HideViewRunnable();
             imageView.post(runnable);
         }
+    }
 
+    public void setData(int nameRes, int descRes, int iconRes, boolean skipTint) {
+        Resources resources = getResources();
+        String name = resources.getString(nameRes);
+        String desc = resources.getString(descRes);
+        Drawable icon  = resources.getDrawable(iconRes, null);
+        setData(name, desc, icon, skipTint);
+    }
+
+    private void setData(String name, String desc, Drawable icon, boolean skipTint) {
         nameTv.setText(name);
-        if (desc == null || desc.isEmpty())
+        if (desc == null || desc.isEmpty()) {
             descTv.setVisibility(GONE);
-        else
+        } else {
+            descTv.setVisibility(VISIBLE);
             descTv.setText(desc);
+        }
         if (skipTint)
             iconView.setImageTintList(null);
         iconView.setImageDrawable(icon);

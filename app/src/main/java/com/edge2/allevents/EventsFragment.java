@@ -248,6 +248,10 @@ public class EventsFragment extends BaseFragment {
                         context.getDrawable(R.drawable.ic_upcoming),
                         getString(R.string.upcoming_desc));
                 quickItems.add(quickItem);
+                quickItem = new QuickItemModel(getString(R.string.accommodation_title),
+                        context.getDrawable(R.drawable.ic_accommodation),
+                        getString(R.string.accommodation_desc));
+                quickItems.add(quickItem);
 
                 for (int j = 0; j < 2; j++) {
                     QuickItemModel item = new QuickItemModel("Accommodations",
@@ -277,6 +281,9 @@ public class EventsFragment extends BaseFragment {
                     break;
                 case 2:
                     actionRes = R.id.action_events_to_upcoming;
+                    break;
+                case 3:
+                    actionRes = R.id.action_events_to_accommodation;
                     break;
                 default:
                     return;
