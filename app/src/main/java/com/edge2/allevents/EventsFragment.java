@@ -240,6 +240,10 @@ public class EventsFragment extends BaseFragment {
                         context.getDrawable(R.drawable.ic_upcoming),
                         getString(R.string.upcoming_desc));
                 quickItems.add(quickItem);
+                quickItem = new QuickItemModel(getString(R.string.registration_title),
+                        context.getDrawable(R.drawable.ic_reg),
+                        getString(R.string.registration_desc));
+                quickItems.add(quickItem);
                 quickItem = new QuickItemModel(getString(R.string.team_title),
                         context.getDrawable(R.drawable.ic_team),
                         getString(R.string.team_desc));
@@ -252,13 +256,10 @@ public class EventsFragment extends BaseFragment {
                         context.getDrawable(R.drawable.ic_accommodation),
                         getString(R.string.accommodation_desc));
                 quickItems.add(quickItem);
-
-                for (int j = 0; j < 2; j++) {
-                    QuickItemModel item = new QuickItemModel("Accommodations",
-                            context.getDrawable(R.drawable.quick_accomodation),
-                            "Registrations are now open");
-                    quickItems.add(item);
-                }
+                quickItem = new QuickItemModel(getString(R.string.results_title),
+                        context.getDrawable(R.drawable.ic_result),
+                        getString(R.string.results_desc));
+                quickItems.add(quickItem);
                 quickAdapter = new QuickItemsAdapter(quickItems, new OnQuickClickListener());
             }
             //noinspection ConstantConditions
@@ -277,13 +278,19 @@ public class EventsFragment extends BaseFragment {
                     actionRes = R.id.action_events_to_upcoming;
                     break;
                 case 1:
-                    actionRes = R.id.action_events_to_about;
+                    actionRes = R.id.action_events_to_registration;
                     break;
                 case 2:
                     actionRes = R.id.action_events_to_team;
                     break;
                 case 3:
+                    actionRes = R.id.action_events_to_about;
+                    break;
+                case 4:
                     actionRes = R.id.action_events_to_accommodation;
+                    break;
+                case 5:
+                    actionRes = R.id.action_events_to_results;
                     break;
                 default:
                     return;

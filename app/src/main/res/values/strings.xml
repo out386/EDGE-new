@@ -73,4 +73,8 @@
     <string name="placeholder_desc">Coming soon in a later update.</string>
     <string name="accommodation_title">Accommodation</string>
     <string name="accommodation_desc">Accommodation during edge</string>
+    <string name="registration_title">Registration</string>
+    <string name="registration_desc">Registrations are not open yet</string>
+    <string name="results_title">Results</string>
+    <string name="results_desc">Results have not been declared yet</string>
 </resources>

@@ -52,6 +52,20 @@
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_events_to_registration"
+            app:destination="@id/registrationFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_events_to_results"
+            app:destination="@id/resultsFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/settings_dest"
@@ -95,6 +109,16 @@
         android:id="@+id/accommodationFragment"
         android:name="com.edge2.accommodation.AccommodationFragment"
         android:label="fragment_accommodation"
+        tools:layout="@layout/fragment_placeholder" />
+    <fragment
+        android:id="@+id/registrationFragment"
+        android:name="com.edge2.registration.RegistrationFragment"
+        android:label="fragment_registration"
+        tools:layout="@layout/fragment_placeholder" />
+    <fragment
+        android:id="@+id/resultsFragment"
+        android:name="com.edge2.results.ResultsFragment"
+        android:label="fragment_results"
         tools:layout="@layout/fragment_placeholder" />
     <fragment
         android:id="@+id/upcomingFragment"
