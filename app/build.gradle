@@ -49,7 +49,11 @@ dependencies {
 
     implementation 'com.mikepenz:aboutlibraries-core:8.0.0-b05'
     implementation 'com.mikepenz:aboutlibraries:8.0.0-b05'
+
+    implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta01'
+    implementation 'com.google.firebase:firebase-analytics:17.2.2'
 }
 
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.mikepenz.aboutlibraries.plugin'
+apply plugin: 'com.google.firebase.crashlytics'
