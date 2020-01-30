@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/event_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/margin_large"
+    android:layout_marginTop="@dimen/allevents_main_events_padding_v"
+    android:layout_marginEnd="@dimen/margin_large"
+    android:layout_marginBottom="@dimen/allevents_main_events_padding_v"
+    android:background="@drawable/sponsors_card"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/margin_huge"
+    android:paddingTop="@dimen/margin_huge"
+    android:paddingEnd="@dimen/margin_huge"
+    android:paddingBottom="@dimen/margin_huge"
+    android:gravity="center_horizontal">
+
+    <ImageView
+        android:id="@+id/sponsor_image"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/sponsors_img_h"
+        tools:src="@drawable/ic_tmsl" />
+
+    <TextView
+        android:id="@+id/sponsor_name"
+        style="@style/TextHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_huge"
+        android:gravity="center_horizontal"
+        android:textColor="#050505"
+        tools:text="Techno Main Salt Lake" />
+
+</LinearLayout>

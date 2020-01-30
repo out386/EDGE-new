@@ -260,6 +260,10 @@ public class EventsFragment extends BaseFragment {
                         context.getDrawable(R.drawable.ic_result),
                         getString(R.string.results_desc));
                 quickItems.add(quickItem);
+                quickItem = new QuickItemModel(getString(R.string.sponsors_title),
+                        context.getDrawable(R.drawable.ic_sponsor),
+                        getString(R.string.sponsors_desc));
+                quickItems.add(quickItem);
                 quickAdapter = new QuickItemsAdapter(quickItems, new OnQuickClickListener());
             }
             //noinspection ConstantConditions
@@ -291,6 +295,9 @@ public class EventsFragment extends BaseFragment {
                     break;
                 case 5:
                     actionRes = R.id.action_events_to_results;
+                    break;
+                case 6:
+                    actionRes = R.id.action_events_to_sponsors;
                     break;
                 default:
                     return;

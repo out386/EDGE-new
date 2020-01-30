@@ -1,7 +1,4 @@
-package com.edge2;
-
-import androidx.appcompat.app.AppCompatActivity;
-
+package com.edge2.sponsors;
 
 /*
  * Copyright (C) 2020 Ritayan Chakraborty <ritayanout@gmail.com>
@@ -23,5 +20,20 @@ import androidx.appcompat.app.AppCompatActivity;
  *
  */
 
-public class TestActivity extends AppCompatActivity {
+public class SponsorsModel {
+    private String name;
+    private String imgUrl;
+
+    public SponsorsModel(String name, String imgUrl) {
+        this.name = name;
+        this.imgUrl = imgUrl;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
 }
