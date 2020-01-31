@@ -22,9 +22,11 @@ package com.edge2.data;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Transaction;
 
 import com.edge2.allevents.models.BannerItemsModel;
 import com.edge2.allevents.models.GroupsModel;
@@ -34,34 +36,43 @@ import com.edge2.eventdetails.models.EventDetailsModel;
 import java.util.List;
 
 @Dao
-public interface RunningOutOfNamesDao {
+public abstract class RunningOutOfNamesDao {
     @Query("SELECT * FROM Groups WHERE countEventsEdge > 0")
-    LiveData<List<GroupsModel>> getGroupsEdge();
+    abstract LiveData<List<GroupsModel>> getGroupsEdge();
 
     @Query("SELECT * FROM Groups WHERE countEventsIntra > 0")
-    LiveData<List<GroupsModel>> getGroupsIntra();
+    abstract LiveData<List<GroupsModel>> getGroupsIntra();
 
     @Query("SELECT * FROM EventCategories WHERE groupName = :groupName AND isInEdge = 1")
-    LiveData<List<EventCategoryModel>> getCategoriesEdge(String groupName);
+    abstract LiveData<List<EventCategoryModel>> getCategoriesEdge(String groupName);
 
     @Query("SELECT * FROM EventCategories WHERE groupName = :groupName AND isInIntra = 1")
-    LiveData<List<EventCategoryModel>> getCategoriesIntra(String groupName);
+    abstract LiveData<List<EventCategoryModel>> getCategoriesIntra(String groupName);
 
     @Query("SELECT * FROM EventDetails WHERE name = :name")
-    LiveData<EventDetailsModel> getDetails(String name);
+    abstract LiveData<EventDetailsModel> getDetails(String name);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void putDetails(List<EventDetailsModel> items);
+    abstract void putDetails(List<EventDetailsModel> items);
 
     @Query("SELECT * FROM BannerItems")
-    LiveData<List<BannerItemsModel>> getBannerItems();
+    abstract LiveData<List<BannerItemsModel>> getBannerItems();
 
     @Query("SELECT * FROM BannerItems WHERE isMega = 1")
-    LiveData<List<BannerItemsModel>> getMegaEvents();
+    abstract LiveData<List<BannerItemsModel>> getMegaEvents();
 
     @Query("SELECT * FROM BannerItems WHERE isMega = 0")
-    LiveData<List<BannerItemsModel>> getUpcomingEvents();
+    abstract LiveData<List<BannerItemsModel>> getUpcomingEvents();
+
+    @Transaction
+    void putBanner(List<BannerItemsModel> items) {
+        removeBanners();
+        insertBanner(items);
+    }
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void putBanner(List<BannerItemsModel> items);
+    abstract void insertBanner(List<BannerItemsModel> items);
+
+    @Query("DELETE FROM BannerItems")
+    abstract void removeBanners();
 }
