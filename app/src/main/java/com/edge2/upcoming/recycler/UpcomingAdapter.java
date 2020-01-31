@@ -72,7 +72,7 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.Events
         name.setText(item.getName());
 
         Html.TagHandler tagHandler = new RulesTagHandler(desc.getContext(), R.style.TextHeaderMid);
-        Spanned descText =  HtmlCompat.fromHtml(
+        Spanned descText = HtmlCompat.fromHtml(
                 item.getDesc(), HtmlCompat.FROM_HTML_MODE_COMPACT, null, tagHandler);
         desc.setText(descText);
         desc.setMaxLines(3);

@@ -95,7 +95,7 @@ public class GeneralHeaderView extends ConstraintLayout {
         Resources resources = getResources();
         String name = resources.getString(nameRes);
         String desc = resources.getString(descRes);
-        Drawable icon  = resources.getDrawable(iconRes, null);
+        Drawable icon = resources.getDrawable(iconRes, null);
         setData(name, desc, icon, skipTint);
     }
 

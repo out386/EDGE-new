@@ -275,14 +275,14 @@ public class GenericEventFragment extends BaseFragment {
 
         @Override
         public boolean onException(Exception e, Object model,
-                Target<GlideDrawable> target, boolean isFirstResource) {
+                                   Target<GlideDrawable> target, boolean isFirstResource) {
             return false;
         }
 
         @Override
         public boolean onResourceReady(GlideDrawable resource,
                                        Object model, Target<GlideDrawable> target,
-        boolean isFromMemoryCache, boolean isFirstResource) {
+                                       boolean isFromMemoryCache, boolean isFirstResource) {
 
             int filter = getResources()
                     .getColor(R.color.windowBackgroundTransparent, null);

@@ -42,12 +42,10 @@ public class DataViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<BannerItemsModel>> getBanner() {
-        //return dataRepo.loadBanner();
         return dataRepo.getBannerItems();
     }
 
     public LiveData<List<BannerItemsModel>> getUpcoming() {
-        //return dataRepo.loadBanner();
         return dataRepo.getUpcomingEvents();
     }
 

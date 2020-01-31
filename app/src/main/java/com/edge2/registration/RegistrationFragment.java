@@ -46,7 +46,7 @@ public class RegistrationFragment extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         //postponeEnterTransition();
-        View v= inflater.inflate(R.layout.fragment_placeholder, container, false);
+        View v = inflater.inflate(R.layout.fragment_placeholder, container, false);
         topView = v.findViewById(R.id.top_view);
         transition = new MoveTransition(null);
         setSharedElementEnterTransition(transition);
@@ -58,7 +58,7 @@ public class RegistrationFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         View contentView = view.findViewById(R.id.placeholder_content);
-        NestedScrollView scrollView  = view.findViewById(R.id.placeholder_scroll);
+        NestedScrollView scrollView = view.findViewById(R.id.placeholder_scroll);
 
         topView.setNameTransition(getString(R.string.events_to_quick_title_transition));
         topView.setDescTransition(getString(R.string.events_to_quick_desc_transition));

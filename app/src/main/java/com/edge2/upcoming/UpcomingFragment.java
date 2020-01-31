@@ -25,8 +25,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
-import android.view.animation.Interpolator;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
