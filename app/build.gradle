@@ -15,9 +15,19 @@ android {
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
                     'proguard-rules.pro'
+            buildConfigField('String', 'URL_SPONSORS', url_sponsors)
+            buildConfigField('String', 'URL_DETAILS', url_details)
+            buildConfigField('String', 'URL_BANNER', url_banner)
+            buildConfigField('String', 'URL_DETAILS_DB_VERSION', url_details_db_version)
+            buildConfigField('String', 'URL_BANNER_DB_VERSION', url_banner_db_version)
         }
         debug {
             minifyEnabled false
+            buildConfigField('String', 'URL_SPONSORS', url_sponsors_dev)
+            buildConfigField('String', 'URL_DETAILS', url_details_dev)
+            buildConfigField('String', 'URL_BANNER', url_banner_dev)
+            buildConfigField('String', 'URL_DETAILS_DB_VERSION', url_details_db_version_dev)
+            buildConfigField('String', 'URL_BANNER_DB_VERSION', url_banner_db_version_dev)
         }
     }
     compileOptions {
