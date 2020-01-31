@@ -29,6 +29,7 @@ import com.edge2.allevents.models.BannerItemsModel;
 import com.edge2.allevents.models.GroupsModel;
 import com.edge2.event.EventCategoryModel;
 import com.edge2.eventdetails.models.EventDetailsModel;
+import com.edge2.sponsors.SponsorsModel;
 
 import java.util.List;
 
@@ -48,6 +49,10 @@ public class DataViewModel extends AndroidViewModel {
     public LiveData<List<BannerItemsModel>> getUpcoming() {
         //return dataRepo.loadBanner();
         return dataRepo.getUpcomingEvents();
+    }
+
+    public LiveData<List<SponsorsModel>> getSponsors() {
+        return dataRepo.getSponsors();
     }
 
     public LiveData<List<GroupsModel>> getGroups(boolean isIntra) {

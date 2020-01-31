@@ -20,9 +20,15 @@ package com.edge2.sponsors;
  *
  */
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class SponsorsModel {
     private String name;
     private String imgUrl;
+
+    private SponsorsModel() {
+    }
 
     public SponsorsModel(String name, String imgUrl) {
         this.name = name;
@@ -35,5 +41,16 @@ public class SponsorsModel {
 
     public String getImgUrl() {
         return imgUrl;
+    }
+
+    public static SponsorsModel getFromJson(JSONObject ob) throws JSONException{
+        SponsorsModel item = new SponsorsModel();
+            item.name = ob.getString("n");
+            if (item.name == null || item.name.isEmpty() || item.name.equals("null"))
+                return null;
+            item.imgUrl = ob.getString("u");
+            if (item.imgUrl.isEmpty())
+                item.imgUrl = null;
+            return item;
     }
 }

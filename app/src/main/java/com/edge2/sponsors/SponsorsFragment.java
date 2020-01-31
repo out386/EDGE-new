@@ -25,32 +25,27 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.Transition;
 
 import com.edge2.BaseFragment;
 import com.edge2.R;
-import com.edge2.allevents.models.BannerItemsModel;
 import com.edge2.data.DataViewModel;
-import com.edge2.genericevents.GenericEventFragment;
+import com.edge2.sponsors.recycler.ItemDecoration;
 import com.edge2.sponsors.recycler.SponsorsAdapter;
 import com.edge2.transitions.MoveTransition;
-import com.edge2.sponsors.recycler.ItemDecoration;
 import com.edge2.views.GeneralHeaderView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SponsorsFragment extends BaseFragment {
     private RecyclerView mainRecycler;
+    private TextView fetchFailView;
     private SponsorsAdapter mainAdapter;
     private ItemDecoration itemDecoration;
     private Context context;
@@ -80,6 +75,7 @@ public class SponsorsFragment extends BaseFragment {
             isTransitionFinished = true;
         View view = inflater.inflate(R.layout.fragment_sponsors, container, false);
         mainRecycler = view.findViewById(R.id.sponsors_content);
+        fetchFailView = view.findViewById(R.id.sponsors_fail);
         topView = view.findViewById(R.id.top_view);
         layoutManager = new GridLayoutManager(context, 2);
         mainRecycler.setLayoutManager(layoutManager);
@@ -105,6 +101,7 @@ public class SponsorsFragment extends BaseFragment {
         transition.onDestroy();
         transition = null;
         topView = null;
+        fetchFailView = null;
     }
 
     @Override
@@ -125,7 +122,7 @@ public class SponsorsFragment extends BaseFragment {
         transition.addListener(sharedElementListener);
 
         topView.post(() ->
-                setupScrollListener((NestedScrollView)view, topView.getHeight()));
+                setupScrollListener((NestedScrollView) view, topView.getHeight()));
 
         setupInsets(view, topView);
         if (isTransitionFinished) {
@@ -141,27 +138,31 @@ public class SponsorsFragment extends BaseFragment {
                 true, (l, t, r, b) -> {
                     int itemMargin = context.getResources()
                             .getDimensionPixelSize(R.dimen.margin_huge);
-                    int itemPadding = context.getResources()
-                            .getDimensionPixelSize(R.dimen.margin_large);
                     if (itemDecoration != null)
                         mainRecycler.removeItemDecoration(itemDecoration);
                     itemDecoration =
-                            new ItemDecoration(layoutManager, b, itemMargin - itemPadding);
+                            new ItemDecoration(layoutManager, b, itemMargin);
                     mainRecycler.addItemDecoration(itemDecoration);
                 });
     }
 
     private void setData() {
         if (mainAdapter == null) {
-            /*DataViewModel viewModel = ViewModelProviders.of(this)
+            DataViewModel viewModel = ViewModelProviders.of(this)
                     .get(DataViewModel.class);
-            viewModel.getUpcoming().observe(this, events -> {
-             */
-
-                mainAdapter = new SponsorsAdapter(prototype());
-                mainRecycler.setAdapter(mainAdapter);
-                mainRecycler.scheduleLayoutAnimation();
-            //});
+            viewModel.getSponsors().observe(this, sponsors -> {
+                if (sponsors == null) {
+                    mainRecycler.setVisibility(View.GONE);
+                    fetchFailView.setText(getString(R.string.sponsor_fetch_fail));
+                    fetchFailView.setVisibility(View.VISIBLE);
+                } else {
+                    mainRecycler.setVisibility(View.VISIBLE);
+                    fetchFailView.setVisibility(View.GONE);
+                    mainAdapter = new SponsorsAdapter(sponsors);
+                    mainRecycler.setAdapter(mainAdapter);
+                    mainRecycler.scheduleLayoutAnimation();
+                }
+            });
         } else {
             //Only play the animation when this fragment is first started (not on backstack pop)
             if (isTransitionFinished)
@@ -169,16 +170,6 @@ public class SponsorsFragment extends BaseFragment {
             mainRecycler.setAdapter(mainAdapter);
             mainRecycler.scheduleLayoutAnimation();
         }
-    }
-
-    private List<SponsorsModel> prototype() {
-        List<SponsorsModel> sponsors = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            SponsorsModel sponsor = new SponsorsModel("Techno Main Salt Lake",
-                    "https://firebasestorage.googleapis.com/v0/b/edge-new-a7306.appspot.com/o/ic_tmsl.png?alt=media&token=d41c69e3-0982-4d1a-926d-a3bdf35856e2");
-            sponsors.add(sponsor);
-        }
-        return sponsors;
     }
 
     private class OnSharedElementListener implements Transition.TransitionListener {

@@ -23,6 +23,21 @@
             app:icon="@drawable/ic_sponsor"
             app:hideImage="true" />
 
+        <TextView
+            android:id="@+id/sponsors_fail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/loading"
+            style="@style/TextHeader"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="80dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:paddingTop="40dp"
+            android:paddingBottom="40dp"
+            android:background="@drawable/card_bg"
+            tools:visibility="gone"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/sponsors_content"
             android:layout_width="match_parent"
@@ -32,7 +47,9 @@
             tools:itemCount="10"
             tools:spanCount="2"
             tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            tools:listitem="@layout/sponsors_item" />
+            tools:listitem="@layout/sponsors_item"
+            android:visibility="gone"
+            tools:visibility="visible"/>
 
     </LinearLayout>
 

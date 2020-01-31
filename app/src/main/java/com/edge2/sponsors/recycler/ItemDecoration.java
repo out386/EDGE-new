@@ -46,11 +46,10 @@ public class ItemDecoration extends RecyclerView.ItemDecoration {
 
         final int itemPosition = parent.getChildAdapterPosition(view);
         RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) view.getLayoutParams();
-        double itemColumn = Math.ceil((itemPosition + 1) / columns);
-        if (itemColumn == Math.ceil(adapter.getItemCount() / columns)) {
-            //params.bottomMargin = 0;
+        double itemRow = Math.ceil((itemPosition + 1) / columns);
+        if (itemRow == Math.ceil(adapter.getItemCount() / columns)) {
             outRect.bottom = bottomOffset;
-        } else if (itemColumn == 1) {
+        } else if (itemRow == 1) {
             params.topMargin = 0;
             outRect.top = topOffset;
         }

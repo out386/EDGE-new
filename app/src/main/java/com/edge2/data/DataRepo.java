@@ -26,6 +26,7 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -36,6 +37,7 @@ import com.edge2.allevents.models.BannerItemsModel;
 import com.edge2.allevents.models.GroupsModel;
 import com.edge2.event.EventCategoryModel;
 import com.edge2.eventdetails.models.EventDetailsModel;
+import com.edge2.sponsors.SponsorsModel;
 import com.edge2.utils.Logger;
 
 import org.json.JSONArray;
@@ -79,6 +81,26 @@ public class DataRepo {
 
     LiveData<List<BannerItemsModel>> getUpcomingEvents() {
         return dao.getUpcomingEvents();
+    }
+
+    LiveData<List<SponsorsModel>> getSponsors() {
+        MutableLiveData<List<SponsorsModel>> res = new MutableLiveData<>();
+        RequestQueue queue = Volley.newRequestQueue(context);
+        StringRequest req = new StringRequest(Request.Method.GET, "https://firebasestorage.googleapis.com/v0/b/edge-new-a7306.appspot.com/o/sponsors%2Fsponsors.txt?alt=media",
+                response -> {
+                    List<SponsorsModel> items = processSponsorsJson(response);
+                    if (items == null) {
+                        res.setValue(null);
+                    } else {
+                        res.setValue(items);
+                    }
+                },
+                error -> res.setValue(null));
+
+        req.setRetryPolicy(
+                new DefaultRetryPolicy(15000, 0, 1f));
+        queue.add(req);
+        return res;
     }
 
     LiveData<EventDetailsModel> getDetails(String name) {
@@ -325,6 +347,24 @@ public class DataRepo {
             for (int i = 0; i < a.length(); i++) {
                 JSONObject item = a.getJSONObject(i);
                 EventDetailsModel model = EventDetailsModel.getFromJson(item);
+                if (model != null) {
+                    items.add(model);
+                }
+            }
+            return items;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private List<SponsorsModel> processSponsorsJson(String res) {
+        try {
+            JSONArray a = new JSONArray(res);
+            List<SponsorsModel> items = new LinkedList<>();
+            for (int i = 0; i < a.length(); i++) {
+                JSONObject item = a.getJSONObject(i);
+                SponsorsModel model = SponsorsModel.getFromJson(item);
                 if (model != null) {
                     items.add(model);
                 }
