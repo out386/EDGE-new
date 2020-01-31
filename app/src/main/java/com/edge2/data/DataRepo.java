@@ -52,6 +52,14 @@ import java.util.concurrent.Executors;
 public class DataRepo {
     private static final String KEY_DETAILS_DB_VERSION = "detailsDbVersion";
     private static final String KEY_BANNER_DB_VERSION = "bannerDbVersion";
+
+    // Sponsors aren't in Firebase Hosting like the others because:
+    // (1) No need to download fast (2) Hosting has more restrictive quotas.
+    private static final String URL_SPONSORS = "https://firebasestorage.googleapis.com/v0/b/edge-new-a7306.appspot.com/o/sponsors%2Fsponsors.txt?alt=media";
+    private static final String URL_DETAILS = "https://edge-new-a7306.firebaseapp.com/EventDetails.json";
+    private static final String URL_BANNER = "https://edge-new-a7306.web.app/BannerItems.json";
+    private static final String URL_DETAILS_DB_VERSION = "https://edge-new-a7306.firebaseapp.com/details_db_version.txt";
+    private static final String URL_BANNER_DB_VERSION = "https://edge-new-a7306.firebaseapp.com/banner_db_version.txt";
     private static final long UPDATE_INTERVAL = 1800000; // 30 minutes
     private static DataRepo repo;
 
@@ -86,7 +94,7 @@ public class DataRepo {
     LiveData<List<SponsorsModel>> getSponsors() {
         MutableLiveData<List<SponsorsModel>> res = new MutableLiveData<>();
         RequestQueue queue = Volley.newRequestQueue(context);
-        StringRequest req = new StringRequest(Request.Method.GET, "https://firebasestorage.googleapis.com/v0/b/edge-new-a7306.appspot.com/o/sponsors%2Fsponsors.txt?alt=media",
+        StringRequest req = new StringRequest(Request.Method.GET, URL_SPONSORS,
                 response -> {
                     List<SponsorsModel> items = processSponsorsJson(response);
                     if (items == null) {
@@ -244,8 +252,7 @@ public class DataRepo {
     }
 
     private void downloadUpdateDetails(RequestQueue queue, OnDetailsVersionFetchedListener listener) {
-        String url = "https://edge-new-a7306.firebaseapp.com/EventDetails.json";
-        StringRequest req = new StringRequest(Request.Method.GET, url,
+        StringRequest req = new StringRequest(Request.Method.GET, URL_DETAILS,
                 response -> {
                     List<EventDetailsModel> items = processDetailsJson(response);
                     if (items == null) {
@@ -262,8 +269,7 @@ public class DataRepo {
     }
 
     private void downloadUpdateBanner(RequestQueue queue, OnBannerVersionFetchedListener listener) {
-        String url = "https://edge-new-a7306.web.app/BannerItems.json";
-        StringRequest req = new StringRequest(Request.Method.GET, url,
+        StringRequest req = new StringRequest(Request.Method.GET, URL_BANNER,
                 response -> {
                     List<BannerItemsModel> items = processBannerJson(response);
                     if (items == null) {
@@ -299,9 +305,7 @@ public class DataRepo {
      * Checks to see if a new database update is available
      */
     private void getDetailsRemoteDbVersion(RequestQueue queue, OnVersionAvailableListener listener) {
-        String url = "https://edge-new-a7306.firebaseapp.com/details_db_version.txt";
-
-        StringRequest req = new StringRequest(Request.Method.GET, url,
+        StringRequest req = new StringRequest(Request.Method.GET, URL_DETAILS_DB_VERSION,
                 response -> {
                     int ver;
                     response = response.trim();
@@ -320,9 +324,7 @@ public class DataRepo {
     }
 
     private void getBannerRemoteDbVersion(RequestQueue queue, OnVersionAvailableListener listener) {
-        String url = "https://edge-new-a7306.firebaseapp.com/banner_db_version.txt";
-
-        StringRequest req = new StringRequest(Request.Method.GET, url,
+        StringRequest req = new StringRequest(Request.Method.GET, URL_BANNER_DB_VERSION,
                 response -> {
                     int ver;
                     response = response.trim();
