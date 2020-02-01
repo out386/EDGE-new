@@ -1,14 +1,23 @@
 <resources>
 
-    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <style name="SplashTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/splashBg</item>
+        <item name="colorPrimaryDark">@color/splashBg</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowBackground">@color/windowBackground</item>
-        <item name="bottomNavigationStyle">@style/BottomNav</item>
-        <item name="android:navigationBarColor">@color/navBar</item>
-        <item name="android:statusBarColor">@color/statusBar</item>
+        <item name="android:windowBackground">@color/splashBg</item>
+        <item name="android:navigationBarColor">@color/splashBg</item>
+        <item name="android:statusBarColor">@color/splashBg</item>
     </style>
+
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <item name="colorPrimary">@color/colorPrimary</item>
+    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <item name="colorAccent">@color/colorAccent</item>
+    <item name="android:windowBackground">@color/windowBackground</item>
+    <item name="bottomNavigationStyle">@style/BottomNav</item>
+    <item name="android:navigationBarColor">@color/navBar</item>
+    <item name="android:statusBarColor">@color/statusBar</item>
+</style>
 
     <style name="BottomNav" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
         <item name="android:background">@color/windowBackground</item>

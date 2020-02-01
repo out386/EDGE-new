@@ -26,4 +26,5 @@
     <color name="rippleColor">#337E7E7E</color>
     <color name="icCall">#2196F3</color>
     <color name="icWhatsapp">#4CAF50</color>
+    <color name="splashBg">#000000</color>
 </resources>
