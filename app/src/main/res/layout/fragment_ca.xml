@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:scrollbars="vertical"
+    android:transitionName="@string/events_to_quick_root_transition">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.edge2.views.GeneralHeaderView
+            android:id="@+id/top_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:name="@string/ca_title"
+            app:desc="@string/ca_desc"
+            app:icon="@drawable/ic_ca"
+            app:flip="true"
+            app:hideImage="true" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ca_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/margin_huge">
+
+            <ImageView
+                android:id="@+id/ca_image"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:src="@drawable/campus_ambassador"
+                app:layout_constraintDimensionRatio="1.103448276:1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_max="500dp"
+                tools:layout_constraintWidth_max="100dp" />
+
+            <View
+                android:id="@+id/divider1"
+                android:layout_width="match_parent"
+                android:layout_height="6dp"
+                android:background="@color/divider"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ca_image" />
+
+            <TextView
+                android:id="@+id/ca_title"
+                style="@style/TextHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_large"
+                android:layout_marginTop="@dimen/margin_huge"
+                android:layout_marginEnd="@dimen/margin_large"
+                android:text="@string/event_details_overview"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider1" />
+
+            <TextView
+                android:id="@+id/ca_text"
+                style="@style/TextBodyLarge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_large"
+                android:layout_marginEnd="@dimen/margin_large"
+                android:layout_marginTop="@dimen/margin_huge"
+                android:justificationMode="inter_word"
+                android:text="@string/ca_long_desc"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ca_title"
+                tools:text="@tools:sample/lorem" />
+
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="match_parent"
+                android:layout_height="6dp"
+                android:background="@color/divider"
+                android:layout_marginTop="@dimen/margin_huge"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ca_text" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/ca_brochure_button"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="@dimen/margin_large"
+                android:layout_marginEnd="@dimen/margin_large"
+                android:backgroundTintMode="src_in"
+                android:minHeight="45sp"
+                android:paddingStart="15dp"
+                android:paddingEnd="12dp"
+                android:text="@string/ca_brochure"
+                android:textAppearance="@style/TextHeader"
+                android:textColor="@color/colorAccent"
+                android:layout_marginTop="@dimen/margin_huge"
+                app:backgroundTint="#00000000"
+                app:cornerRadius="100dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider2"
+                app:rippleColor="@color/lIconFillRedTransparent"
+                app:strokeColor="@color/colorAccent"
+                app:strokeWidth="1dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/ca_register_button"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="@dimen/margin_large"
+                android:layout_marginEnd="@dimen/margin_large"
+                android:backgroundTintMode="src_in"
+                android:minHeight="45sp"
+                android:paddingStart="15dp"
+                android:paddingEnd="12dp"
+                android:text="@string/ca_register"
+                android:textAppearance="@style/TextHeader"
+                android:textColor="@color/colorAccent"
+                android:layout_marginTop="@dimen/margin_huge"
+                app:backgroundTint="#00000000"
+                app:cornerRadius="100dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ca_brochure_button"
+                app:rippleColor="@color/lIconFillRedTransparent"
+                app:strokeColor="@color/colorAccent"
+                app:strokeWidth="1dp" />
+
+            <View
+                android:id="@+id/divider3"
+                android:layout_width="match_parent"
+                android:layout_height="6dp"
+                android:background="@color/divider"
+                android:layout_marginTop="@dimen/margin_huge"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ca_register_button" />
+
+            <TextView
+                android:id="@+id/ca_contacts_title"
+                style="@style/TextHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/event_details_contacts"
+                android:layout_marginStart="@dimen/margin_large"
+                android:layout_marginEnd="@dimen/margin_large"
+                android:layout_marginTop="@dimen/margin_huge"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider3" />
+
+            <com.edge2.views.ContactsView
+                android:id="@+id/ca_con1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_large"
+                android:layout_marginEnd="@dimen/margin_large"
+                android:layout_marginTop="@dimen/margin_huge"
+                app:contact_name="Kumari Bhawna"
+                app:contact_number="8240893668"
+                app:is_not_last="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ca_contacts_title" />
+
+            <com.edge2.views.ContactsView
+                android:id="@+id/ca_con2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_large"
+                android:layout_marginEnd="@dimen/margin_large"
+                app:contact_name="Meheli Choudhury"
+                app:contact_number="7063279355"
+                app:is_not_last="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ca_con1" />
+
+            <com.edge2.views.ContactsView
+                android:id="@+id/ca_con3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_large"
+                android:layout_marginEnd="@dimen/margin_large"
+                app:contact_name="Pradipta Roy"
+                app:contact_number="7044358389"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ca_con2" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

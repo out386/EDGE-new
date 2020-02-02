@@ -81,4 +81,22 @@
     <string name="results_desc">Results have not been declared yet</string>
     <string name="sponsor_fetch_fail">Failed to fetch the list of sponsors</string>
     <string name="loading">Loading…</string>
+    <string name="ca_title">Campus Ambassador</string>
+    <string name="ca_desc">Registrations are open</string>
+    <string name="ca_long_desc">Hello all social butterflies out there, who are not students of TMSL, but
+        are intrigued to be a part of Eastern India\'s 2nd largest techno-management fest, EDGE.
+        Don\'t worry, as EDGE is proud to announce the kickoff of its highly anticipated Campus
+        Ambassador programme.\n\Why, you ask? What\'s in it for me? Glad you asked. This programme
+        entails the following for the Campus Ambassadors:\n\n1) Imbue leadership and management
+        skills.\n2) The top 10 CAs get assured e-certificates.\n3) A chance to win exciting gifts
+        and accessories\n4) The top 5 Campus Ambassadors will get certificates along with goodies.
+        \n5) The top 3 CAs will get goodies, certificates, and a recommendation letter from the
+        teacher convenor of our Technical Committee, as well as a LinkedIn recommendation from our
+        official page.\n6) Exciting goodies at the end of every month for the highest point scorers.
+        \n7) The entire system of how to score points will be explained through a meeting, which
+        will be held after we declare our final list of CAs.\n8) An unparalleled experience of
+        associating with EDGE.
+    </string>
+    <string name="ca_register">Register</string>
+    <string name="ca_brochure">Read the brochure</string>
 </resources>

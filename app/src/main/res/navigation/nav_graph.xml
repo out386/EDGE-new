@@ -73,6 +73,13 @@
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_events_to_CA"
+            app:destination="@id/CAFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/settings_dest"
@@ -145,4 +152,9 @@
         android:name="com.edge2.sponsors.SponsorsFragment"
         android:label="fragment_sponsors"
         tools:layout="@layout/fragment_sponsors" />
+    <fragment
+        android:id="@+id/CAFragment"
+        android:name="com.edge2.ca.CAFragment"
+        android:label="fragment_ca"
+        tools:layout="@layout/fragment_ca" />
 </navigation>

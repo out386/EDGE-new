@@ -236,7 +236,11 @@ public class EventsFragment extends BaseFragment {
         if (!isIntra) {
             if (quickAdapter == null) {
                 ArrayList<QuickItemModel> quickItems = new ArrayList<>();
-                QuickItemModel quickItem = new QuickItemModel(getString(R.string.upcoming_title),
+                QuickItemModel quickItem = new QuickItemModel(getString(R.string.ca_title),
+                        context.getDrawable(R.drawable.ic_ca),
+                        getString(R.string.ca_desc));
+                quickItems.add(quickItem);
+                quickItem = new QuickItemModel(getString(R.string.upcoming_title),
                         context.getDrawable(R.drawable.ic_upcoming),
                         getString(R.string.upcoming_desc));
                 quickItems.add(quickItem);
@@ -279,24 +283,27 @@ public class EventsFragment extends BaseFragment {
             int actionRes;
             switch (position) {
                 case 0:
-                    actionRes = R.id.action_events_to_upcoming;
+                    actionRes = R.id.action_events_to_CA;
                     break;
                 case 1:
-                    actionRes = R.id.action_events_to_registration;
+                    actionRes = R.id.action_events_to_upcoming;
                     break;
                 case 2:
-                    actionRes = R.id.action_events_to_team;
+                    actionRes = R.id.action_events_to_registration;
                     break;
                 case 3:
-                    actionRes = R.id.action_events_to_about;
+                    actionRes = R.id.action_events_to_team;
                     break;
                 case 4:
-                    actionRes = R.id.action_events_to_accommodation;
+                    actionRes = R.id.action_events_to_about;
                     break;
                 case 5:
-                    actionRes = R.id.action_events_to_results;
+                    actionRes = R.id.action_events_to_accommodation;
                     break;
                 case 6:
+                    actionRes = R.id.action_events_to_results;
+                    break;
+                case 7:
                     actionRes = R.id.action_events_to_sponsors;
                     break;
                 default:
