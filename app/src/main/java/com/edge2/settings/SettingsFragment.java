@@ -62,13 +62,18 @@ public class SettingsFragment extends BaseFragment {
 
     private void setupListeners(View rootView) {
         TextView theme = rootView.findViewById(R.id.sett_theme);
-        MaterialButton signIn = rootView.findViewById(R.id.sett_sign_in);
 
         theme.setOnClickListener(view ->
                 ((ThemeActivity) requireActivity()).showThemeDialog()
         );
-        signIn.setOnClickListener(view -> Toast.makeText(requireContext(),
-                getString(R.string.sett_signin_message), LENGTH_LONG).show()
-        );
+
+        // TODO: Make the notifications switch actually work
+        /*
+         * Currently, it can't work when the app is in the background, because FCM doesn't allow
+         * handling notification messages when the app is in the background, but just fires
+         * notifications itself. This restriction does not exist for FCM data messages, but the FCM
+         * console can't send data messages. Fixing this switch requires writing a tiny server app
+         * to send data messages with.
+         */
     }
 }
