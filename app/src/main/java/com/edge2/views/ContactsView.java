@@ -4,7 +4,9 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.TypedArray;
 import android.net.Uri;
+import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -22,6 +24,25 @@ public class ContactsView extends RelativeLayout {
     private long number;
     private boolean isNotLast;
 
+    public ContactsView(Context context) {
+        this(context, null);
+    }
+
+    public ContactsView(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
+
+    public ContactsView(Context context, AttributeSet attrs, int defStyleAttr) {
+        this(context, attrs, defStyleAttr, 0);
+    }
+
+    public ContactsView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+        this.context = context;
+        setFromAttrs(attrs);
+        init(null);
+    }
+
     public ContactsView(Context context, String name, long number, boolean isNotLast) {
         this(context, name, null, number, isNotLast);
     }
@@ -33,6 +54,17 @@ public class ContactsView extends RelativeLayout {
         this.name = name;
         this.isNotLast = isNotLast;
         init(desc);
+    }
+
+    private void setFromAttrs(AttributeSet attrs) {
+        TypedArray a = getContext().obtainStyledAttributes(attrs,
+                R.styleable.ContactsView, 0, 0);
+        name = a.getString(R.styleable.ContactsView_contact_name);
+        String numStr = a.getString(R.styleable.ContactsView_contact_number);
+        if (numStr != null)
+            number = Long.parseLong(numStr);
+        isNotLast = a.getBoolean(R.styleable.ContactsView_is_not_last, false);
+        a.recycle();
     }
 
     private void init(@Nullable String desc) {

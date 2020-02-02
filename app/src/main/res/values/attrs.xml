@@ -15,4 +15,9 @@
         <attr name="switchHeaderStyle" format="reference" />
         <attr name="switchDescStyle" format="reference" />
     </declare-styleable>
+    <declare-styleable name="ContactsView">
+        <attr name="contact_name" format="string" />
+        <attr name="contact_number" format="string" />
+        <attr name="is_not_last" format="boolean" />
+    </declare-styleable>
 </resources>
