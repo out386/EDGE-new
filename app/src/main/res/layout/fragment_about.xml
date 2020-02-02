@@ -322,7 +322,7 @@
                 android:layout_marginTop="@dimen/margin_huge"
                 android:paddingStart="@dimen/margin_large"
                 android:paddingEnd="@dimen/margin_large"
-                android:text="Misc. Icons and images"
+                android:text="Indranil Chowdhury"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/dev3" />
@@ -334,20 +334,37 @@
                 android:layout_height="wrap_content"
                 android:paddingStart="@dimen/margin_large"
                 android:paddingEnd="@dimen/margin_large"
+                android:text="Website Developer"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dev4_h" />
+
+            <TextView
+                android:id="@+id/dev5_h"
+                style="@style/TextHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_huge"
+                android:paddingStart="@dimen/margin_large"
+                android:paddingEnd="@dimen/margin_large"
+                android:text="Misc. Icons and images"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dev4" />
+
+            <TextView
+                android:id="@+id/dev5"
+                style="@style/TextBodyLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/margin_large"
+                android:paddingEnd="@dimen/margin_large"
                 android:gravity="center_horizontal"
                 android:text="flaticon.com\nBiZkettE1 / Freepik\nSrip\nEucalyp"
                 android:lineSpacingMultiplier="1.1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/dev4_h" />
-
-            <View
-                android:id="@+id/view"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/margin_large"
-                android:visibility="invisible"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/dev4" />
+                app:layout_constraintTop_toBottomOf="@+id/dev5_h" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/about_licences"
@@ -367,10 +384,18 @@
                 app:cornerRadius="100dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/dev4"
+                app:layout_constraintTop_toBottomOf="@+id/dev5"
                 app:rippleColor="@color/lIconFillRedTransparent"
                 app:strokeColor="@color/cardStroke"
                 app:strokeWidth="1dp" />
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/margin_large"
+                android:visibility="invisible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/about_licences" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
