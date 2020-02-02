@@ -124,10 +124,10 @@ public class BannerItemsModel implements Serializable {
         if (item.imgUrl == null || item.imgUrl.isEmpty() || item.imgUrl.equals("null"))
             item.imgUrl = null;
 
-        item.icName = ob.getString("imgName");
+        item.icName = ob.getString("icName");
         if (item.icName == null || item.icName.isEmpty() || item.icName.equals("null"))
             item.icName = null;
-        item.icUrl = ob.getString("imgUrl");
+        item.icUrl = ob.getString("icUrl");
         if (item.icUrl == null || item.icUrl.isEmpty() || item.icUrl.equals("null"))
             item.icUrl = null;
 
