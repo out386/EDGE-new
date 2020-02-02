@@ -29,9 +29,12 @@
     <TextView
         android:id="@+id/general_name"
         style="@style/TextHeaderLarge"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin"
+        android:maxLines="3"
+        android:ellipsize="end"
+        android:gravity="center_horizontal"
         app:layout_constraintBottom_toTopOf="@+id/general_desc"
         app:layout_constraintEnd_toEndOf="@+id/general_desc"
         app:layout_constraintStart_toStartOf="@+id/general_desc"
