@@ -99,6 +99,7 @@ public class AboutFragment extends BaseFragment {
     private void soManyListenersExclamationMark(View root) {
         View edge = root.findViewById(R.id.about_img_edge);
         View tmsl = root.findViewById(R.id.about_img_tmsl);
+        View gx = root.findViewById(R.id.about_img_gx);
         View location = root.findViewById(R.id.about_img_location);
         View fb = root.findViewById(R.id.about_img_fb);
         View yt = root.findViewById(R.id.about_img_yt);
@@ -111,6 +112,10 @@ public class AboutFragment extends BaseFragment {
 
         tmsl.setOnClickListener(view -> startActivity(new Intent(Intent.ACTION_VIEW,
                 Uri.parse("http://www.ticollege.ac.in/"))));
+
+        gx.setOnClickListener(view -> startActivity(new Intent(Intent.ACTION_VIEW,
+                Uri.parse("http://geekonix.org/"))));
+
         location.setOnClickListener(view -> startActivity(new Intent(Intent.ACTION_VIEW,
                 Uri.parse("https://www.google.com/maps/@22.5764407,88.4276723,18z"))));
 

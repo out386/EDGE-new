@@ -166,8 +166,20 @@
                 android:layout_marginTop="@dimen/margin_huge"
                 android:layout_marginEnd="@dimen/margin_large"
                 android:src="@drawable/ic_about_tmsl"
-                app:layout_constraintEnd_toStartOf="@+id/about_img_location"
+                app:layout_constraintEnd_toStartOf="@+id/about_img_gx"
                 app:layout_constraintStart_toEndOf="@+id/about_img_edge"
+                app:layout_constraintTop_toBottomOf="@+id/about_quick_links_h" />
+
+            <ImageView
+                android:id="@+id/about_img_gx"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="@dimen/margin_large"
+                android:layout_marginTop="@dimen/margin_huge"
+                android:layout_marginEnd="@dimen/margin_large"
+                android:src="@drawable/ic_about_gx"
+                app:layout_constraintEnd_toStartOf="@+id/about_img_location"
+                app:layout_constraintStart_toEndOf="@+id/about_img_tmsl"
                 app:layout_constraintTop_toBottomOf="@+id/about_quick_links_h" />
 
             <ImageView
@@ -179,7 +191,7 @@
                 android:layout_marginEnd="@dimen/margin_large"
                 android:src="@drawable/ic_about_location"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/about_img_tmsl"
+                app:layout_constraintStart_toEndOf="@+id/about_img_gx"
                 app:layout_constraintTop_toBottomOf="@+id/about_quick_links_h" />
 
             <ImageView
