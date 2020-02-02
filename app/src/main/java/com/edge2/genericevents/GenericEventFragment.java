@@ -1,7 +1,7 @@
 package com.edge2.genericevents;
 
 /*
- * Copyright (C) 2019 Ritayan Chakraborty <ritayanout@gmail.com>
+ * Copyright (C) 2020 Ritayan Chakraborty <ritayanout@gmail.com>
  *
  * This file is part of EDGE-new
  *
