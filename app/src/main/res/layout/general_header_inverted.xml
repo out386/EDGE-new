@@ -47,13 +47,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin"
+        android:layout_marginStart="@dimen/margin"
+        android:layout_marginEnd="@dimen/margin"
         android:gravity="center_horizontal"
-        android:justificationMode="inter_word"
         app:layout_constraintBottom_toTopOf="@+id/divider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/general_img"
         app:layout_constraintTop_toBottomOf="@+id/general_name"
-        tools:text="Intra College Events" />
+        tools:text="Intra College Events"/>
 
     <View
         android:id="@+id/divider"
