@@ -84,13 +84,10 @@ public class EventsFragment extends BaseFragment {
     @Nullable
     private QuickItemsAdapter quickAdapter;
     /**
-     * All available banner items.
-     */
-    private List<BannerItemsModel> bannerItemsModels;
-    /**
      * Items that are actually in the banner. Items with no image are skipped.
      */
     private List<BannerItemsModel> itemsInBanner;
+    private List<Slide> bannerItemslist;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -216,7 +213,7 @@ public class EventsFragment extends BaseFragment {
     }
 
     private void showData() {
-        DataViewModel viewModel = ViewModelProviders.of(this).get(DataViewModel.class);
+        DataViewModel viewModel = ViewModelProviders.of(requireActivity()).get(DataViewModel.class);
 
         if (eventsAdapter == null) {
             viewModel.getGroups(isIntra).observe(this, events -> {
@@ -228,7 +225,7 @@ public class EventsFragment extends BaseFragment {
             mainReycler.setAdapter(eventsAdapter);
         }
 
-        setupObservers(viewModel);
+        observeBanner(viewModel);
         setQuickItems();
     }
 
@@ -327,26 +324,34 @@ public class EventsFragment extends BaseFragment {
         }
     }
 
-    private void setupObservers(DataViewModel viewModel) {
+    private void observeBanner(DataViewModel viewModel) {
         if (!isIntra) {
-            OnBannerItemClickedListener bannerListener = new OnBannerItemClickedListener();
+            if (bannerItemslist != null) {
+                setBanner();
+                return;
+            }
+
             viewModel.getBanner().observe(this, items -> {
-                bannerItemsModels = items;
                 itemsInBanner = new ArrayList<>(items.size());
-                List<Slide> list = new ArrayList<>(items.size());
+                bannerItemslist = new ArrayList<>(items.size());
                 for (int i = 0; i < items.size(); i++) {
                     BannerItemsModel item = items.get(i);
                     Uri uri = item.getImageUri();
                     if (uri != null) {
-                        list.add(new Slide(i, uri, 0));
+                        bannerItemslist.add(new Slide(i, uri, 0));
                         itemsInBanner.add(item);
                     }
                 }
-                //noinspection ConstantConditions
-                banner.setItemClickListener(bannerListener);
-                banner.addSlides(list);
+                setBanner();
             });
         }
+    }
+
+    private void setBanner() {
+        OnBannerItemClickedListener bannerListener = new OnBannerItemClickedListener();
+        //noinspection ConstantConditions
+        banner.setItemClickListener(bannerListener);
+        banner.addSlides(bannerItemslist);
     }
 
     private int getRecyclerColumnCount(View parent, View child, float pxWidth) {
@@ -363,16 +368,6 @@ public class EventsFragment extends BaseFragment {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             if (itemsInBanner != null) {
                 BannerItemsModel item = itemsInBanner.get(position);
-                String transitionImgName = getString(R.string.events_to_sub_img_transition);
-                String transitionNameName = getString(R.string.events_to_sub_name_transition);
-                String transitionRootName = getString(R.string.events_to_sub_root_transition);
-
-                // To add more shared views here, call "setTransitionName" in the adapter
-                /*FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
-                        .addSharedElement(imageView, transitionImgName)
-                        .addSharedElement(nameView, transitionNameName)
-                        .addSharedElement(rootView, transitionRootName)
-                        .build();*/
 
                 Bundle args = new Bundle();
                 if (item.getImageUri() == null) {

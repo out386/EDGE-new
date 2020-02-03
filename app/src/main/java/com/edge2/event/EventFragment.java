@@ -185,7 +185,7 @@ public class EventFragment extends BaseFragment {
 
     private void setData() {
         if (mainAdapter == null) {
-            DataViewModel viewModel = ViewModelProviders.of(this)
+            DataViewModel viewModel = ViewModelProviders.of(requireActivity())
                     .get(DataViewModel.class);
             viewModel.getCategories(isIntra, groupName).observe(this, categories -> {
                 categoriesList = categories;

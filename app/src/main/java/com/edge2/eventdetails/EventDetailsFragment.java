@@ -176,7 +176,7 @@ public class EventDetailsFragment extends BaseFragment {
     private void setData(TextView longDesc, TextView rules, LinearLayout contacts, TextView schedule,
                          View schedDiv, View rulesDiv, View contDiv,
                          TextView schedHead, TextView rulesHead, TextView contHead) {
-        DataViewModel viewModel = ViewModelProviders.of(this)
+        DataViewModel viewModel = ViewModelProviders.of(requireActivity())
                 .get(DataViewModel.class);
 
         viewModel.getDetails(eventName).observe(this, item -> {
