@@ -33,16 +33,20 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
-        GifImageView splashView = findViewById(R.id.splash_gif);
-        GifDrawable splash = GifDrawable.createFromResource(getResources(), R.raw.edge_splash);
-        if (splash != null) {
-            splash.setLoopCount(1);
-            splash.addAnimationListener(loop -> launchMain());
-        } else {
+        if (BuildConfig.DEBUG) {
             launchMain();
+        } else {
+            setContentView(R.layout.activity_splash);
+            GifImageView splashView = findViewById(R.id.splash_gif);
+            GifDrawable splash = GifDrawable.createFromResource(getResources(), R.raw.edge_splash);
+            if (splash != null) {
+                splash.setLoopCount(1);
+                splash.addAnimationListener(loop -> launchMain());
+            } else {
+                launchMain();
+            }
+            splashView.setImageDrawable(splash);
         }
-        splashView.setImageDrawable(splash);
 
     }
 
