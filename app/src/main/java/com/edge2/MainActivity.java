@@ -25,7 +25,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
@@ -55,10 +54,6 @@ public class MainActivity extends ThemeActivity implements OnFragmentScrollListe
         bottomNav = findViewById(R.id.navigation);
 
         toolbar = findViewById(R.id.toolbar);
-        ActionBar bar = getSupportActionBar();
-        if (bar != null) {
-            bar.setDisplayShowTitleEnabled(false);
-        }
         toolbarAnimator = toolbar.animate();
 
         setupBottomNav();

@@ -21,6 +21,7 @@ package com.edge2;
  */
 
 import android.content.Context;
+import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup.MarginLayoutParams;
 
@@ -30,6 +31,9 @@ import androidx.fragment.app.Fragment;
 
 import com.edge2.data.DataRepo;
 import com.edge2.utils.DimenUtils;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public abstract class BaseFragment extends Fragment {
 
@@ -47,6 +51,15 @@ public abstract class BaseFragment extends Fragment {
         onFragmentScrollListener = null;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Handler handler = new Handler();
+        // Without the delay, Fragment#setAnimatingAway is called last once the animation finishes.
+        // By which time, clearAnim would already have set it to null. The entire fix is hacky anyway.
+        handler.postDelayed(() -> clearAnim(handler), 500);
+    }
+
     protected void setupScrollListener(NestedScrollView scrollView, int topViewHeight) {
         scrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener)
                 (v, scrollX, scrollY, oldScrollX, oldScrollY) ->
@@ -58,6 +71,29 @@ public abstract class BaseFragment extends Fragment {
     public void onResume() {
         super.onResume();
         DataRepo.getInstance(getContext()).updateDb();
+    }
+
+    /* mAnimationInfo holds a View that never gets cleared, causing a memory leak.
+     * This was the only fix I could think of. Couldn't find any way this could cause NPEs, but
+     * keep an eye on this anyway.
+     */
+    private void clearAnim(Handler handler) {
+        try {
+            Class fragment = this.getClass().getSuperclass();
+            if (fragment != null) {
+                fragment = fragment.getSuperclass();
+                if (fragment != null) {
+                    Method animMethod = fragment.getDeclaredMethod("setAnimatingAway", View.class);
+                    animMethod.setAccessible(true);
+                    View v = null;
+                    animMethod.invoke(this, v);
+                }
+            }
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        } finally {
+            handler.removeCallbacksAndMessages(null);
+        }
     }
 
     protected void setupWindowInsets(View rootView, View contentView, View topView,
