@@ -29,6 +29,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -70,11 +71,13 @@ public class EventsFragment extends BaseFragment {
     private RecyclerView quickReycler;
     @Nullable
     private Slider banner;
+    private ImageView eventsHiddenView;
     private Context context;
     private OnFragmentScrollListener listener;
     private ItemDecoration itemDecoration;
     private int appBarOffset;
     private boolean isIntra;
+    private boolean isEventsHidden = true;
     @Nullable
     private View topViewEdge;
     @Nullable
@@ -88,6 +91,7 @@ public class EventsFragment extends BaseFragment {
      */
     private List<BannerItemsModel> itemsInBanner;
     private List<Slide> bannerItemslist;
+    private View rootView;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -106,9 +110,11 @@ public class EventsFragment extends BaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        rootView = inflater.inflate(R.layout.fragment_main, container, false);
         postponeEnterTransition();
         Bundle args = getArguments();
+        mainReycler = rootView.findViewById(R.id.main_recycler);
+        eventsHiddenView = rootView.findViewById(R.id.wait_view);
         if (args != null)
             isIntra = args.getBoolean(KEY_IS_INTRA);
         if (savedInstanceState != null) {
@@ -130,20 +136,32 @@ public class EventsFragment extends BaseFragment {
             quickReycler.setLayoutManager(quickLayoutManager);
             new GravitySnapHelper(Gravity.START).attachToRecyclerView(quickReycler);
         }
-        mainReycler = rootView.findViewById(R.id.main_recycler);
-
-        float itemSize = getResources().getDimensionPixelSize(R.dimen.allevents_main_events_img_w) +
-                2 * getResources().getDimension(R.dimen.allevents_main_events_padding_h);
-        int columnCount = getRecyclerColumnCount(rootView, mainReycler, itemSize);
-        RecyclerView.LayoutManager mainLayoutManager = new GridLayoutManager(context, columnCount);
-        mainReycler.setHasFixedSize(true);
-        mainReycler.setLayoutManager(mainLayoutManager);
 
         // Show the toolbar and bottomnav
         listener.onListScrolled(-1, Integer.MAX_VALUE);
-
-        showData();
+        setupRecyclerOrHide();
         return rootView;
+    }
+
+    /**
+     * Checks if events have been announced yet. If yes, shows the Events RecyclerView, else shows
+     * an ImageView
+     */
+    private void setupRecyclerOrHide() {
+        if (isEventsHidden) {
+            mainReycler.setVisibility(View.GONE);
+            eventsHiddenView.setVisibility(View.VISIBLE);
+        } else {
+            mainReycler.setVisibility(View.VISIBLE);
+            eventsHiddenView.setVisibility(View.GONE);
+            float itemSize = getResources().getDimensionPixelSize(R.dimen.allevents_main_events_img_w) +
+                    2 * getResources().getDimension(R.dimen.allevents_main_events_padding_h);
+            int columnCount = getRecyclerColumnCount(mainReycler, itemSize);
+            RecyclerView.LayoutManager mainLayoutManager = new GridLayoutManager(context, columnCount);
+            mainReycler.setHasFixedSize(true);
+            mainReycler.setLayoutManager(mainLayoutManager);
+        }
+        showData();
     }
 
     @Override
@@ -163,6 +181,8 @@ public class EventsFragment extends BaseFragment {
             quickReycler.setAdapter(null);
         mainReycler = null;
         quickReycler = null;
+        eventsHiddenView = null;
+        rootView = null;
     }
 
     @Override
@@ -174,12 +194,24 @@ public class EventsFragment extends BaseFragment {
 
     private void setupInsets(View v, NestedScrollView scrollView) {
         View topView;
-        if (isIntra) {
+        View contentView;
+        if (isIntra)
             topView = topViewIntra;
-        } else {
+        else
             topView = topViewEdge;
+
+        if (isEventsHidden) {
+            contentView = eventsHiddenView;
+            startPostponedEnterTransition();
+        } else {
+            contentView = mainReycler;
+            // Needed because the shared element transition doesn't work on return unless
+            // postponeEnterTransition() is called. And postponeEnterTransition needs
+            // a corresponding startPostponedEnterTransition().
+            mainReycler.postDelayed(this::startPostponedEnterTransition, 150);
         }
-        setupWindowInsets(v, mainReycler, topView, true,
+
+        setupWindowInsets(v, contentView, topView, true,
                 true, (l, t, r, b) -> {
 
                     if (!isIntra) {
@@ -191,19 +223,16 @@ public class EventsFragment extends BaseFragment {
                         setupScrollListener(scrollView, topView.getHeight());
                     });
 
-                    if (itemDecoration != null)
-                        mainReycler.removeItemDecoration(itemDecoration);
-                    int itemMargins = context.getResources()
-                            .getDimensionPixelSize(R.dimen.margin_huge);
-                    itemDecoration =
-                            new ItemDecoration(mainReycler.getLayoutManager(), b, itemMargins);
-                    mainReycler.addItemDecoration(itemDecoration);
+                    if (!isEventsHidden) {
+                        if (itemDecoration != null)
+                            mainReycler.removeItemDecoration(itemDecoration);
+                        int itemMargins = context.getResources()
+                                .getDimensionPixelSize(R.dimen.margin_huge);
+                        itemDecoration =
+                                new ItemDecoration(mainReycler.getLayoutManager(), b, itemMargins);
+                        mainReycler.addItemDecoration(itemDecoration);
+                    }
                 });
-
-        // Needed because the shared element transition doesn't work on return unless
-        // postponeEnterTransition() is called. And postponeEnterTransition needs
-        // a corresponding startPostponedEnterTransition().
-        mainReycler.postDelayed(this::startPostponedEnterTransition, 150);
     }
 
     @Override
@@ -215,14 +244,16 @@ public class EventsFragment extends BaseFragment {
     private void showData() {
         DataViewModel viewModel = ViewModelProviders.of(requireActivity()).get(DataViewModel.class);
 
-        if (eventsAdapter == null) {
-            viewModel.getGroups(isIntra).observe(this, events -> {
-                allEventsList = events;
-                eventsAdapter = new EventsAdapter(allEventsList, isIntra, this::onEventClicked);
+        if (!isEventsHidden) {
+            if (eventsAdapter == null) {
+                viewModel.getGroups(isIntra).observe(this, events -> {
+                    allEventsList = events;
+                    eventsAdapter = new EventsAdapter(allEventsList, isIntra, this::onEventClicked);
+                    mainReycler.setAdapter(eventsAdapter);
+                });
+            } else {
                 mainReycler.setAdapter(eventsAdapter);
-            });
-        } else {
-            mainReycler.setAdapter(eventsAdapter);
+            }
         }
 
         observeBanner(viewModel);
@@ -354,8 +385,8 @@ public class EventsFragment extends BaseFragment {
         banner.addSlides(bannerItemslist);
     }
 
-    private int getRecyclerColumnCount(View parent, View child, float pxWidth) {
-        int totalPadding = parent.getPaddingRight() + parent.getPaddingLeft()
+    private int getRecyclerColumnCount(View child, float pxWidth) {
+        int totalPadding = rootView.getPaddingRight() + rootView.getPaddingLeft()
                 + child.getPaddingRight() + child.getPaddingLeft();
         pxWidth += child.getPaddingRight() + child.getPaddingLeft();
         int screenWidth = DimenUtils.getWindowWidth(context) - totalPadding;

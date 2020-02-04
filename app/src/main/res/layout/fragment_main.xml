@@ -70,9 +70,20 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical"
+            android:visibility="gone"
             tools:listitem="@layout/events_item"
             tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            tools:spanCount="2" />
+            tools:spanCount="2"
+            tools:visibility="visible"/>
+
+        <ImageView
+            android:id="@+id/wait_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/img_edge_wait"
+            android:adjustViewBounds="true"
+            android:gravity="top"
+            android:visibility="gone"/>
 
     </LinearLayout>
 

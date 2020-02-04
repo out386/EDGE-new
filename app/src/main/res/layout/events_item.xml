@@ -21,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/allevents_main_events_img_h"
         android:layout_gravity="center_horizontal"
-        tools:src="@drawable/computeaid" />
+        tools:src="@drawable/ic_computeaid" />
 
     <TextView
         android:id="@+id/event_name"
