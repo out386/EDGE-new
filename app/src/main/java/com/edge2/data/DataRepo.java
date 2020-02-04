@@ -33,8 +33,10 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.edge2.BuildConfig;
 import com.edge2.allevents.models.BannerItemsModel;
 import com.edge2.allevents.models.GroupsModel;
+import com.edge2.allevents.models.HideEventsModel;
 import com.edge2.event.EventCategoryModel;
 import com.edge2.eventdetails.models.EventDetailsModel;
 import com.edge2.sponsors.SponsorsModel;
@@ -66,13 +68,16 @@ public class DataRepo {
     private int detailsCode;
     private int bannerCode;
     private long lastUpdateTime;
+    private long lastIsHiddenUpdateTime;
     private RunningOutOfNamesDao dao;
     private Context context;
     private RequestQueue requestQueue;
+    private StringRequest isEventsHiddenRequest;
 
     private DataRepo(Context context) {
         this.context = context.getApplicationContext();
         dao = AppDatabase.getDatabase(this.context).getDao();
+        requestQueue = Volley.newRequestQueue(context);
     }
 
     public static DataRepo getInstance(Context context) {
@@ -142,8 +147,6 @@ public class DataRepo {
         isUpdating = true;
         bannerCode = detailsCode = 0;
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        if (requestQueue == null)
-            requestQueue = Volley.newRequestQueue(context);
         ExecutorService executor = Executors.newSingleThreadExecutor();
 
         updateDetails(prefs, executor, code -> {
@@ -402,6 +405,22 @@ public class DataRepo {
 
     private void updateOfflineBannerDb(ExecutorService executor, List<BannerItemsModel> items) {
         executor.submit(() -> dao.putBanner(items));
+    }
+
+    void fetchIsEventsHidden(MutableLiveData<HideEventsModel> liveData) {
+        if (SystemClock.uptimeMillis() - lastIsHiddenUpdateTime < 20000)
+            return;
+        if (isEventsHiddenRequest == null) {
+            isEventsHiddenRequest = new StringRequest(Request.Method.GET, BuildConfig.URL_EVENTS_HIDDEN,
+                    response -> {
+                        HideEventsModel model = HideEventsModel.getFromString(response);
+                        liveData.setValue(model);
+                        lastIsHiddenUpdateTime = SystemClock.uptimeMillis();
+                    }, error -> lastIsHiddenUpdateTime = 0);
+            isEventsHiddenRequest.setShouldCache(false).setRetryPolicy(
+                    new DefaultRetryPolicy(15000, 0, 1f));
+        }
+        requestQueue.add(isEventsHiddenRequest);
     }
 
     private interface OnVersionAvailableListener {

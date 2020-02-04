@@ -24,9 +24,11 @@ import android.app.Application;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.edge2.allevents.models.BannerItemsModel;
 import com.edge2.allevents.models.GroupsModel;
+import com.edge2.allevents.models.HideEventsModel;
 import com.edge2.event.EventCategoryModel;
 import com.edge2.eventdetails.models.EventDetailsModel;
 import com.edge2.sponsors.SponsorsModel;
@@ -35,10 +37,18 @@ import java.util.List;
 
 public class DataViewModel extends AndroidViewModel {
     private DataRepo dataRepo;
+    private MutableLiveData<HideEventsModel> hideEventsLD;
 
     public DataViewModel(Application app) {
         super(app);
         dataRepo = DataRepo.getInstance(app);
+    }
+
+    public LiveData<HideEventsModel> getIsEventsHidden() {
+        if (hideEventsLD == null)
+            hideEventsLD = new MutableLiveData<>();
+        dataRepo.fetchIsEventsHidden(hideEventsLD);
+        return hideEventsLD;
     }
 
     public LiveData<List<BannerItemsModel>> getBanner() {

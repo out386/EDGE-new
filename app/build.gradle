@@ -20,6 +20,7 @@ android {
             buildConfigField('String', 'URL_BANNER', url_banner)
             buildConfigField('String', 'URL_DETAILS_DB_VERSION', url_details_db_version)
             buildConfigField('String', 'URL_BANNER_DB_VERSION', url_banner_db_version)
+            buildConfigField('String', 'URL_EVENTS_HIDDEN', url_events_hidden)
         }
         debug {
             minifyEnabled false
@@ -28,6 +29,7 @@ android {
             buildConfigField('String', 'URL_BANNER', url_banner_dev)
             buildConfigField('String', 'URL_DETAILS_DB_VERSION', url_details_db_version_dev)
             buildConfigField('String', 'URL_BANNER_DB_VERSION', url_banner_db_version_dev)
+            buildConfigField('String', 'URL_EVENTS_HIDDEN', url_events_hidden_dev)
         }
     }
     compileOptions {

@@ -41,11 +41,13 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.edge2.BaseFragment;
 import com.edge2.OnFragmentScrollListener;
 import com.edge2.R;
 import com.edge2.allevents.models.BannerItemsModel;
 import com.edge2.allevents.models.GroupsModel;
+import com.edge2.allevents.models.HideEventsModel;
 import com.edge2.allevents.models.QuickItemModel;
 import com.edge2.allevents.recycler.EventsAdapter;
 import com.edge2.allevents.recycler.ItemDecoration;
@@ -77,7 +79,7 @@ public class EventsFragment extends BaseFragment {
     private ItemDecoration itemDecoration;
     private int appBarOffset;
     private boolean isIntra;
-    private boolean isEventsHidden = true;
+    private HideEventsModel hideEventsModel;
     @Nullable
     private View topViewEdge;
     @Nullable
@@ -98,6 +100,7 @@ public class EventsFragment extends BaseFragment {
         super.onAttach(context);
         this.context = context;
         listener = (OnFragmentScrollListener) context;
+        hideEventsModel = HideEventsModel.getFromPrefs(context);
     }
 
     @Override
@@ -148,9 +151,14 @@ public class EventsFragment extends BaseFragment {
      * an ImageView
      */
     private void setupRecyclerOrHide() {
-        if (isEventsHidden) {
+        if (hideEventsModel.isHideEvents()) {
             mainReycler.setVisibility(View.GONE);
             eventsHiddenView.setVisibility(View.VISIBLE);
+            if (hideEventsModel.getImgUrl() != null) {
+                Glide.with(requireContext())
+                        .load(hideEventsModel.getImgUrl())
+                        .into(eventsHiddenView);
+            }
         } else {
             mainReycler.setVisibility(View.VISIBLE);
             eventsHiddenView.setVisibility(View.GONE);
@@ -162,6 +170,12 @@ public class EventsFragment extends BaseFragment {
             mainReycler.setLayoutManager(mainLayoutManager);
         }
         showData();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        observeIsHidden();
     }
 
     @Override
@@ -200,7 +214,7 @@ public class EventsFragment extends BaseFragment {
         else
             topView = topViewEdge;
 
-        if (isEventsHidden) {
+        if (hideEventsModel.isHideEvents()) {
             contentView = eventsHiddenView;
             startPostponedEnterTransition();
         } else {
@@ -223,7 +237,7 @@ public class EventsFragment extends BaseFragment {
                         setupScrollListener(scrollView, topView.getHeight());
                     });
 
-                    if (!isEventsHidden) {
+                    if (!hideEventsModel.isHideEvents()) {
                         if (itemDecoration != null)
                             mainReycler.removeItemDecoration(itemDecoration);
                         int itemMargins = context.getResources()
@@ -244,7 +258,7 @@ public class EventsFragment extends BaseFragment {
     private void showData() {
         DataViewModel viewModel = ViewModelProviders.of(requireActivity()).get(DataViewModel.class);
 
-        if (!isEventsHidden) {
+        if (!hideEventsModel.isHideEvents()) {
             if (eventsAdapter == null) {
                 viewModel.getGroups(isIntra).observe(this, events -> {
                     allEventsList = events;
@@ -258,6 +272,16 @@ public class EventsFragment extends BaseFragment {
 
         observeBanner(viewModel);
         setQuickItems();
+    }
+
+    // Make sure it is safe to call getIsEventsHidden() multiple times, as observeIsHidden is
+    // called both from onResume and onCreateView
+    private void observeIsHidden() {
+        DataViewModel viewModel = ViewModelProviders.of(requireActivity()).get(DataViewModel.class);
+        viewModel.getIsEventsHidden().observe(this, hideEvents -> {
+            hideEventsModel = hideEvents;
+            setupRecyclerOrHide();
+        });
     }
 
     private void setQuickItems() {
