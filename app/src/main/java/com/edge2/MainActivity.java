@@ -155,7 +155,12 @@ public class MainActivity extends ThemeActivity implements OnFragmentScrollListe
     }
 
     @Override
-    public int getBottomNavHeight() {
-        return bottomNav.getHeight();
+    public int getBottomNavBottom() {
+        return bottomNav.getBottom();
+    }
+
+    @Override
+    public int getBottomNavTop() {
+        return bottomNav.getTop();
     }
 }

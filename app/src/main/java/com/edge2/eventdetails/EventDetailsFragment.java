@@ -124,7 +124,7 @@ public class EventDetailsFragment extends BaseFragment {
                 divider3, schedule, longDesc, rules, contacts, scheduleHeader, rulesHeader, contactsHeader);
         transition.addListener(sharedElementListener);
 
-        setupInsets(view, divider, topView, scrollView, contentView);
+        setupInsets(divider, topView, scrollView, contentView);
         setHeaderData(shortDescTv, image);
 
         setData(longDesc, rules, contacts, schedule, divider1, divider2, divider3,
@@ -158,11 +158,11 @@ public class EventDetailsFragment extends BaseFragment {
         }
     }
 
-    private void setupInsets(View v, View divider, View topView, NestedScrollView scrollView,
+    private void setupInsets(View divider, View topView, NestedScrollView scrollView,
                              View content) {
         // Hide the toolbar
         listener.onListScrolled(0, Integer.MAX_VALUE);
-        setupWindowInsets(v, content, topView, true, false,
+        setupWindowInsets(scrollView, content, topView, true, false,
                 (l, t, r, b) -> {
                     startPostponedEnterTransition();
                     int dividerHeight = ((RelativeLayout.LayoutParams)

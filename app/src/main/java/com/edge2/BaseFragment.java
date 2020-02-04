@@ -97,7 +97,8 @@ public abstract class BaseFragment extends Fragment {
     }
 
     protected void setupWindowInsets(View rootView, View contentView, View topView,
-                                     boolean skipTopViewSideMargins, boolean skipContentBottomMargin,
+                                     NestedScrollView scrollView, boolean skipTopViewSideMargins,
+                                     boolean skipContentBottomMargin,
                                      OnApplyWindowInsetsListener listener) {
 
         rootView.setOnApplyWindowInsetsListener((v1, insets) -> {
@@ -108,15 +109,13 @@ public abstract class BaseFragment extends Fragment {
             int toolbarHeight = DimenUtils.getActionbarHeight(requireContext());
 
             MarginLayoutParams contentParams = (MarginLayoutParams) contentView.getLayoutParams();
-            int bottomNavHeight = onFragmentScrollListener.getBottomNavHeight();
-            int windowHeight = DimenUtils.getWindowHeight(rootView.getContext());
-            rootView.post(() -> {
-                int rootHeight = rootView.getHeight();
+            scrollView.postDelayed(() -> {
+                int navTop = onFragmentScrollListener.getBottomNavTop();
+                int navBottom = onFragmentScrollListener.getBottomNavBottom();
+                int scrollBottom = scrollView.getBottom();
                 int baseMargin = 0;
-                if (rootHeight <= windowHeight) {
-                    int aboveNavHeight = windowHeight - bottomNavHeight;
-                    if (rootHeight > aboveNavHeight)    // Root bottom lies between bottomNav and screen bottom
-                        baseMargin = windowHeight - rootHeight + 2; // Extra 2px for safety
+                if (navBottom > scrollBottom && scrollBottom > navTop) {
+                    baseMargin = navBottom - scrollBottom + 2;
                 }
 
                 if (skipContentBottomMargin)
@@ -124,7 +123,7 @@ public abstract class BaseFragment extends Fragment {
                 else
                     contentParams.setMargins(leftInset, 0, rightInset, baseMargin + bottomInset);
                 contentView.setLayoutParams(contentParams);
-            });
+            }, 1000);
             MarginLayoutParams topViewParams = (MarginLayoutParams) topView.getLayoutParams();
             if (skipTopViewSideMargins) {
                 topViewParams.topMargin = toolbarHeight + topInset;
