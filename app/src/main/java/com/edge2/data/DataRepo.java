@@ -68,6 +68,7 @@ public class DataRepo {
     private long lastUpdateTime;
     private RunningOutOfNamesDao dao;
     private Context context;
+    private RequestQueue requestQueue;
 
     private DataRepo(Context context) {
         this.context = context.getApplicationContext();
@@ -141,10 +142,11 @@ public class DataRepo {
         isUpdating = true;
         bannerCode = detailsCode = 0;
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        RequestQueue queue = Volley.newRequestQueue(context);
+        if (requestQueue == null)
+            requestQueue = Volley.newRequestQueue(context);
         ExecutorService executor = Executors.newSingleThreadExecutor();
 
-        updateDetails(prefs, queue, executor, code -> {
+        updateDetails(prefs, executor, code -> {
             if (code == -1) {
                 detailsCode = -1;
                 if (bannerCode != 0) {  // Both downloads are done
@@ -163,7 +165,7 @@ public class DataRepo {
             }
         });
 
-        updateBanner(prefs, queue, executor, code -> {
+        updateBanner(prefs, executor, code -> {
             if (code == -1) {
                 bannerCode = -1;
                 if (detailsCode != 0) {  // Both downloads are done
@@ -185,11 +187,11 @@ public class DataRepo {
 
     //TODO: Fix the race condition with lastUpdateTime in case just one of banner or details update fail
 
-    private void updateDetails(SharedPreferences prefs, RequestQueue queue, ExecutorService executor,
+    private void updateDetails(SharedPreferences prefs, ExecutorService executor,
                                OnDownloadCompleteListener completeListener) {
         int currentVersion = updateDetailsVersionInCache(prefs);
 
-        getDetailsRemoteDbVersion(queue, availableVersion -> {
+        getDetailsRemoteDbVersion(availableVersion -> {
             if (availableVersion < 0) {
                 Logger.log("DataRepo", "updateDb: Failed to get new version number");
                 completeListener.onDownloadComplete(-1);
@@ -197,7 +199,7 @@ public class DataRepo {
             }
             if (availableVersion > currentVersion) {
                 Logger.log("DataRepo", "updateDb: update found: " + availableVersion);
-                downloadUpdateDetails(queue, items -> {
+                downloadUpdateDetails(items -> {
                     if (items == null) {
                         Logger.log("DataRepo", "updateDb: Failed to fetch update");
                         completeListener.onDownloadComplete(-1);
@@ -217,11 +219,11 @@ public class DataRepo {
         });
     }
 
-    private void updateBanner(SharedPreferences prefs, RequestQueue queue, ExecutorService executor,
+    private void updateBanner(SharedPreferences prefs, ExecutorService executor,
                               OnDownloadCompleteListener completeListener) {
         int currentVersion = prefs.getInt(KEY_BANNER_DB_VERSION, 0);
 
-        getBannerRemoteDbVersion(queue, availableVersion -> {
+        getBannerRemoteDbVersion(availableVersion -> {
             if (availableVersion < 0) {
                 Logger.log("DataRepo", "updateDb: Failed to get new banner version number");
                 completeListener.onDownloadComplete(-1);
@@ -229,7 +231,7 @@ public class DataRepo {
             }
             if (availableVersion > currentVersion) {
                 Logger.log("DataRepo", "updateDb: banner update found: " + availableVersion);
-                downloadUpdateBanner(queue, items -> {
+                downloadUpdateBanner(items -> {
                     if (items == null) {
                         Logger.log("DataRepo", "updateDb: Failed to fetch banner update");
                         completeListener.onDownloadComplete(-1);
@@ -249,7 +251,7 @@ public class DataRepo {
         });
     }
 
-    private void downloadUpdateDetails(RequestQueue queue, OnDetailsVersionFetchedListener listener) {
+    private void downloadUpdateDetails(OnDetailsVersionFetchedListener listener) {
         StringRequest req = new StringRequest(Request.Method.GET, URL_DETAILS,
                 response -> {
                     List<EventDetailsModel> items = processDetailsJson(response);
@@ -263,10 +265,10 @@ public class DataRepo {
 
         req.setShouldCache(false).setRetryPolicy(
                 new DefaultRetryPolicy(15000, 0, 1f));
-        queue.add(req);
+        requestQueue.add(req);
     }
 
-    private void downloadUpdateBanner(RequestQueue queue, OnBannerVersionFetchedListener listener) {
+    private void downloadUpdateBanner(OnBannerVersionFetchedListener listener) {
         StringRequest req = new StringRequest(Request.Method.GET, URL_BANNER,
                 response -> {
                     List<BannerItemsModel> items = processBannerJson(response);
@@ -280,7 +282,7 @@ public class DataRepo {
 
         req.setShouldCache(false).setRetryPolicy(
                 new DefaultRetryPolicy(15000, 0, 1f));
-        queue.add(req);
+        requestQueue.add(req);
     }
 
     /**
@@ -302,7 +304,7 @@ public class DataRepo {
     /**
      * Checks to see if a new database update is available
      */
-    private void getDetailsRemoteDbVersion(RequestQueue queue, OnVersionAvailableListener listener) {
+    private void getDetailsRemoteDbVersion(OnVersionAvailableListener listener) {
         StringRequest req = new StringRequest(Request.Method.GET, URL_DETAILS_DB_VERSION,
                 response -> {
                     int ver;
@@ -318,10 +320,10 @@ public class DataRepo {
 
         req.setShouldCache(false).setRetryPolicy(
                 new DefaultRetryPolicy(15000, 0, 1f));
-        queue.add(req);
+        requestQueue.add(req);
     }
 
-    private void getBannerRemoteDbVersion(RequestQueue queue, OnVersionAvailableListener listener) {
+    private void getBannerRemoteDbVersion(OnVersionAvailableListener listener) {
         StringRequest req = new StringRequest(Request.Method.GET, URL_BANNER_DB_VERSION,
                 response -> {
                     int ver;
@@ -337,7 +339,7 @@ public class DataRepo {
 
         req.setShouldCache(false).setRetryPolicy(
                 new DefaultRetryPolicy(15000, 0, 1f));
-        queue.add(req);
+        requestQueue.add(req);
     }
 
     private List<EventDetailsModel> processDetailsJson(String res) {
