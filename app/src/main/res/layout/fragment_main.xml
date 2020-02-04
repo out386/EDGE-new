@@ -63,7 +63,7 @@
             app:icon="@drawable/ic_intra"
             app:name="Intra Events"
             app:desc="Intra College Events"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/main_recycler"
@@ -74,16 +74,30 @@
             tools:listitem="@layout/events_item"
             tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             tools:spanCount="2"
-            tools:visibility="visible"/>
+            tools:visibility="gone" />
 
-        <ImageView
+        <FrameLayout
             android:id="@+id/wait_view"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/img_edge_wait"
-            android:adjustViewBounds="true"
-            android:gravity="top"
-            android:visibility="gone"/>
+            android:paddingBottom="100dp">
+
+            <ImageView
+                android:id="@+id/wait_imageview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/img_edge_wait"
+                android:foreground="@drawable/card_bg"
+                android:layout_marginStart="@dimen/margin_large"
+                android:layout_marginEnd="@dimen/margin_large"
+                android:layout_marginTop="@dimen/margin_huge"
+                android:layout_marginBottom="@dimen/margin_large"
+                android:padding="@dimen/margin_huge"
+                android:adjustViewBounds="true"
+                android:gravity="top"
+                android:visibility="visible" />
+
+        </FrameLayout>
 
     </LinearLayout>
 

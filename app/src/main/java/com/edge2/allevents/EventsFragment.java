@@ -73,7 +73,8 @@ public class EventsFragment extends BaseFragment {
     private RecyclerView quickReycler;
     @Nullable
     private Slider banner;
-    private ImageView eventsHiddenView;
+    private View eventsHiddenView;
+    private ImageView eventsHiddenImg;
     private Context context;
     private OnFragmentScrollListener listener;
     private ItemDecoration itemDecoration;
@@ -118,6 +119,7 @@ public class EventsFragment extends BaseFragment {
         Bundle args = getArguments();
         mainReycler = rootView.findViewById(R.id.main_recycler);
         eventsHiddenView = rootView.findViewById(R.id.wait_view);
+        eventsHiddenImg = rootView.findViewById(R.id.wait_imageview);
         if (args != null)
             isIntra = args.getBoolean(KEY_IS_INTRA);
         if (savedInstanceState != null) {
@@ -157,7 +159,7 @@ public class EventsFragment extends BaseFragment {
             if (hideEventsModel.getImgUrl() != null) {
                 Glide.with(requireContext())
                         .load(hideEventsModel.getImgUrl())
-                        .into(eventsHiddenView);
+                        .into(eventsHiddenImg);
             }
         } else {
             mainReycler.setVisibility(View.VISIBLE);
@@ -196,6 +198,7 @@ public class EventsFragment extends BaseFragment {
         mainReycler = null;
         quickReycler = null;
         eventsHiddenView = null;
+        eventsHiddenImg = null;
         rootView = null;
     }
 
