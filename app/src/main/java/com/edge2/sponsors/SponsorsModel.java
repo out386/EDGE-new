@@ -25,32 +25,38 @@ import org.json.JSONObject;
 
 public class SponsorsModel {
     private String name;
+    private String role;
     private String imgUrl;
 
     private SponsorsModel() {
-    }
-
-    public SponsorsModel(String name, String imgUrl) {
-        this.name = name;
-        this.imgUrl = imgUrl;
     }
 
     public String getName() {
         return name;
     }
 
+    public String getRole() {
+        return role;
+    }
+
     public String getImgUrl() {
         return imgUrl;
     }
 
-    public static SponsorsModel getFromJson(JSONObject ob) throws JSONException{
+    public static SponsorsModel getFromJson(JSONObject ob) throws JSONException {
         SponsorsModel item = new SponsorsModel();
-            item.name = ob.getString("n");
-            if (item.name == null || item.name.isEmpty() || item.name.equals("null"))
-                return null;
-            item.imgUrl = ob.getString("u");
-            if (item.imgUrl.isEmpty())
-                item.imgUrl = null;
-            return item;
+        item.name = ob.getString("n");
+        if (item.name == null || item.name.isEmpty() || item.name.equals("null"))
+            return null;
+        try {
+            item.role = ob.getString("r");
+            if (item.role.isEmpty() || item.role.equals("null"))
+                item.role = null;
+        } catch (JSONException ignored) {   // "r" doesn't exist for all items, so this is fine
+        }
+        item.imgUrl = ob.getString("u");
+        if (item.imgUrl.isEmpty())
+            item.imgUrl = null;
+        return item;
     }
 }

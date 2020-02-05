@@ -20,14 +20,24 @@
         android:id="@+id/sponsor_image"
         android:layout_width="match_parent"
         android:layout_height="@dimen/sponsors_img_h"
+        android:layout_marginBottom="@dimen/margin_huge"
         tools:src="@drawable/ic_tmsl" />
+
+    <TextView
+        android:id="@+id/sponsor_role"
+        style="@style/TextBody"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin"
+        android:gravity="center_horizontal"
+        android:textColor="#585858"
+        tools:text="Presented by" />
 
     <TextView
         android:id="@+id/sponsor_name"
         style="@style/TextHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_huge"
         android:gravity="center_horizontal"
         android:textColor="#050505"
         tools:text="Techno Main Salt Lake" />

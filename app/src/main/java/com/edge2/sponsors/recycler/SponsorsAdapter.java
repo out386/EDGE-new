@@ -55,10 +55,22 @@ public class SponsorsAdapter extends RecyclerView.Adapter<SponsorsAdapter.Sponso
     public void onBindViewHolder(@NonNull SponsorsViewHolder holder, int position) {
         SponsorsModel item = items.get(position);
         ImageView imageView = holder.sponsorImage;
+        TextView roleView = holder.sponsorRole;
 
         holder.sponsorName.setText(item.getName());
+
+        String role = item.getRole();
+        if (role != null) {
+            roleView.setText(role);
+            roleView.setVisibility(View.VISIBLE);
+        } else {
+            roleView.setText(null);
+            roleView.setVisibility(View.GONE);
+        }
+
         Glide.with(imageView.getContext())
                 .load(item.getImgUrl())
+                .fitCenter()
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .into(imageView);
     }
@@ -71,11 +83,13 @@ public class SponsorsAdapter extends RecyclerView.Adapter<SponsorsAdapter.Sponso
     static class SponsorsViewHolder extends RecyclerView.ViewHolder {
         ImageView sponsorImage;
         TextView sponsorName;
+        TextView sponsorRole;
 
         SponsorsViewHolder(View item) {
             super(item);
             sponsorImage = item.findViewById(R.id.sponsor_image);
             sponsorName = item.findViewById(R.id.sponsor_name);
+            sponsorRole = item.findViewById(R.id.sponsor_role);
         }
     }
 
