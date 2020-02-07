@@ -21,6 +21,7 @@ package com.edge2.allevents;
  */
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
@@ -56,6 +57,7 @@ import com.edge2.event.EventFragment;
 import com.edge2.genericevents.GenericEventFragment;
 import com.edge2.utils.DimenUtils;
 import com.edge2.views.OnClickListener;
+import com.example.a4.GameActivity;
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 
 import java.util.ArrayList;
@@ -295,6 +297,12 @@ public class EventsFragment extends BaseFragment {
                         context.getDrawable(R.drawable.ic_ca),
                         getString(R.string.ca_desc));
                 quickItems.add(quickItem);
+
+                quickItem = new QuickItemModel(getString(R.string.game_title),
+                        context.getDrawable(R.drawable.ic_game),
+                        getString(R.string.game_desc));
+                quickItems.add(quickItem);
+
                 quickItem = new QuickItemModel(getString(R.string.upcoming_title),
                         context.getDrawable(R.drawable.ic_upcoming),
                         getString(R.string.upcoming_desc));
@@ -341,24 +349,27 @@ public class EventsFragment extends BaseFragment {
                     actionRes = R.id.action_events_to_CA;
                     break;
                 case 1:
+                    startActivity(new Intent(requireContext(), GameActivity.class));
+                    return;
+                case 2:
                     actionRes = R.id.action_events_to_upcoming;
                     break;
-                case 2:
+                case 3:
                     actionRes = R.id.action_events_to_registration;
                     break;
-                case 3:
+                case 4:
                     actionRes = R.id.action_events_to_team;
                     break;
-                case 4:
+                case 5:
                     actionRes = R.id.action_events_to_about;
                     break;
-                case 5:
+                case 6:
                     actionRes = R.id.action_events_to_accommodation;
                     break;
-                case 6:
+                case 7:
                     actionRes = R.id.action_events_to_results;
                     break;
-                case 7:
+                case 8:
                     actionRes = R.id.action_events_to_sponsors;
                     break;
                 default:

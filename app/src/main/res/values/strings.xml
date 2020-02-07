@@ -37,6 +37,8 @@
     <string name="about_desc">Know more about EDGE</string>
     <string name="upcoming_title">Upcoming</string>
     <string name="upcoming_desc">Pre-EDGE events, coming soon</string>
+    <string name="game_title">EDGE Slice</string>
+    <string name="game_desc">A simple game to pass the time</string>
     <string name="sponsors_title">Sponsors</string>
     <string name="sponsors_desc">Those who help make EDGE happen</string>
     <string name="member_image">Member Image</string>

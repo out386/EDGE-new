@@ -4,3 +4,6 @@
 [submodule "RecyclerViewSnap"]
 	path = RecyclerViewSnap
 	url = git@github.com:out386/RecyclerViewSnap.git
+[submodule "slice-game"]
+	path = slice-game
+	url = git@github.com:out386/Android-fruit-ninja.git

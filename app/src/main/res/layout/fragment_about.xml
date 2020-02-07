@@ -372,11 +372,27 @@
                 android:paddingStart="@dimen/margin_large"
                 android:paddingEnd="@dimen/margin_large"
                 android:gravity="center_horizontal"
-                android:text="flaticon.com\nBiZkettE1 / Freepik\nSrip\nEucalyp"
+                android:text="flaticon.com\nBiZkettE1\nFreepik\nSrip\nEucalyp\nmynamepong"
                 android:lineSpacingMultiplier="1.1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/dev5_h" />
+
+            <TextView
+                android:id="@+id/dev6"
+                style="@style/TextBodyLarge"
+                android:textStyle="italic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/margin_large"
+                android:paddingEnd="@dimen/margin_large"
+                android:layout_marginTop="4dp"
+                android:gravity="center_horizontal"
+                android:text="EDGE Slice: originally by Jeff Avery (Pandawoyun), and modified by Ritayan Chakraborty"
+                android:lineSpacingMultiplier="1.1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dev5" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/about_licences"
@@ -396,7 +412,7 @@
                 app:cornerRadius="100dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/dev5"
+                app:layout_constraintTop_toBottomOf="@+id/dev6"
                 app:rippleColor="@color/lIconFillRedTransparent"
                 app:strokeColor="@color/cardStroke"
                 app:strokeWidth="1dp" />

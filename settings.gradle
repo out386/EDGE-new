@@ -1,3 +1,4 @@
-include ':app', ':apendIrSlider', ':gravitysnaphelper'
+include ':app', ':apendIrSlider', ':gravitysnaphelper', ':slice'
 project(':apendIrSlider').projectDir = new File('slider/slider')
 project(':gravitysnaphelper').projectDir = new File('RecyclerViewSnap/gravitysnaphelper')
+project(':slice').projectDir = new File('slice-game/app')
