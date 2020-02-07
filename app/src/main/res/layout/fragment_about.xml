@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:scrollbars="vertical"
     android:transitionName="@string/events_to_quick_root_transition"
     android:background="@color/windowBackground">
@@ -38,7 +39,8 @@
                 android:text="@string/about_tmsl_h"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="gone"/>
 
             <TextView
                 android:id="@+id/about_tmsl"
@@ -52,7 +54,8 @@
                 android:text="@string/about_tmsl"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/about_tmsl_h" />
+                app:layout_constraintTop_toBottomOf="@+id/about_tmsl_h"
+                tools:visibility="gone" />
 
             <View
                 android:id="@+id/divider2"
@@ -60,7 +63,8 @@
                 android:layout_height="6dp"
                 android:layout_marginTop="@dimen/margin_huge"
                 android:background="@color/divider"
-                app:layout_constraintTop_toBottomOf="@+id/about_tmsl" />
+                app:layout_constraintTop_toBottomOf="@+id/about_tmsl"
+                tools:visibility="gone" />
 
             <TextView
                 android:id="@+id/about_gx_h"
@@ -73,7 +77,8 @@
                 android:text="@string/about_gx_h"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider2" />
+                app:layout_constraintTop_toBottomOf="@+id/divider2"
+                tools:visibility="gone"/>
 
             <TextView
                 android:id="@+id/about_gx"
@@ -87,7 +92,8 @@
                 android:text="@string/about_gx"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/about_gx_h" />
+                app:layout_constraintTop_toBottomOf="@+id/about_gx_h"
+                tools:visibility="gone"/>
 
             <View
                 android:id="@+id/divider3"
@@ -95,7 +101,8 @@
                 android:layout_height="6dp"
                 android:layout_marginTop="@dimen/margin_huge"
                 android:background="@color/divider"
-                app:layout_constraintTop_toBottomOf="@+id/about_gx" />
+                app:layout_constraintTop_toBottomOf="@+id/about_gx"
+                tools:visibility="gone"/>
 
             <TextView
                 android:id="@+id/about_edge_h"
@@ -108,7 +115,8 @@
                 android:text="@string/about_edge_h"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider3" />
+                app:layout_constraintTop_toBottomOf="@+id/divider3"
+                tools:visibility="gone" />
 
             <TextView
                 android:id="@+id/about_edge"
@@ -122,7 +130,8 @@
                 android:text="@string/about_edge"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/about_edge_h" />
+                app:layout_constraintTop_toBottomOf="@+id/about_edge_h"
+                tools:visibility="gone"/>
 
             <View
                 android:id="@+id/divider4"
@@ -130,7 +139,8 @@
                 android:layout_height="6dp"
                 android:layout_marginTop="@dimen/margin_huge"
                 android:background="@color/divider"
-                app:layout_constraintTop_toBottomOf="@+id/about_edge" />
+                app:layout_constraintTop_toBottomOf="@+id/about_edge"
+                tools:visibility="gone" />
 
             <TextView
                 android:id="@+id/about_quick_links_h"
@@ -143,7 +153,8 @@
                 android:text="@string/about_quick_links"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider4" />
+                app:layout_constraintTop_toBottomOf="@+id/divider4"
+                tools:visibility="gone"/>
 
             <ImageView
                 android:id="@+id/about_img_edge"
@@ -346,7 +357,7 @@
                 android:layout_height="wrap_content"
                 android:paddingStart="@dimen/margin_large"
                 android:paddingEnd="@dimen/margin_large"
-                android:text="Website Developer"
+                android:text="Website: DevOps and Maintenance"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/dev4_h" />
@@ -359,7 +370,7 @@
                 android:layout_marginTop="@dimen/margin_huge"
                 android:paddingStart="@dimen/margin_large"
                 android:paddingEnd="@dimen/margin_large"
-                android:text="Misc. Icons and images"
+                android:text="EDGE Design"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/dev4" />
@@ -371,15 +382,40 @@
                 android:layout_height="wrap_content"
                 android:paddingStart="@dimen/margin_large"
                 android:paddingEnd="@dimen/margin_large"
-                android:gravity="center_horizontal"
-                android:text="flaticon.com\nBiZkettE1\nFreepik\nSrip\nEucalyp\nmynamepong"
-                android:lineSpacingMultiplier="1.1"
+                android:text="Event Posters"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/dev5_h" />
 
             <TextView
+                android:id="@+id/dev6_h"
+                style="@style/TextHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_huge"
+                android:paddingStart="@dimen/margin_large"
+                android:paddingEnd="@dimen/margin_large"
+                android:text="Misc. Icons and images"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dev5" />
+
+            <TextView
                 android:id="@+id/dev6"
+                style="@style/TextBodyLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/margin_large"
+                android:paddingEnd="@dimen/margin_large"
+                android:gravity="center_horizontal"
+                android:text="flaticon.com\nBiZkettE1\nFreepik\nSrip\nEucalyp\nmynamepong"
+                android:lineSpacingMultiplier="1.1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dev6_h" />
+
+            <TextView
+                android:id="@+id/dev7"
                 style="@style/TextBodyLarge"
                 android:textStyle="italic"
                 android:layout_width="wrap_content"
@@ -392,7 +428,7 @@
                 android:lineSpacingMultiplier="1.1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/dev5" />
+                app:layout_constraintTop_toBottomOf="@+id/dev6" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/about_licences"
@@ -412,7 +448,7 @@
                 app:cornerRadius="100dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/dev6"
+                app:layout_constraintTop_toBottomOf="@+id/dev7"
                 app:rippleColor="@color/lIconFillRedTransparent"
                 app:strokeColor="@color/cardStroke"
                 app:strokeWidth="1dp" />
