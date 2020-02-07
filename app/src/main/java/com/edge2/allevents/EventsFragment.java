@@ -141,7 +141,9 @@ public class EventsFragment extends BaseFragment {
             RecyclerView.LayoutManager quickLayoutManager = new LinearLayoutManager(
                     context, RecyclerView.HORIZONTAL, false);
             quickReycler.setLayoutManager(quickLayoutManager);
-            new GravitySnapHelper(Gravity.START).attachToRecyclerView(quickReycler);
+            GravitySnapHelper snap = new GravitySnapHelper(Gravity.START);
+            snap.setMaxFlingSizeFraction(0.2f);
+            snap.attachToRecyclerView(quickReycler);
         }
 
         // Show the toolbar and bottomnav
