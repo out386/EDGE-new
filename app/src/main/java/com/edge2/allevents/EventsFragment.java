@@ -70,9 +70,9 @@ public class EventsFragment extends BaseFragment {
     public static final String KEY_IS_INTRA = "isIntra";
     private static final String KEY_APPBAR_OFFSET = "appBarOffset";
 
-    private RecyclerView mainReycler;
+    private RecyclerView mainRecycler;
     @Nullable
-    private RecyclerView quickReycler;
+    private RecyclerView quickRecycler;
     @Nullable
     private Slider banner;
     private View eventsHiddenView;
@@ -119,7 +119,7 @@ public class EventsFragment extends BaseFragment {
         rootView = inflater.inflate(R.layout.fragment_main, container, false);
         postponeEnterTransition();
         Bundle args = getArguments();
-        mainReycler = rootView.findViewById(R.id.main_recycler);
+        mainRecycler = rootView.findViewById(R.id.main_recycler);
         eventsHiddenView = rootView.findViewById(R.id.wait_view);
         eventsHiddenImg = rootView.findViewById(R.id.wait_imageview);
         if (args != null)
@@ -136,14 +136,15 @@ public class EventsFragment extends BaseFragment {
             topViewEdge.setVisibility(View.VISIBLE);
             banner = rootView.findViewById(R.id.top_banner);
             banner.setTargetWidth(getResources().getDimensionPixelSize(R.dimen.allevents_banner_w));
-            quickReycler = rootView.findViewById(R.id.quick_recycler);
-            quickReycler.setHasFixedSize(true);
+            quickRecycler = rootView.findViewById(R.id.quick_recycler);
+            quickRecycler.setHasFixedSize(true);
             RecyclerView.LayoutManager quickLayoutManager = new LinearLayoutManager(
                     context, RecyclerView.HORIZONTAL, false);
-            quickReycler.setLayoutManager(quickLayoutManager);
+            quickRecycler.setLayoutManager(quickLayoutManager);
+            quickRecycler.addItemDecoration(new QuickItemDecorator());
             GravitySnapHelper snap = new GravitySnapHelper(Gravity.START);
             snap.setMaxFlingSizeFraction(0.2f);
-            snap.attachToRecyclerView(quickReycler);
+            snap.attachToRecyclerView(quickRecycler);
         }
 
         // Show the toolbar and bottomnav
@@ -158,7 +159,7 @@ public class EventsFragment extends BaseFragment {
      */
     private void setupRecyclerOrHide() {
         if (hideEventsModel.isHideEvents()) {
-            mainReycler.setVisibility(View.GONE);
+            mainRecycler.setVisibility(View.GONE);
             eventsHiddenView.setVisibility(View.VISIBLE);
             if (hideEventsModel.getImgUrl() != null) {
                 Glide.with(requireContext())
@@ -166,14 +167,14 @@ public class EventsFragment extends BaseFragment {
                         .into(eventsHiddenImg);
             }
         } else {
-            mainReycler.setVisibility(View.VISIBLE);
+            mainRecycler.setVisibility(View.VISIBLE);
             eventsHiddenView.setVisibility(View.GONE);
             float itemSize = getResources().getDimensionPixelSize(R.dimen.allevents_main_events_img_w) +
                     2 * getResources().getDimension(R.dimen.allevents_main_events_padding_h);
-            int columnCount = getRecyclerColumnCount(mainReycler, itemSize);
+            int columnCount = getRecyclerColumnCount(mainRecycler, itemSize);
             RecyclerView.LayoutManager mainLayoutManager = new GridLayoutManager(context, columnCount);
-            mainReycler.setHasFixedSize(true);
-            mainReycler.setLayoutManager(mainLayoutManager);
+            mainRecycler.setHasFixedSize(true);
+            mainRecycler.setLayoutManager(mainLayoutManager);
         }
         showData();
     }
@@ -194,13 +195,13 @@ public class EventsFragment extends BaseFragment {
             banner.onDestroy();
             banner = null;
         }
-        mainReycler.setAdapter(null);
-        mainReycler.removeItemDecoration(itemDecoration);
+        mainRecycler.setAdapter(null);
+        mainRecycler.removeItemDecoration(itemDecoration);
         itemDecoration = null;
-        if (quickReycler != null)
-            quickReycler.setAdapter(null);
-        mainReycler = null;
-        quickReycler = null;
+        if (quickRecycler != null)
+            quickRecycler.setAdapter(null);
+        mainRecycler = null;
+        quickRecycler = null;
         eventsHiddenView = null;
         eventsHiddenImg = null;
         rootView = null;
@@ -225,11 +226,11 @@ public class EventsFragment extends BaseFragment {
             contentView = eventsHiddenView;
             startPostponedEnterTransition();
         } else {
-            contentView = mainReycler;
+            contentView = mainRecycler;
             // Needed because the shared element transition doesn't work on return unless
             // postponeEnterTransition() is called. And postponeEnterTransition needs
             // a corresponding startPostponedEnterTransition().
-            mainReycler.postDelayed(this::startPostponedEnterTransition, 150);
+            mainRecycler.postDelayed(this::startPostponedEnterTransition, 150);
         }
 
         setupWindowInsets(v, contentView, topView, true,
@@ -237,7 +238,7 @@ public class EventsFragment extends BaseFragment {
 
                     if (!isIntra) {
                         //noinspection ConstantConditions
-                        quickReycler.setPadding(l, 0, r, 0);
+                        quickRecycler.setPadding(l, 0, r, 0);
                     }
                     //noinspection ConstantConditions
                     topView.post(() -> {
@@ -246,12 +247,12 @@ public class EventsFragment extends BaseFragment {
 
                     if (!hideEventsModel.isHideEvents()) {
                         if (itemDecoration != null)
-                            mainReycler.removeItemDecoration(itemDecoration);
+                            mainRecycler.removeItemDecoration(itemDecoration);
                         int itemMargins = context.getResources()
                                 .getDimensionPixelSize(R.dimen.margin_huge);
                         itemDecoration =
-                                new ItemDecoration(mainReycler.getLayoutManager(), b, itemMargins);
-                        mainReycler.addItemDecoration(itemDecoration);
+                                new ItemDecoration(mainRecycler.getLayoutManager(), b, itemMargins);
+                        mainRecycler.addItemDecoration(itemDecoration);
                     }
                 });
     }
@@ -270,10 +271,10 @@ public class EventsFragment extends BaseFragment {
                 viewModel.getGroups(isIntra).observe(this, events -> {
                     allEventsList = events;
                     eventsAdapter = new EventsAdapter(allEventsList, isIntra, this::onEventClicked);
-                    mainReycler.setAdapter(eventsAdapter);
+                    mainRecycler.setAdapter(eventsAdapter);
                 });
             } else {
-                mainReycler.setAdapter(eventsAdapter);
+                mainRecycler.setAdapter(eventsAdapter);
             }
         }
 
@@ -334,11 +335,9 @@ public class EventsFragment extends BaseFragment {
                         getString(R.string.sponsors_desc));
                 quickItems.add(quickItem);
                 quickAdapter = new QuickItemsAdapter(quickItems, new OnQuickClickListener());
-                //noinspection ConstantConditions
-                quickReycler.addItemDecoration(new QuickItemDecorator());
             }
             //noinspection ConstantConditions
-            quickReycler.setAdapter(quickAdapter);
+            quickRecycler.setAdapter(quickAdapter);
         }
     }
 
