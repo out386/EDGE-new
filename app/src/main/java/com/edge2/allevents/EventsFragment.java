@@ -332,10 +332,11 @@ public class EventsFragment extends BaseFragment {
                         getString(R.string.sponsors_desc));
                 quickItems.add(quickItem);
                 quickAdapter = new QuickItemsAdapter(quickItems, new OnQuickClickListener());
+                //noinspection ConstantConditions
+                quickReycler.addItemDecoration(new QuickItemDecorator());
             }
             //noinspection ConstantConditions
             quickReycler.setAdapter(quickAdapter);
-            quickReycler.addItemDecoration(new QuickItemDecorator());
         }
     }
 
