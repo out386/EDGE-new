@@ -35,6 +35,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.FragmentNavigator;
 import androidx.navigation.fragment.NavHostFragment;
@@ -97,6 +98,7 @@ public class EventsFragment extends BaseFragment {
     private List<BannerItemsModel> itemsInBanner;
     private List<Slide> bannerItemslist;
     private View rootView;
+    private DataViewModel viewModel;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -111,6 +113,17 @@ public class EventsFragment extends BaseFragment {
         super.onDetach();
         context = null;
         listener = null;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(requireActivity()).get(DataViewModel.class);
+        LiveData<HideEventsModel> ld = viewModel.getIsEventsHidden();
+        ld.observe(this, hideEvents -> {
+            hideEventsModel = hideEvents;
+            setupRecyclerOrHide();
+        });
     }
 
     @Override
@@ -182,7 +195,7 @@ public class EventsFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        observeIsHidden();
+        viewModel.getIsEventsHidden();
     }
 
     @Override
@@ -264,8 +277,6 @@ public class EventsFragment extends BaseFragment {
     }
 
     private void showData() {
-        DataViewModel viewModel = ViewModelProviders.of(requireActivity()).get(DataViewModel.class);
-
         if (!hideEventsModel.isHideEvents()) {
             if (eventsAdapter == null) {
                 viewModel.getGroups(isIntra).observe(this, events -> {
@@ -278,18 +289,8 @@ public class EventsFragment extends BaseFragment {
             }
         }
 
-        observeBanner(viewModel);
+        observeBanner();
         setQuickItems();
-    }
-
-    // Make sure it is safe to call getIsEventsHidden() multiple times, as observeIsHidden is
-    // called both from onResume and onCreateView
-    private void observeIsHidden() {
-        DataViewModel viewModel = ViewModelProviders.of(requireActivity()).get(DataViewModel.class);
-        viewModel.getIsEventsHidden().observe(this, hideEvents -> {
-            hideEventsModel = hideEvents;
-            setupRecyclerOrHide();
-        });
     }
 
     private void setQuickItems() {
@@ -395,7 +396,7 @@ public class EventsFragment extends BaseFragment {
         }
     }
 
-    private void observeBanner(DataViewModel viewModel) {
+    private void observeBanner() {
         if (!isIntra) {
             if (bannerItemslist != null) {
                 setBanner();

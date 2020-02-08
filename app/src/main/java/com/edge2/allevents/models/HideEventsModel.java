@@ -24,6 +24,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import androidx.annotation.Nullable;
+
 public class HideEventsModel {
     private static final String KEY_IS_EVENTS_HIDDEN = "isEventsHidden";
     private static final String KEY_EVENTS_HIDDEN_URL = "eventsHiddenUrl";
@@ -64,5 +66,19 @@ public class HideEventsModel {
         item.hideEvents = prefs.getBoolean(KEY_IS_EVENTS_HIDDEN, true);
         item.imgUrl = prefs.getString(KEY_EVENTS_HIDDEN_URL, null);
         return item;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (!(obj instanceof HideEventsModel))
+            return false;
+        HideEventsModel other = (HideEventsModel) obj;
+
+        if (other.imgUrl == null && this.imgUrl != null
+                || this.imgUrl == null && other.imgUrl != null)
+            return false;
+
+        return other.hideEvents == this.hideEvents
+                && (other.imgUrl == null || other.imgUrl.equals(this.imgUrl));
     }
 }

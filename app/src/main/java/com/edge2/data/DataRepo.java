@@ -31,6 +31,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.edge2.BuildConfig;
@@ -73,6 +74,7 @@ public class DataRepo {
     private Context context;
     private RequestQueue requestQueue;
     private StringRequest isEventsHiddenRequest;
+    private EventsHiddenListener eventsHiddenListener;
 
     private DataRepo(Context context) {
         this.context = context.getApplicationContext();
@@ -410,17 +412,36 @@ public class DataRepo {
     void fetchIsEventsHidden(MutableLiveData<HideEventsModel> liveData) {
         if (SystemClock.uptimeMillis() - lastIsHiddenUpdateTime < 20000)
             return;
+        // Will immediately block duplicate calls. Reset this to 0 if request fails.
+        lastIsHiddenUpdateTime = SystemClock.uptimeMillis();
+
         if (isEventsHiddenRequest == null) {
+            eventsHiddenListener = new EventsHiddenListener();
+            eventsHiddenListener.setLd(liveData);
             isEventsHiddenRequest = new StringRequest(Request.Method.GET, BuildConfig.URL_EVENTS_HIDDEN,
-                    response -> {
-                        HideEventsModel model = HideEventsModel.getFromString(response);
-                        liveData.setValue(model);
-                        lastIsHiddenUpdateTime = SystemClock.uptimeMillis();
-                    }, error -> lastIsHiddenUpdateTime = 0);
+                    eventsHiddenListener, error -> lastIsHiddenUpdateTime = 0);
             isEventsHiddenRequest.setShouldCache(false).setRetryPolicy(
                     new DefaultRetryPolicy(15000, 0, 1f));
+        } else {
+            eventsHiddenListener.setLd(liveData);
         }
         requestQueue.add(isEventsHiddenRequest);
+    }
+
+    private class EventsHiddenListener implements Response.Listener<String> {
+        private MutableLiveData<HideEventsModel> ld;
+
+        @Override
+        public void onResponse(String response) {
+            HideEventsModel model = HideEventsModel.getFromString(response);
+            if (ld != null && !model.equals(ld.getValue()))
+                ld.setValue(model);
+            lastIsHiddenUpdateTime = SystemClock.uptimeMillis();
+        }
+
+        void setLd(MutableLiveData<HideEventsModel> ld) {
+            this.ld = ld;
+        }
     }
 
     private interface OnVersionAvailableListener {
