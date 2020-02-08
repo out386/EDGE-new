@@ -31,6 +31,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -78,6 +79,7 @@ public class EventsFragment extends BaseFragment {
     private Slider banner;
     private View eventsHiddenView;
     private ImageView eventsHiddenImg;
+    private TextView intraHiddenText;
     private Context context;
     private OnFragmentScrollListener listener;
     private ItemDecoration itemDecoration;
@@ -135,6 +137,7 @@ public class EventsFragment extends BaseFragment {
         mainRecycler = rootView.findViewById(R.id.main_recycler);
         eventsHiddenView = rootView.findViewById(R.id.wait_view);
         eventsHiddenImg = rootView.findViewById(R.id.wait_imageview);
+        intraHiddenText = rootView.findViewById(R.id.wait_text);
         if (args != null)
             isIntra = args.getBoolean(KEY_IS_INTRA);
         if (savedInstanceState != null) {
@@ -171,23 +174,35 @@ public class EventsFragment extends BaseFragment {
      * an ImageView
      */
     private void setupRecyclerOrHide() {
-        if (hideEventsModel.isHideEvents()) {
+        if (hideEventsModel.isHideEvents() && !isIntra) {
             mainRecycler.setVisibility(View.GONE);
+            intraHiddenText.setVisibility(View.GONE);
+            eventsHiddenImg.setVisibility(View.VISIBLE);
             eventsHiddenView.setVisibility(View.VISIBLE);
             if (hideEventsModel.getImgUrl() != null) {
                 Glide.with(requireContext())
                         .load(hideEventsModel.getImgUrl())
                         .into(eventsHiddenImg);
             }
+        } else if (hideEventsModel.isHideIntra() && isIntra) {
+            mainRecycler.setVisibility(View.GONE);
+            intraHiddenText.setVisibility(View.VISIBLE);
+            eventsHiddenImg.setVisibility(View.GONE);
+            eventsHiddenView.setVisibility(View.VISIBLE);
+            if (hideEventsModel.getIntraText() != null) {
+                intraHiddenText.setText(hideEventsModel.getIntraText());
+            }
         } else {
             mainRecycler.setVisibility(View.VISIBLE);
             eventsHiddenView.setVisibility(View.GONE);
-            float itemSize = getResources().getDimensionPixelSize(R.dimen.allevents_main_events_img_w) +
-                    2 * getResources().getDimension(R.dimen.allevents_main_events_padding_h);
-            int columnCount = getRecyclerColumnCount(mainRecycler, itemSize);
-            RecyclerView.LayoutManager mainLayoutManager = new GridLayoutManager(context, columnCount);
-            mainRecycler.setHasFixedSize(true);
-            mainRecycler.setLayoutManager(mainLayoutManager);
+            if (mainRecycler.getLayoutManager() == null) {
+                float itemSize = getResources().getDimensionPixelSize(R.dimen.allevents_main_events_img_w) +
+                        2 * getResources().getDimension(R.dimen.allevents_main_events_padding_h);
+                int columnCount = getRecyclerColumnCount(mainRecycler, itemSize);
+                RecyclerView.LayoutManager mainLayoutManager = new GridLayoutManager(context, columnCount);
+                mainRecycler.setHasFixedSize(true);
+                mainRecycler.setLayoutManager(mainLayoutManager);
+            }
         }
         showData();
     }
@@ -217,6 +232,7 @@ public class EventsFragment extends BaseFragment {
         quickRecycler = null;
         eventsHiddenView = null;
         eventsHiddenImg = null;
+        intraHiddenText = null;
         rootView = null;
     }
 
@@ -235,7 +251,8 @@ public class EventsFragment extends BaseFragment {
         else
             topView = topViewEdge;
 
-        if (hideEventsModel.isHideEvents()) {
+        if ((!isIntra && hideEventsModel.isHideEvents())
+                || (isIntra && hideEventsModel.isHideIntra())) {
             contentView = eventsHiddenView;
             startPostponedEnterTransition();
         } else {
@@ -258,7 +275,8 @@ public class EventsFragment extends BaseFragment {
                         setupScrollListener(scrollView, topView.getHeight());
                     });
 
-                    if (!hideEventsModel.isHideEvents()) {
+                    if ((!isIntra && !hideEventsModel.isHideEvents())
+                            || (isIntra && !hideEventsModel.isHideIntra())) {
                         if (itemDecoration != null)
                             mainRecycler.removeItemDecoration(itemDecoration);
                         int itemMargins = context.getResources()
@@ -277,7 +295,8 @@ public class EventsFragment extends BaseFragment {
     }
 
     private void showData() {
-        if (!hideEventsModel.isHideEvents()) {
+        if ((isIntra && !hideEventsModel.isHideIntra())
+                || (!isIntra && !hideEventsModel.isHideEvents())) {
             if (eventsAdapter == null) {
                 viewModel.getGroups(isIntra).observe(this, events -> {
                     allEventsList = events;

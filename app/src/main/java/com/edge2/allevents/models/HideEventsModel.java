@@ -25,28 +25,43 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import androidx.annotation.Nullable;
+import com.edge2.R;
 
 public class HideEventsModel {
     private static final String KEY_IS_EVENTS_HIDDEN = "isEventsHidden";
+    private static final String KEY_IS_INTRA_HIDDEN = "isIntraHidden";
     private static final String KEY_EVENTS_HIDDEN_URL = "eventsHiddenUrl";
+    private static final String KEY_INTRA_HIDDEN_TEXT = "intraHiddenText";
 
     private boolean hideEvents;
     private String imgUrl;
+    private boolean hideIntra;
+    private String intraText;
 
     private HideEventsModel() {
         hideEvents = true;
+        hideIntra = true;
     }
 
     public boolean isHideEvents() {
         return hideEvents;
     }
 
+    public boolean isHideIntra() {
+        return hideIntra;
+    }
+
     public String getImgUrl() {
         return imgUrl;
     }
 
+    public String getIntraText() {
+        return intraText;
+    }
+
     /**
-     * Format of the string: <1 or 0>\n<imgUrl> 1 = hide events, 2 = show events
+     * Format of the string: <1 or 0>\n<imgUrl>\n<0 or 1 for intra>\n<intra text> 1 = hide events, 2
+     * = show events
      */
     public static HideEventsModel getFromString(String s) {
         HideEventsModel item = new HideEventsModel();
@@ -57,6 +72,14 @@ public class HideEventsModel {
         }
         if (i.length > 1 && !i[1].isEmpty())
             item.imgUrl = i[1];
+        if (i.length > 2 && !i[2].isEmpty()) {
+            try {
+                item.hideIntra = Integer.parseInt(i[2]) == 1;
+            } catch (NumberFormatException ignored) {
+            }
+        }
+        if (i.length > 3 && !i[3].isEmpty())
+            item.intraText = i[3];
         return item;
     }
 
@@ -65,6 +88,9 @@ public class HideEventsModel {
         HideEventsModel item = new HideEventsModel();
         item.hideEvents = prefs.getBoolean(KEY_IS_EVENTS_HIDDEN, true);
         item.imgUrl = prefs.getString(KEY_EVENTS_HIDDEN_URL, null);
+        item.hideIntra = prefs.getBoolean(KEY_IS_INTRA_HIDDEN, true);
+        item.intraText = prefs.getString(KEY_INTRA_HIDDEN_TEXT,
+                context.getString(R.string.intra_coming_soon));
         return item;
     }
 
@@ -73,12 +99,17 @@ public class HideEventsModel {
         if (!(obj instanceof HideEventsModel))
             return false;
         HideEventsModel other = (HideEventsModel) obj;
+        if (other.intraText == null && this.intraText != null
+                || this.intraText == null && other.intraText != null)
+            return false;
 
         if (other.imgUrl == null && this.imgUrl != null
                 || this.imgUrl == null && other.imgUrl != null)
             return false;
 
-        return other.hideEvents == this.hideEvents
+        return other.hideIntra == this.hideIntra
+                && (other.intraText == null || other.intraText.equals(this.intraText))
+                && other.hideEvents == this.hideEvents
                 && (other.imgUrl == null || other.imgUrl.equals(this.imgUrl));
     }
 }
