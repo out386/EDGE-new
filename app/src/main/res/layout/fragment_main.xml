@@ -33,11 +33,20 @@
                 app:loopSlides="true"
                 android:paddingTop="@dimen/margin_huge" />
 
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginStart="@dimen/margin_huge"
+                android:layout_marginEnd="@dimen/margin_huge"
+                android:layout_marginTop="@dimen/margin_huge"
+                android:layout_marginBottom="@dimen/margin"
+                android:adjustViewBounds="true"
+                android:src="@drawable/edge_text" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="6dp"
-                android:background="@color/divider"
-                android:layout_marginTop="@dimen/margin_huge" />
+                android:background="@color/divider" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/quick_recycler"
