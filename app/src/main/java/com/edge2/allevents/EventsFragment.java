@@ -252,16 +252,15 @@ public class EventsFragment extends BaseFragment {
             topView = topViewEdge;
 
         if ((!isIntra && hideEventsModel.isHideEvents())
-                || (isIntra && hideEventsModel.isHideIntra())) {
+                || (isIntra && hideEventsModel.isHideIntra()))
             contentView = eventsHiddenView;
-            startPostponedEnterTransition();
-        } else {
+        else
             contentView = mainRecycler;
-            // Needed because the shared element transition doesn't work on return unless
-            // postponeEnterTransition() is called. And postponeEnterTransition needs
-            // a corresponding startPostponedEnterTransition().
-            mainRecycler.postDelayed(this::startPostponedEnterTransition, 150);
-        }
+
+        // Needed because the shared element transition doesn't work on return unless
+        // postponeEnterTransition() is called. And postponeEnterTransition needs
+        // a corresponding startPostponedEnterTransition().
+        contentView.postDelayed(this::startPostponedEnterTransition, 150);
 
         setupWindowInsets(v, contentView, topView, true,
                 true, (l, t, r, b) -> {
