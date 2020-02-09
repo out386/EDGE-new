@@ -38,6 +38,8 @@ import com.edge2.BaseFragment;
 import com.edge2.R;
 import com.edge2.transitions.MoveTransition;
 import com.edge2.views.GeneralHeaderView;
+import com.edge2.views.people.PeopleModel;
+import com.edge2.views.people.PeopleView;
 
 import java.util.List;
 
@@ -87,10 +89,10 @@ public class TeamFragment extends BaseFragment {
     }
 
     private void setData(LinearLayout contentView) {
-        List<Data.MemberModel> team = new Data().getMembers();
+        List<PeopleModel> team = new Data().getMembers();
         Context context = requireContext();
-        for (Data.MemberModel member : team) {
-            MemberView view = new MemberView(context, member);
+        for (PeopleModel member : team) {
+            PeopleView view = new PeopleView(context, member);
             contentView.addView(view);
         }
         startPostponedEnterTransition();

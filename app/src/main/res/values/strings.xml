@@ -15,6 +15,8 @@
     <string name="event_details_schedule">Schedule</string>
     <string name="event_details_rules">Rules</string>
     <string name="event_details_contacts">Contacts</string>
+    <string name="generic_pguest">Previous Guests</string>
+    <string name="generic_iguest">Intended Guests</string>
     <string name="sett_user_ic">User image</string>
     <string name="sett_sign_in">SIGN IN</string>
     <string name="about_licences">OPEN SOURCE LICENCES</string>

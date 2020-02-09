@@ -27,6 +27,7 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.util.Pair;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
@@ -65,6 +66,22 @@ public class BannerItemsModel implements Parcelable {
     public long cNo4;
     @Ignore
     private List<Pair<String, Long>> contacts;
+    /**
+     * Expected format: <name1>,<imgName1>,<name2>,<imgName2>
+     * Image names use the template string {@link #URL_TEMPLATE}
+     */
+    @ColumnInfo(name = "pG")
+    public String prevGuests;
+    /**
+     * Expected format: <name1>,<imgName1>,<name2>,<imgName2>
+     * Image names use the template string {@link #URL_TEMPLATE}
+     */
+    @ColumnInfo(name = "iG")
+    public String intendedGuests;
+
+    @Ignore
+    public static final String URL_TEMPLATE =
+            "https://firebasestorage.googleapis.com/v0/b/edge-new-a7306.appspot.com/o/banner_items%%2Fguests%%2F%s?alt=media";
 
     private BannerItemsModel() {
     }
@@ -72,7 +89,7 @@ public class BannerItemsModel implements Parcelable {
     public BannerItemsModel(@NonNull String name, String imgName, String imgUrl, String icName,
                             String icUrl, String sched, String desc, boolean isMega, String cN1,
                             long cNo1, String cN2, long cNo2, String cN3, long cNo3, String cN4,
-                            long cNo4) {
+                            long cNo4, String prevGuests, String intendedGuests) {
         this.name = name;
         this.imgName = imgName;
         this.imgUrl = imgUrl;
@@ -91,6 +108,8 @@ public class BannerItemsModel implements Parcelable {
         this.cN4 = cN4;
         this.cNo4 = cNo4;
         setContacts(this);
+        this.prevGuests = prevGuests;
+        this.intendedGuests = intendedGuests;
     }
 
     protected BannerItemsModel(Parcel in) {
@@ -110,6 +129,8 @@ public class BannerItemsModel implements Parcelable {
         cN4 = in.readString();
         cNo4 = in.readLong();
         setContacts(this);
+        prevGuests = in.readString();
+        intendedGuests = in.readString();
     }
 
     @Override
@@ -128,6 +149,8 @@ public class BannerItemsModel implements Parcelable {
         dest.writeLong(cNo3);
         dest.writeString(cN4);
         dest.writeLong(cNo4);
+        dest.writeString(prevGuests);
+        dest.writeString(intendedGuests);
     }
 
     @Override
@@ -208,6 +231,14 @@ public class BannerItemsModel implements Parcelable {
         return contacts;
     }
 
+    public String getPrevGuests() {
+        return prevGuests;
+    }
+
+    public String getIntendedGuests() {
+        return intendedGuests;
+    }
+
     public static BannerItemsModel getFromJson(JSONObject ob) throws JSONException {
         BannerItemsModel item = new BannerItemsModel();
         item.name = ob.getString("name");
@@ -251,10 +282,21 @@ public class BannerItemsModel implements Parcelable {
         item.cN4 = ob.getString("cN4");
         if (item.cN4 == null || item.cN4.isEmpty() || item.cN4.equals("null"))
             item.cN4 = null;
-        item.cNo1 = ob.getLong("cNo1");
-        item.cNo2 = ob.getLong("cNo2");
-        item.cNo3 = ob.getLong("cNo3");
-        item.cNo4 = ob.getLong("cNo4");
+        try {
+            item.cNo1 = Long.parseLong(ob.getString("cNo1"));
+            item.cNo2 = Long.parseLong(ob.getString("cNo2"));
+            item.cNo3 = Long.parseLong(ob.getString("cNo3"));
+            item.cNo4 = Long.parseLong(ob.getString("cNo4"));
+        } catch (NumberFormatException ignored) {
+        }
+        item.prevGuests = ob.getString("pG");
+        if (item.prevGuests == null || item.prevGuests.isEmpty() || item.prevGuests.equals("null"))
+            item.prevGuests = null;
+
+        item.intendedGuests = ob.getString("iG");
+        if (item.intendedGuests == null || item.intendedGuests.isEmpty() || item.intendedGuests.equals("null"))
+            item.intendedGuests = null;
+
         setUri(item);
         setContacts(item);
         return item;

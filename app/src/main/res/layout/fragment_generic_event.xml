@@ -41,7 +41,7 @@
                     android:layout_marginTop="@dimen/margin_large"
                     android:layout_marginEnd="@dimen/margin_large"
                     android:background="@color/windowBackground"
-                    tools:text="@sample/details_long_desc" />
+                    tools:text="@sample/single_event_short_desc" />
 
                 <View
                     android:id="@+id/divider1"
@@ -74,6 +74,64 @@
 
                 <View
                     android:id="@+id/divider2"
+                    android:layout_width="match_parent"
+                    android:layout_height="6dp"
+                    android:layout_marginTop="@dimen/margin_huge"
+                    android:layout_marginBottom="@dimen/margin_huge"
+                    android:background="@color/divider" />
+
+                <TextView
+                    android:id="@+id/genericevent_pguest_header"
+                    style="@style/TextHeaderMid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    android:background="@color/windowBackground"
+                    android:text="@string/generic_pguest" />
+
+                <LinearLayout
+                    android:id="@+id/genericevent_pguest"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    android:background="@color/windowBackground"
+                    android:orientation="vertical" />
+
+                <View
+                    android:id="@+id/divider3"
+                    android:layout_width="match_parent"
+                    android:layout_height="6dp"
+                    android:layout_marginTop="@dimen/margin_huge"
+                    android:layout_marginBottom="@dimen/margin_huge"
+                    android:background="@color/divider" />
+
+                <TextView
+                    android:id="@+id/genericevent_iguest_header"
+                    style="@style/TextHeaderMid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    android:background="@color/windowBackground"
+                    android:text="@string/generic_iguest" />
+
+                <LinearLayout
+                    android:id="@+id/genericevent_iguest"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    android:background="@color/windowBackground"
+                    android:orientation="vertical" />
+
+                <View
+                    android:id="@+id/divider4"
                     android:layout_width="match_parent"
                     android:layout_height="6dp"
                     android:layout_marginTop="@dimen/margin_huge"

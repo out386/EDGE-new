@@ -21,64 +21,52 @@ package com.edge2.team;
  */
 
 import com.edge2.R;
+import com.edge2.views.people.PeopleModel;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class Data {
-    private List<MemberModel> members;
+    private List<PeopleModel> members;
 
     Data() {
         members = new LinkedList<>();
-        members.add(new MemberModel("Soham Biswas", "Convener", R.drawable.soham,
+        members.add(new PeopleModel("Soham Biswas", "Convener", R.drawable.soham,
                 7602760944L));
 
-        members.add(new MemberModel("Rishav Bhattacharyya",
+        members.add(new PeopleModel("Rishav Bhattacharyya",
                 "Co Convener & Co Sponsorship Head", R.drawable.rishav, 8335067136L));
 
-        members.add(new MemberModel("Sayantan Bhattacharya",
+        members.add(new PeopleModel("Sayantan Bhattacharya",
                 "Co Convener & Co Signing Authority", R.drawable.sayantan, 9163480278L));
 
-        members.add(new MemberModel("Sroman Guha", "Sponsorship Head", R.drawable.sroman,
+        members.add(new PeopleModel("Sroman Guha", "Sponsorship Head", R.drawable.sroman,
                 8981570577L));
 
-        members.add(new MemberModel("Subhajit Saha", "Treasurer & Signing Authority",
+        members.add(new PeopleModel("Subhajit Saha", "Treasurer & Signing Authority",
                 R.drawable.subhajit, 9679343204L));
 
-        members.add(new MemberModel("Abhishek Jha", "Administrative Head",
+        members.add(new PeopleModel("Abhishek Jha", "Administrative Head",
                 R.drawable.abhishek, 7654285631L));
 
-        members.add(new MemberModel("Suman Ghosh", "Resource Management Head",
+        members.add(new PeopleModel("Suman Ghosh", "Resource Management Head",
                 R.drawable.suman, 9734900238L));
 
-        members.add(new MemberModel("Shibshankar Saha", "Public Relations Coordinator",
+        members.add(new PeopleModel("Shibshankar Saha", "Public Relations Coordinator",
                 R.drawable.shibshankar, 9062294021L));
 
-        members.add(new MemberModel("Sharmistha Pan",
+        members.add(new PeopleModel("Sharmistha Pan",
                 "Member Management Head & Editorial Head", R.drawable.sarmistha,
                 8768078258L));
 
-        members.add(new MemberModel("Swarnali Talukdar", "Outreach Head",
+        members.add(new PeopleModel("Swarnali Talukdar", "Outreach Head",
                 R.drawable.swarnali, 9123334065L));
 
 
     }
 
-    public List<MemberModel> getMembers() {
+    List<PeopleModel> getMembers() {
         return members;
     }
 
-    class MemberModel {
-        String name;
-        String role;
-        int imgRes;
-        long phoneNo;
-
-        MemberModel(String name, String role, int imgRes, long phoneNo) {
-            this.name = name;
-            this.role = role;
-            this.imgRes = imgRes;
-            this.phoneNo = phoneNo;
-        }
-    }
 }

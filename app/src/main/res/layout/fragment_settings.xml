@@ -43,7 +43,7 @@
                 app:switchKey="sett_ev_st_notif"
                 app:switchHeaderStyle="@style/TextHeader"
                 app:switchDescStyle="@style/TextBody"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/sett_theme"

@@ -40,7 +40,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:visibility="gone"/>
+                tools:visibility="gone" />
 
             <TextView
                 android:id="@+id/about_tmsl"
@@ -78,7 +78,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider2"
-                tools:visibility="gone"/>
+                tools:visibility="gone" />
 
             <TextView
                 android:id="@+id/about_gx"
@@ -93,7 +93,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/about_gx_h"
-                tools:visibility="gone"/>
+                tools:visibility="gone" />
 
             <View
                 android:id="@+id/divider3"
@@ -102,7 +102,7 @@
                 android:layout_marginTop="@dimen/margin_huge"
                 android:background="@color/divider"
                 app:layout_constraintTop_toBottomOf="@+id/about_gx"
-                tools:visibility="gone"/>
+                tools:visibility="gone" />
 
             <TextView
                 android:id="@+id/about_edge_h"
@@ -131,7 +131,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/about_edge_h"
-                tools:visibility="gone"/>
+                tools:visibility="gone" />
 
             <View
                 android:id="@+id/divider4"
@@ -154,7 +154,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider4"
-                tools:visibility="gone"/>
+                tools:visibility="gone" />
 
             <ImageView
                 android:id="@+id/about_img_edge"

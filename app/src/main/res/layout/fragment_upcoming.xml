@@ -28,7 +28,7 @@
                 app:desc="@string/upcoming_desc"
                 app:icon="@drawable/ic_upcoming"
                 app:flip="true"
-                app:hideImage="true"/>
+                app:hideImage="true" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/upcoming_content"

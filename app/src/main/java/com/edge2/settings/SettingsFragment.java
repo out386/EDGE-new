@@ -25,7 +25,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,9 +33,6 @@ import androidx.core.widget.NestedScrollView;
 import com.edge2.BaseFragment;
 import com.edge2.R;
 import com.edge2.ThemeActivity;
-import com.google.android.material.button.MaterialButton;
-
-import static android.widget.Toast.LENGTH_LONG;
 
 public class SettingsFragment extends BaseFragment {
 

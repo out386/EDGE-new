@@ -58,6 +58,7 @@ import com.edge2.allevents.models.BannerItemsModel;
 import com.edge2.html.RulesTagHandler;
 import com.edge2.html.ScheduleTagHandler;
 import com.edge2.views.ContactsView;
+import com.edge2.views.people.PeopleView;
 
 import java.util.List;
 
@@ -72,6 +73,8 @@ public class GenericEventFragment extends BaseFragment {
     private Context context;
     private TextView nameTv;
     private LinearLayout contactsView;
+    private LinearLayout prevGuestsView;
+    private LinearLayout intendedGuestsView;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -94,6 +97,8 @@ public class GenericEventFragment extends BaseFragment {
         View rootView = inflater.inflate(R.layout.fragment_generic_event, container, false);
         nameTv = rootView.findViewById(R.id.genericevent_name);
         contactsView = rootView.findViewById(R.id.genericevent_contacts);
+        prevGuestsView = rootView.findViewById(R.id.genericevent_pguest);
+        intendedGuestsView = rootView.findViewById(R.id.genericevent_iguest);
         return rootView;
     }
 
@@ -103,6 +108,10 @@ public class GenericEventFragment extends BaseFragment {
         nameTv = null;
         contactsView.removeAllViews();
         contactsView = null;
+        prevGuestsView.removeAllViews();
+        prevGuestsView = null;
+        intendedGuestsView.removeAllViews();
+        intendedGuestsView = null;
     }
 
     @Override
@@ -162,6 +171,13 @@ public class GenericEventFragment extends BaseFragment {
             sched.setText(processSched(schedule));
         longDesc.setText(processDesc(item.getDesc()));
         setContacts(item.getContacts());
+
+        String pGuest = item.getPrevGuests();
+        String iGuest = item.getIntendedGuests();
+        if (pGuest != null && !pGuest.isEmpty())
+            setPrevGuests(BannerItemsModel.URL_TEMPLATE, pGuest);
+        if (iGuest != null && !iGuest.isEmpty())
+            setIntendedGuests(BannerItemsModel.URL_TEMPLATE, iGuest);
         return item;
     }
 
@@ -217,6 +233,30 @@ public class GenericEventFragment extends BaseFragment {
         }
     }
 
+    /**
+     * Expected format of prefGuests: <name1>,<imgUrl1>,<name2>,<imgUrl2>
+     */
+    private void setPrevGuests(String urlTemplate, String prevGuests) {
+        String[] guests = prevGuests.split(",");
+        for (int i = 0; i < guests.length; i += 2) {
+            String imgUrl = String.format(urlTemplate, guests[i + 1]);
+            PeopleView peopleView = new PeopleView(context, guests[i], imgUrl);
+            prevGuestsView.addView(peopleView);
+        }
+    }
+
+    /**
+     * Expected format of intendedGuests: <name1>,<imgUrl1>,<name2>,<imgUrl2>
+     */
+    private void setIntendedGuests(String urlTemplate, String intendedGuests) {
+        String[] guests = intendedGuests.split(",");
+        for (int i = 0; i < guests.length; i += 2) {
+            String imgUrl = String.format(urlTemplate, guests[i + 1]);
+            PeopleView peopleView = new PeopleView(context, guests[i], imgUrl);
+            intendedGuestsView.addView(peopleView);
+        }
+    }
+
     private Spanned processDesc(String rule) {
         Html.TagHandler tagHandler = new RulesTagHandler(requireContext(), R.style.TextHeaderMid);
         return HtmlCompat.fromHtml(rule, HtmlCompat.FROM_HTML_MODE_COMPACT, null, tagHandler);
@@ -242,11 +282,19 @@ public class GenericEventFragment extends BaseFragment {
             int animTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
             View divider1 = root.findViewById(R.id.divider1);
             View divider2 = root.findViewById(R.id.divider2);
+            View divider3 = root.findViewById(R.id.divider3);
+            View divider4 = root.findViewById(R.id.divider4);
             View overviewHeader = root.findViewById(R.id.genericevent_overview_header);
             View scheduleHeader = root.findViewById(R.id.genericevent_schedule_header);
             View contactsHeader = root.findViewById(R.id.genericevent_contacts_header);
-            allViews = new View[]{divider, overviewHeader, longDesc, divider1, scheduleHeader,
-                    schedule, divider2, contactsHeader, contactsView};
+            View pguestsHeader = root.findViewById(R.id.genericevent_pguest_header);
+            View iguestsHeader = root.findViewById(R.id.genericevent_iguest_header);
+            allViews = new View[]{
+                    divider, overviewHeader, longDesc,
+                    divider1, scheduleHeader, schedule,
+                    divider2, pguestsHeader, prevGuestsView,
+                    divider3, iguestsHeader, intendedGuestsView,
+                    divider4, contactsHeader, contactsView};
 
             anims = new Animation[allViews.length];
             for (int i = 0; i < anims.length; i++) {
@@ -261,7 +309,9 @@ public class GenericEventFragment extends BaseFragment {
             for (int i = 0; i < allViews.length; i++) {
                 int group = i / 3;
                 if ((group != 1 || !(item.getSched() == null || item.getSched().isEmpty()))
-                        && (group != 2 || !(item.getContacts() == null || item.getContacts().size() == 0)))
+                        && (group != 2 || !(item.getPrevGuests() == null || item.getPrevGuests().isEmpty()))
+                        && (group != 3 || !(item.getIntendedGuests() == null || item.getIntendedGuests().isEmpty()))
+                        && (group != 4 || !(item.getContacts() == null || item.getContacts().size() == 0)))
                     allViews[i].setVisibility(View.VISIBLE);
                 else
                     allViews[i].setVisibility(GONE);
