@@ -409,14 +409,14 @@ public class DataRepo {
         executor.submit(() -> dao.putBanner(items));
     }
 
-    void fetchIsEventsHidden(MutableLiveData<HideEventsModel> liveData) {
+    void fetchIsEventsHidden(Context context, MutableLiveData<HideEventsModel> liveData) {
         if (SystemClock.uptimeMillis() - lastIsHiddenUpdateTime < 20000)
             return;
         // Will immediately block duplicate calls. Reset this to 0 if request fails.
         lastIsHiddenUpdateTime = SystemClock.uptimeMillis();
 
         if (isEventsHiddenRequest == null) {
-            eventsHiddenListener = new EventsHiddenListener();
+            eventsHiddenListener = new EventsHiddenListener(context);
             eventsHiddenListener.setLd(liveData);
             isEventsHiddenRequest = new StringRequest(Request.Method.GET, BuildConfig.URL_EVENTS_HIDDEN,
                     eventsHiddenListener, error -> lastIsHiddenUpdateTime = 0);
@@ -430,10 +430,15 @@ public class DataRepo {
 
     private class EventsHiddenListener implements Response.Listener<String> {
         private MutableLiveData<HideEventsModel> ld;
+        private Context context;
+
+        EventsHiddenListener(Context context) {
+            this.context = context.getApplicationContext();
+        }
 
         @Override
         public void onResponse(String response) {
-            HideEventsModel model = HideEventsModel.getFromString(response);
+            HideEventsModel model = HideEventsModel.getFromString(context, response);
             if (ld != null && !model.equals(ld.getValue()))
                 ld.setValue(model);
             lastIsHiddenUpdateTime = SystemClock.uptimeMillis();

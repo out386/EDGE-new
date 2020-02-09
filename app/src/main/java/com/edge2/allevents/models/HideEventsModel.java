@@ -25,6 +25,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import androidx.annotation.Nullable;
+
 import com.edge2.R;
 
 public class HideEventsModel {
@@ -63,7 +64,7 @@ public class HideEventsModel {
      * Format of the string: <1 or 0>\n<imgUrl>\n<0 or 1 for intra>\n<intra text> 1 = hide events, 2
      * = show events
      */
-    public static HideEventsModel getFromString(String s) {
+    public static HideEventsModel getFromString(Context context, String s) {
         HideEventsModel item = new HideEventsModel();
         String[] i = s.split("\n");
         try {
@@ -80,6 +81,7 @@ public class HideEventsModel {
         }
         if (i.length > 3 && !i[3].isEmpty())
             item.intraText = i[3];
+        putPrefs(context, item);
         return item;
     }
 
@@ -92,6 +94,16 @@ public class HideEventsModel {
         item.intraText = prefs.getString(KEY_INTRA_HIDDEN_TEXT,
                 context.getString(R.string.intra_coming_soon));
         return item;
+    }
+
+    private static void putPrefs(Context context, HideEventsModel item) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(KEY_IS_EVENTS_HIDDEN, item.hideEvents);
+        editor.putString(KEY_EVENTS_HIDDEN_URL, item.imgUrl);
+        editor.putBoolean(KEY_IS_INTRA_HIDDEN, item.hideIntra);
+        editor.putString(KEY_INTRA_HIDDEN_TEXT, item.intraText);
+        editor.apply();
     }
 
     @Override

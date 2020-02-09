@@ -21,6 +21,7 @@ package com.edge2.data;
  */
 
 import android.app.Application;
+import android.content.Context;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -38,16 +39,18 @@ import java.util.List;
 public class DataViewModel extends AndroidViewModel {
     private DataRepo dataRepo;
     private MutableLiveData<HideEventsModel> hideEventsLD;
+    private Context context;
 
     public DataViewModel(Application app) {
         super(app);
+        this.context = app;
         dataRepo = DataRepo.getInstance(app);
     }
 
     public LiveData<HideEventsModel> getIsEventsHidden() {
         if (hideEventsLD == null)
             hideEventsLD = new MutableLiveData<>();
-        dataRepo.fetchIsEventsHidden(hideEventsLD);
+        dataRepo.fetchIsEventsHidden(context, hideEventsLD);
         return hideEventsLD;
     }
 
