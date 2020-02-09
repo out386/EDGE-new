@@ -25,8 +25,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.Html;
 import android.text.Spanned;
 import android.view.LayoutInflater;
@@ -42,9 +42,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.text.HtmlCompat;
+import androidx.core.util.Pair;
 import androidx.core.widget.NestedScrollView;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.transition.Transition;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -54,26 +54,24 @@ import com.bumptech.glide.request.target.Target;
 import com.edge2.BaseFragment;
 import com.edge2.OnFragmentScrollListener;
 import com.edge2.R;
+import com.edge2.allevents.models.BannerItemsModel;
 import com.edge2.html.RulesTagHandler;
 import com.edge2.html.ScheduleTagHandler;
 import com.edge2.views.ContactsView;
+
+import java.util.List;
 
 import jp.wasabeef.blurry.Blurry;
 
 import static android.view.View.GONE;
 
 public class GenericEventFragment extends BaseFragment {
-    public static final String KEY_EVENT_NAME = "gEventName";
-    public static final String KEY_EVENT_IMG = "gEventImg";
-    public static final String KEY_EVENT_SCHED = "gEventSched";
-    public static final String KEY_EVENT_DESC = "gEventDesc";
-    public static final String KEY_EVENT_IS_MEGA = "gEventIsMega";
+    public static final String KEY_BANNER_ITEM = "gBannerItem";
 
     private OnFragmentScrollListener listener;
     private Context context;
-    private Transition transition;
     private TextView nameTv;
-    private String schedule;
+    private LinearLayout contactsView;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -95,6 +93,7 @@ public class GenericEventFragment extends BaseFragment {
         postponeEnterTransition();
         View rootView = inflater.inflate(R.layout.fragment_generic_event, container, false);
         nameTv = rootView.findViewById(R.id.genericevent_name);
+        contactsView = rootView.findViewById(R.id.genericevent_contacts);
         return rootView;
     }
 
@@ -102,6 +101,8 @@ public class GenericEventFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         nameTv = null;
+        contactsView.removeAllViews();
+        contactsView = null;
     }
 
     @Override
@@ -115,55 +116,53 @@ public class GenericEventFragment extends BaseFragment {
         ImageView imageBlur = view.findViewById(R.id.genericevent_image_blur);
         TextView longDesc = view.findViewById(R.id.genericevent_long_desc);
         TextView schedule = view.findViewById(R.id.genericevent_schedule);
-        //LinearLayout contacts = view.findViewById(R.id.genericevent_contacts);
 
         setupInsets(view, divider, topView, scrollView, contentView);
-        setData(image, imageBlur, longDesc, schedule, divider);
+        BannerItemsModel model = setData(image, imageBlur, longDesc, schedule);
 
-        new AnimationHolder(view, divider, schedule, longDesc).animateViews();
+        if (model != null)
+            new AnimationHolder(view, divider, schedule, longDesc, model).animateViews();
     }
 
-    private void setData(ImageView image, ImageView imageBlur, TextView longDesc, TextView sched,
-                         View divider1) {
+    private BannerItemsModel setData(ImageView image, ImageView imageBlur, TextView longDesc, TextView sched) {
         Bundle args = getArguments();
-        if (args != null) {
-            String name = args.getString(KEY_EVENT_NAME);
-            String imgStr = args.getString(KEY_EVENT_IMG);
-            schedule = args.getString(KEY_EVENT_SCHED);
-            String desc = args.getString(KEY_EVENT_DESC);
-            boolean isMega = args.getBoolean(KEY_EVENT_IS_MEGA);
-            if (name == null || name.isEmpty()) {
-                NavHostFragment.findNavController(this).popBackStack();
-                return;
-            }
-            if (isMega) {
-                name = String.format(getString(R.string.mega_event_template), name);
-            }
-            nameTv.setText(name);
-            if (imgStr != null) {
-                Glide.with(context)
-                        .load(Uri.parse(imgStr))
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                        .listener(new BlurImageListener(imageBlur))
-                        .into(image);
-            } else {
-                Bitmap bitmap = drawableToBitmap(
-                        getResources().getDrawable(R.drawable.generic_banner, null));
-                image.setImageResource(R.drawable.generic_banner);
-                Blurry.with(context)
-                        .color(getResources().getColor(R.color.windowBackgroundTransparent, null))
-                        .from(bitmap)
-                        .into(imageBlur);
-            }
-            if (schedule == null || schedule.isEmpty()) {
-                sched.setVisibility(GONE);
-                divider1.setVisibility(GONE);
-            } else {
-                sched.setText(processSched(schedule));
-            }
-            longDesc.setText(processDesc(desc));
-            //setContacts(contacts);
+        if (args == null) {
+            NavHostFragment.findNavController(this).popBackStack();
+            return null;
         }
+        Parcelable parcelable = args.getParcelable(KEY_BANNER_ITEM);
+        if (!(parcelable instanceof BannerItemsModel)) {
+            NavHostFragment.findNavController(this).popBackStack();
+            return null; // Panic. RUN!
+        }
+        BannerItemsModel item = (BannerItemsModel) parcelable;
+        if (item.getName().isEmpty()) {
+            NavHostFragment.findNavController(this).popBackStack();
+            return null;
+        }
+        String name = item.getMega() ? String.format(getString(R.string.mega_event_template), item.getName()) : item.getName();
+        nameTv.setText(name);
+        if (item.getImageUri() != null) {
+            Glide.with(context)
+                    .load(item.getImageUri())
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .listener(new BlurImageListener(imageBlur))
+                    .into(image);
+        } else {
+            Bitmap bitmap = drawableToBitmap(
+                    getResources().getDrawable(R.drawable.generic_banner, null));
+            image.setImageResource(R.drawable.generic_banner);
+            Blurry.with(context)
+                    .color(getResources().getColor(R.color.windowBackgroundTransparent, null))
+                    .from(bitmap)
+                    .into(imageBlur);
+        }
+        String schedule = item.getSched();
+        if (schedule != null && !schedule.isEmpty())
+            sched.setText(processSched(schedule));
+        longDesc.setText(processDesc(item.getDesc()));
+        setContacts(item.getContacts());
+        return item;
     }
 
     // By André: https://stackoverflow.com/a/10600736
@@ -206,14 +205,16 @@ public class GenericEventFragment extends BaseFragment {
                 });
     }
 
-    private void setContacts(LinearLayout contacts) {
+    private void setContacts(List<Pair<String, Long>> contacts) {
         // Why bother with List/RecyclerViews for 2-4 items?
-        ContactsView c1 = new ContactsView(context, "Some Name", 9123456789L, true);
-        ContactsView c2 = new ContactsView(context, "Some Name", 8901234567L, true);
-        ContactsView c3 = new ContactsView(context, "Yet Another Name", 9234567890L, false);
-        contacts.addView(c1);
-        contacts.addView(c2);
-        contacts.addView(c3);
+        for (int i = 0; i < contacts.size(); i++) {
+            Pair<String, Long> contact = contacts.get(i);
+            if (contact.second == null)
+                continue;
+            ContactsView c = new ContactsView(context, contact.first, contact.second,
+                    i != contacts.size() - 1);
+            contactsView.addView(c);
+        }
     }
 
     private Spanned processDesc(String rule) {
@@ -233,20 +234,22 @@ public class GenericEventFragment extends BaseFragment {
     private class AnimationHolder {
         private View[] allViews;
         private Animation[] anims;
+        private BannerItemsModel item;
 
-        AnimationHolder(View root, View divider, TextView schedule,
-                        TextView longDesc) {
+        AnimationHolder(View root, View divider, TextView schedule, TextView longDesc,
+                        BannerItemsModel item) {
+            this.item = item;
             int animTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
             View divider1 = root.findViewById(R.id.divider1);
-            //View divider2 = root.findViewById(R.id.divider2);
+            View divider2 = root.findViewById(R.id.divider2);
             View overviewHeader = root.findViewById(R.id.genericevent_overview_header);
             View scheduleHeader = root.findViewById(R.id.genericevent_schedule_header);
-            //View contactsHeader = root.findViewById(R.id.genericevent_contacts_header);
+            View contactsHeader = root.findViewById(R.id.genericevent_contacts_header);
             allViews = new View[]{divider, overviewHeader, longDesc, divider1, scheduleHeader,
-                    schedule};
+                    schedule, divider2, contactsHeader, contactsView};
 
-            anims = new Animation[2];
-            for (int i = 0; i < 2; i++) {
+            anims = new Animation[allViews.length];
+            for (int i = 0; i < anims.length; i++) {
                 anims[i] = AnimationUtils.loadAnimation(divider.getContext(),
                         R.anim.view_fall_down);
                 anims[i].setStartOffset((i + 1) * 100);
@@ -257,7 +260,8 @@ public class GenericEventFragment extends BaseFragment {
         void animateViews() {
             for (int i = 0; i < allViews.length; i++) {
                 int group = i / 3;
-                if (group != 1 || (schedule != null && !schedule.isEmpty()))
+                if ((group != 1 || !(item.getSched() == null || item.getSched().isEmpty()))
+                        && (group != 2 || !(item.getContacts() == null || item.getContacts().size() == 0)))
                     allViews[i].setVisibility(View.VISIBLE);
                 else
                     allViews[i].setVisibility(GONE);
@@ -269,7 +273,7 @@ public class GenericEventFragment extends BaseFragment {
     class BlurImageListener implements RequestListener<Object, GlideDrawable> {
         private ImageView imageBlur;
 
-        public BlurImageListener(ImageView imageBlur) {
+        BlurImageListener(ImageView imageBlur) {
             this.imageBlur = imageBlur;
         }
 

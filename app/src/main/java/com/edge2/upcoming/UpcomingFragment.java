@@ -151,6 +151,7 @@ public class UpcomingFragment extends BaseFragment {
         if (mainAdapter == null) {
             DataViewModel viewModel = ViewModelProviders.of(requireActivity())
                     .get(DataViewModel.class);
+            // TODO: Bug without visible effects: Do not observe more than once. Move observe to onCreate
             viewModel.getUpcoming().observe(this, events -> {
                 eventsList = events;
                 mainAdapter = new UpcomingAdapter(events, this::onEventClicked);
@@ -171,16 +172,7 @@ public class UpcomingFragment extends BaseFragment {
 
         BannerItemsModel item = eventsList.get(position);
         Bundle args = new Bundle();
-        if (item.getImageUri() == null) {
-            if (item.getIconUri() != null)
-                args.putString(GenericEventFragment.KEY_EVENT_IMG, item.getIconUri().toString());
-        } else {
-            args.putString(GenericEventFragment.KEY_EVENT_IMG, item.getImageUri().toString());
-        }
-        args.putString(GenericEventFragment.KEY_EVENT_NAME, item.getName());
-        args.putString(GenericEventFragment.KEY_EVENT_DESC, item.getDesc());
-        args.putString(GenericEventFragment.KEY_EVENT_SCHED, item.getSched());
-        args.putInt(GenericEventFragment.KEY_EVENT_IS_MEGA, 0);
+        args.putParcelable(GenericEventFragment.KEY_BANNER_ITEM, item);
 
         // To add more shared views here, call "setTransitionName" in the adapter
         /*String transitionImgName = getString(R.string.sub_to_details_img_transition);

@@ -124,16 +124,16 @@ public class EventDetailsModel {
         if (item.schedule.isEmpty())
             item.schedule = null;
         item.cN1 = ob.getString("cN1");
-        if (item.cN1.isEmpty())
+        if (item.cN1 == null || item.cN1.isEmpty() || item.cN1.equals("null"))
             item.cN1 = null;
         item.cN2 = ob.getString("cN2");
-        if (item.cN2.isEmpty())
+        if (item.cN2 == null || item.cN2.isEmpty() || item.cN2.equals("null"))
             item.cN2 = null;
         item.cN3 = ob.getString("cN3");
-        if (item.cN3.isEmpty())
+        if (item.cN3 == null || item.cN3.isEmpty() || item.cN3.equals("null"))
             item.cN3 = null;
         item.cN4 = ob.getString("cN4");
-        if (item.cN4.isEmpty())
+        if (item.cN4 == null || item.cN4.isEmpty() || item.cN4.equals("null"))
             item.cN4 = null;
         item.cNo1 = ob.getLong("cNo1");
         item.cNo2 = ob.getLong("cNo2");

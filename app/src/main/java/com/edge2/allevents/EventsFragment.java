@@ -460,17 +460,7 @@ public class EventsFragment extends BaseFragment {
                 BannerItemsModel item = itemsInBanner.get(position);
 
                 Bundle args = new Bundle();
-                if (item.getImageUri() == null) {
-                    if (item.getIconUri() != null) {
-                        args.putString(GenericEventFragment.KEY_EVENT_IMG, item.getIconUri().toString());
-                    }
-                } else {
-                    args.putString(GenericEventFragment.KEY_EVENT_IMG, item.getImageUri().toString());
-                }
-                args.putString(GenericEventFragment.KEY_EVENT_NAME, item.getName());
-                args.putString(GenericEventFragment.KEY_EVENT_SCHED, item.getSched());
-                args.putString(GenericEventFragment.KEY_EVENT_DESC, item.getDesc());
-                args.putBoolean(GenericEventFragment.KEY_EVENT_IS_MEGA, item.getMega());
+                args.putParcelable(GenericEventFragment.KEY_BANNER_ITEM, item);
 
                 NavHostFragment.findNavController(EventsFragment.this)
                         .navigate(R.id.action_events_to_genericEvent, args, null, null);
