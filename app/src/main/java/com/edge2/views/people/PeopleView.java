@@ -30,8 +30,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.DrawableTypeRequest;
 import com.bumptech.glide.Glide;
 import com.edge2.R;
+
+import pl.droidsonroids.gif.GifDrawable;
 
 public class PeopleView extends LinearLayout {
     private Context context;
@@ -48,7 +51,7 @@ public class PeopleView extends LinearLayout {
         role = member.getRole();
         imgRes = member.getImgRes();
         phoneNo = member.getPhoneNo();
-        init();
+        init(null);
     }
 
     public PeopleView(Context context, String name, String imgUrl) {
@@ -56,10 +59,11 @@ public class PeopleView extends LinearLayout {
         this.context = context;
         this.name = name;
         this.imgUrl = imgUrl;
-        init();
+        GifDrawable placeholder = GifDrawable.createFromResource(getResources(), R.drawable.loading);
+        init(placeholder);
     }
 
-    private void init() {
+    private void init(GifDrawable splash) {
         inflate(context, R.layout.people_item, this);
         ImageView imgView = findViewById(R.id.team_img);
         TextView nameView = findViewById(R.id.team_name);
@@ -71,10 +75,13 @@ public class PeopleView extends LinearLayout {
         if (imgUrl == null) {
             imgView.setImageResource(imgRes);
         } else {
-            Glide.with(context)
-                    .load(imgUrl)
-                    .placeholder(R.drawable.loading)
-                    .into(imgView);
+            DrawableTypeRequest<String> req = Glide.with(context)
+                    .load(imgUrl);
+            if (splash != null)
+                req.placeholder(splash)
+                        .into(imgView);
+            else
+                req.into(imgView);
         }
 
         if (role != null) {
