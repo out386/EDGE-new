@@ -25,20 +25,23 @@
 
     <TextView
         android:id="@+id/team_name"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/TextHeaderLarge"
         android:textColor="@color/colorAccent"
+        android:gravity="center_horizontal"
         tools:text="@tools:sample/full_names" />
 
     <TextView
         android:id="@+id/team_role"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/TextSmallSub"
+        android:gravity="center_horizontal"
         android:layout_marginTop="@dimen/margin"
         android:visibility="gone"
-        tools:text="@tools:sample/last_names" />
+        tools:text="@tools:sample/last_names"
+        tools:visibility="visible" />
 
     <LinearLayout
         android:id="@+id/team_ph_wa_holder"
@@ -46,7 +49,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="@dimen/margin"
-        android:visibility="gone">
+        android:visibility="gone"
+        tools:visibility="visible">
 
         <ImageView
             android:id="@+id/team_ph"
