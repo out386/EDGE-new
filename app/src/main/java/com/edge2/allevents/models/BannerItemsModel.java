@@ -72,29 +72,47 @@ public class BannerItemsModel implements Parcelable {
     @Ignore
     private List<Pair<String, Long>> contacts;
     /**
-     * Expected format: <name1>,<imgName1>,<name2>,<imgName2> Image names use the template string
-     * {@link #URL_TEMPLATE}
+     * Expected format: <name1>,<imgName1>,<name2>,<imgName2>,... Image names use the template
+     * string {@link #GUEST_URL_TEMPLATE}
      */
     @ColumnInfo(name = "pG")
     public String prevGuests;
     /**
-     * Expected format: <name1>,<imgName1>,<name2>,<imgName2> Image names use the template string
-     * {@link #URL_TEMPLATE}
+     * Expected format: <name1>,<imgName1>,<name2>,<imgName2>,... Image names use the template
+     * string {@link #GUEST_URL_TEMPLATE}
      */
     @ColumnInfo(name = "iG")
     public String intendedGuests;
 
+    /**
+     * Expected format: <heading (optionally 0-length)>,<imgName1>,<imgName2>,... Image names use
+     * the template string {@link #ADDITIONAL_URL_TEMPLATE}
+     */
+    @ColumnInfo(name = "addImg")
+    public String additionalImages;
+
     @Ignore
-    public static final String URL_TEMPLATE =
+    public static final String GUEST_URL_TEMPLATE =
             "https://firebasestorage.googleapis.com/v0/b/edge-new-a7306.appspot.com/o/banner_items%%2Fguests%%2F%s?alt=media";
+
+    @Ignore
+    public static final String ADDITIONAL_URL_TEMPLATE =
+            "https://firebasestorage.googleapis.com/v0/b/edge-new-a7306.appspot.com/o/banner_items%%2Fadditional%%2F%s?alt=media";
 
     private BannerItemsModel() {
     }
 
+    // TODO: Switch to NoSQL, like Realm
+    /*
+     * When I wrote this thing, I never expected so many fields, with so many of them needing to be
+     * lists. At this point, working around the list limitation is getting riddiculous. Not to
+     * mention that the JSON used for updates are getting big, because of unused fields.
+     */
     public BannerItemsModel(@NonNull String name, String imgName, String imgUrl, String icName,
                             String icUrl, String sched, String desc, boolean isUpcoming, String cN1,
                             long cNo1, String cN2, long cNo2, String cN3, long cNo3, String cN4,
-                            long cNo4, String prevGuests, String intendedGuests) {
+                            long cNo4, String prevGuests, String intendedGuests,
+                            String additionalImages) {
         this.name = name;
         this.imgName = imgName;
         this.imgUrl = imgUrl;
@@ -115,6 +133,7 @@ public class BannerItemsModel implements Parcelable {
         setContacts(this);
         this.prevGuests = prevGuests;
         this.intendedGuests = intendedGuests;
+        this.additionalImages = additionalImages;
     }
 
     protected BannerItemsModel(Parcel in) {
@@ -136,6 +155,7 @@ public class BannerItemsModel implements Parcelable {
         setContacts(this);
         prevGuests = in.readString();
         intendedGuests = in.readString();
+        additionalImages = in.readString();
     }
 
     @Override
@@ -156,6 +176,7 @@ public class BannerItemsModel implements Parcelable {
         dest.writeLong(cNo4);
         dest.writeString(prevGuests);
         dest.writeString(intendedGuests);
+        dest.writeString(additionalImages);
     }
 
     @Override
@@ -236,6 +257,7 @@ public class BannerItemsModel implements Parcelable {
         return contacts;
     }
 
+    //TODO: Make getPrevGuests, getIntendedGuests, and getAdditionalImages all return deserialized data
     public String getPrevGuests() {
         return prevGuests;
     }
@@ -244,6 +266,12 @@ public class BannerItemsModel implements Parcelable {
         return intendedGuests;
     }
 
+    public String getAdditionalImages() {
+        return additionalImages;
+    }
+
+    // TODO: USE GSON!
+    // Never expected this tiny bit of deserialization to become not so tiny.
     public static BannerItemsModel getFromJson(JSONObject ob) throws JSONException {
         BannerItemsModel item = new BannerItemsModel();
         item.name = ob.getString("name");
@@ -273,7 +301,14 @@ public class BannerItemsModel implements Parcelable {
         if (item.desc == null || item.desc.isEmpty() || item.desc.equals("null"))
             item.desc = null;
 
-        item.isUpcoming = ob.getInt("isUp") == 1;
+        try {
+            item.isUpcoming = ob.getInt("isUp") == 1;
+        } catch (JSONException e) {
+            try {
+                item.isUpcoming = Integer.parseInt(ob.getString("isUp")) == 1;
+            } catch (NumberFormatException | JSONException ignored) {
+            }
+        }
 
         item.cN1 = ob.getString("cN1");
         if (item.cN1 == null || item.cN1.isEmpty() || item.cN1.equals("null"))
@@ -301,6 +336,10 @@ public class BannerItemsModel implements Parcelable {
         item.intendedGuests = ob.getString("iG");
         if (item.intendedGuests == null || item.intendedGuests.isEmpty() || item.intendedGuests.equals("null"))
             item.intendedGuests = null;
+
+        item.additionalImages = ob.getString("addImg");
+        if (item.additionalImages == null || item.additionalImages.isEmpty() || item.additionalImages.equals("null"))
+            item.additionalImages = null;
 
         setUri(item);
         setContacts(item);

@@ -63,6 +63,7 @@ import com.edge2.views.people.PeopleView;
 import java.util.List;
 
 import jp.wasabeef.blurry.Blurry;
+import pl.droidsonroids.gif.GifDrawable;
 
 import static android.view.View.GONE;
 
@@ -72,6 +73,7 @@ public class GenericEventFragment extends BaseFragment {
     private OnFragmentScrollListener listener;
     private Context context;
     private TextView nameTv;
+    private LinearLayout additionalImgView;
     private LinearLayout contactsView;
     private LinearLayout prevGuestsView;
     private LinearLayout intendedGuestsView;
@@ -96,6 +98,7 @@ public class GenericEventFragment extends BaseFragment {
         postponeEnterTransition();
         View rootView = inflater.inflate(R.layout.fragment_generic_event, container, false);
         nameTv = rootView.findViewById(R.id.genericevent_name);
+        additionalImgView = rootView.findViewById(R.id.genericevent_additional_imgs);
         contactsView = rootView.findViewById(R.id.genericevent_contacts);
         prevGuestsView = rootView.findViewById(R.id.genericevent_pguest);
         intendedGuestsView = rootView.findViewById(R.id.genericevent_iguest);
@@ -108,6 +111,8 @@ public class GenericEventFragment extends BaseFragment {
         nameTv = null;
         contactsView.removeAllViews();
         contactsView = null;
+        additionalImgView.removeAllViews();
+        additionalImgView = null;
         prevGuestsView.removeAllViews();
         prevGuestsView = null;
         intendedGuestsView.removeAllViews();
@@ -125,15 +130,27 @@ public class GenericEventFragment extends BaseFragment {
         ImageView imageBlur = view.findViewById(R.id.genericevent_image_blur);
         TextView longDesc = view.findViewById(R.id.genericevent_long_desc);
         TextView schedule = view.findViewById(R.id.genericevent_schedule);
+        TextView additionalHeader = view.findViewById(R.id.genericevent_additional_imgs_header);
 
         setupInsets(view, divider, topView, scrollView, contentView);
-        BannerItemsModel model = setData(image, imageBlur, longDesc, schedule);
+        BannerItemsModel model = setData(image, imageBlur, longDesc, schedule, additionalHeader);
 
-        if (model != null)
-            new AnimationHolder(view, divider, schedule, longDesc, model).animateViews();
+        if (model != null) {
+            String addImgs = model.getAdditionalImages();
+            boolean additionalHasHeader = false;
+            if (addImgs != null && !addImgs.isEmpty()) {
+                // If getAdditionalImages() starts with a ",", it means that the header field is empty
+                // Yeah yeah, I know CSV sucks for this. Code is getting more and more brittle now.
+                additionalHasHeader = addImgs.indexOf(",") != 0;
+            }
+            new AnimationHolder(view, divider, schedule, longDesc, model, additionalHasHeader,
+                    additionalHeader)
+                    .animateViews();
+        }
     }
 
-    private BannerItemsModel setData(ImageView image, ImageView imageBlur, TextView longDesc, TextView sched) {
+    private BannerItemsModel setData(ImageView image, ImageView imageBlur, TextView longDesc,
+                                     TextView sched, TextView additionalHeader) {
         Bundle args = getArguments();
         if (args == null) {
             NavHostFragment.findNavController(this).popBackStack();
@@ -171,12 +188,16 @@ public class GenericEventFragment extends BaseFragment {
         longDesc.setText(processDesc(item.getDesc()));
         setContacts(item.getContacts());
 
+        String addImgs = item.getAdditionalImages();
+        if (addImgs != null && !addImgs.isEmpty())
+            setAdditionalImgs(additionalHeader, addImgs);
+
         String pGuest = item.getPrevGuests();
         String iGuest = item.getIntendedGuests();
         if (pGuest != null && !pGuest.isEmpty())
-            setPrevGuests(BannerItemsModel.URL_TEMPLATE, pGuest);
+            setPrevGuests(pGuest);
         if (iGuest != null && !iGuest.isEmpty())
-            setIntendedGuests(BannerItemsModel.URL_TEMPLATE, iGuest);
+            setIntendedGuests(iGuest);
         return item;
     }
 
@@ -233,12 +254,35 @@ public class GenericEventFragment extends BaseFragment {
     }
 
     /**
+     * Expected format of additionalImgs: <name (optional 0-length)>,<imgUrl1>,<imgUrl2>,...
+     */
+    private void setAdditionalImgs(TextView header, String additionalImgs) {
+        String[] imgs = additionalImgs.split(",");
+        if (!imgs[0].isEmpty())
+            header.setText(imgs[0]);
+        else
+            header.setVisibility(GONE);
+
+        GifDrawable placeholder = GifDrawable.createFromResource(getResources(), R.drawable.loading);
+        for (int i = 1; i < imgs.length; i++) {
+            String imgUrl = String.format(BannerItemsModel.ADDITIONAL_URL_TEMPLATE, imgs[i]);
+            ImageView imageView = new AdditionalImageView(context);
+            additionalImgView.addView(imageView);
+            Glide.with(context)
+                    .load(imgUrl)
+                    .placeholder(placeholder)
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .into(imageView);
+        }
+    }
+
+    /**
      * Expected format of prefGuests: <name1>,<imgUrl1>,<name2>,<imgUrl2>
      */
-    private void setPrevGuests(String urlTemplate, String prevGuests) {
+    private void setPrevGuests(String prevGuests) {
         String[] guests = prevGuests.split(",");
         for (int i = 0; i < guests.length; i += 2) {
-            String imgUrl = String.format(urlTemplate, guests[i + 1]);
+            String imgUrl = String.format(BannerItemsModel.GUEST_URL_TEMPLATE, guests[i + 1]);
             PeopleView peopleView = new PeopleView(context, guests[i], imgUrl);
             prevGuestsView.addView(peopleView);
         }
@@ -247,10 +291,10 @@ public class GenericEventFragment extends BaseFragment {
     /**
      * Expected format of intendedGuests: <name1>,<imgUrl1>,<name2>,<imgUrl2>
      */
-    private void setIntendedGuests(String urlTemplate, String intendedGuests) {
+    private void setIntendedGuests(String intendedGuests) {
         String[] guests = intendedGuests.split(",");
         for (int i = 0; i < guests.length; i += 2) {
-            String imgUrl = String.format(urlTemplate, guests[i + 1]);
+            String imgUrl = String.format(BannerItemsModel.GUEST_URL_TEMPLATE, guests[i + 1]);
             PeopleView peopleView = new PeopleView(context, guests[i], imgUrl);
             intendedGuestsView.addView(peopleView);
         }
@@ -274,15 +318,21 @@ public class GenericEventFragment extends BaseFragment {
         private View[] allViews;
         private Animation[] anims;
         private BannerItemsModel item;
+        private boolean shouldHideAdditionalHeader;
+        private View addImgHeader;
 
         AnimationHolder(View root, View divider, TextView schedule, TextView longDesc,
-                        BannerItemsModel item) {
+                        BannerItemsModel item, boolean shouldHideAdditionalHeader,
+                        View addImgHeader) {
             this.item = item;
+            this.shouldHideAdditionalHeader = shouldHideAdditionalHeader;
+            this.addImgHeader = addImgHeader;
             int animTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
             View divider1 = root.findViewById(R.id.divider1);
             View divider2 = root.findViewById(R.id.divider2);
             View divider3 = root.findViewById(R.id.divider3);
             View divider4 = root.findViewById(R.id.divider4);
+            View divider5 = root.findViewById(R.id.divider5);
             View overviewHeader = root.findViewById(R.id.genericevent_overview_header);
             View scheduleHeader = root.findViewById(R.id.genericevent_schedule_header);
             View contactsHeader = root.findViewById(R.id.genericevent_contacts_header);
@@ -293,7 +343,8 @@ public class GenericEventFragment extends BaseFragment {
                     divider1, scheduleHeader, schedule,
                     divider2, pguestsHeader, prevGuestsView,
                     divider3, iguestsHeader, intendedGuestsView,
-                    divider4, contactsHeader, contactsView};
+                    divider4, addImgHeader, additionalImgView,
+                    divider5, contactsHeader, contactsView};
 
             anims = new Animation[allViews.length];
             for (int i = 0; i < anims.length; i++) {
@@ -310,7 +361,9 @@ public class GenericEventFragment extends BaseFragment {
                 if ((group != 1 || !(item.getSched() == null || item.getSched().isEmpty()))
                         && (group != 2 || !(item.getPrevGuests() == null || item.getPrevGuests().isEmpty()))
                         && (group != 3 || !(item.getIntendedGuests() == null || item.getIntendedGuests().isEmpty()))
-                        && (group != 4 || !(item.getContacts() == null || item.getContacts().size() == 0)))
+                        && (group != 4 || !(item.getAdditionalImages() == null || item.additionalImages.isEmpty())
+                        || i == 13 && !shouldHideAdditionalHeader)
+                        && (group != 5 || !(item.getContacts() == null || item.getContacts().size() == 0)))
                     allViews[i].setVisibility(View.VISIBLE);
                 else
                     allViews[i].setVisibility(GONE);
