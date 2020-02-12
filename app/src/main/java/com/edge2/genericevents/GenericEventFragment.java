@@ -149,8 +149,7 @@ public class GenericEventFragment extends BaseFragment {
             NavHostFragment.findNavController(this).popBackStack();
             return null;
         }
-        String name = item.getMega() ? String.format(getString(R.string.mega_event_template), item.getName()) : item.getName();
-        nameTv.setText(name);
+        nameTv.setText(item.getName());
         if (item.getImageUri() != null) {
             Glide.with(context)
                     .load(item.getImageUri())

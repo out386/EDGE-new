@@ -55,7 +55,12 @@ public class BannerItemsModel implements Parcelable {
     private Uri iconUri;
     public String sched;
     public String desc;
-    public boolean isMega;
+    /**
+     * If false, this item doesn't appear in Upcoming, just in banner. If false and no image is
+     * specified, this item will not appear anywhere at all.
+     */
+    @ColumnInfo(name = "isUp")
+    public boolean isUpcoming;
     public String cN1;
     public long cNo1;
     public String cN2;
@@ -67,14 +72,14 @@ public class BannerItemsModel implements Parcelable {
     @Ignore
     private List<Pair<String, Long>> contacts;
     /**
-     * Expected format: <name1>,<imgName1>,<name2>,<imgName2>
-     * Image names use the template string {@link #URL_TEMPLATE}
+     * Expected format: <name1>,<imgName1>,<name2>,<imgName2> Image names use the template string
+     * {@link #URL_TEMPLATE}
      */
     @ColumnInfo(name = "pG")
     public String prevGuests;
     /**
-     * Expected format: <name1>,<imgName1>,<name2>,<imgName2>
-     * Image names use the template string {@link #URL_TEMPLATE}
+     * Expected format: <name1>,<imgName1>,<name2>,<imgName2> Image names use the template string
+     * {@link #URL_TEMPLATE}
      */
     @ColumnInfo(name = "iG")
     public String intendedGuests;
@@ -87,7 +92,7 @@ public class BannerItemsModel implements Parcelable {
     }
 
     public BannerItemsModel(@NonNull String name, String imgName, String imgUrl, String icName,
-                            String icUrl, String sched, String desc, boolean isMega, String cN1,
+                            String icUrl, String sched, String desc, boolean isUpcoming, String cN1,
                             long cNo1, String cN2, long cNo2, String cN3, long cNo3, String cN4,
                             long cNo4, String prevGuests, String intendedGuests) {
         this.name = name;
@@ -98,7 +103,7 @@ public class BannerItemsModel implements Parcelable {
         setUri(this);
         this.sched = sched;
         this.desc = desc;
-        this.isMega = isMega;
+        this.isUpcoming = isUpcoming;
         this.cN1 = cN1;
         this.cNo1 = cNo1;
         this.cN2 = cN2;
@@ -119,7 +124,7 @@ public class BannerItemsModel implements Parcelable {
         iconUri = in.readParcelable(Uri.class.getClassLoader());
         sched = in.readString();
         desc = in.readString();
-        isMega = in.readByte() != 0;
+        isUpcoming = in.readByte() != 0;
         cN1 = in.readString();
         cNo1 = in.readLong();
         cN2 = in.readString();
@@ -140,7 +145,7 @@ public class BannerItemsModel implements Parcelable {
         dest.writeParcelable(iconUri, flags);
         dest.writeString(sched);
         dest.writeString(desc);
-        dest.writeByte((byte) (isMega ? 1 : 0));
+        dest.writeByte((byte) (isUpcoming ? 1 : 0));
         dest.writeString(cN1);
         dest.writeLong(cNo1);
         dest.writeString(cN2);
@@ -223,8 +228,8 @@ public class BannerItemsModel implements Parcelable {
         return desc;
     }
 
-    public boolean getMega() {
-        return isMega;
+    public boolean getUpcoming() {
+        return isUpcoming;
     }
 
     public List<Pair<String, Long>> getContacts() {
@@ -268,7 +273,7 @@ public class BannerItemsModel implements Parcelable {
         if (item.desc == null || item.desc.isEmpty() || item.desc.equals("null"))
             item.desc = null;
 
-        item.isMega = ob.getInt("isMega") == 1;
+        item.isUpcoming = ob.getInt("isUp") == 1;
 
         item.cN1 = ob.getString("cN1");
         if (item.cN1 == null || item.cN1.isEmpty() || item.cN1.equals("null"))

@@ -57,10 +57,7 @@ public abstract class RunningOutOfNamesDao {
     @Query("SELECT * FROM BannerItems")
     abstract LiveData<List<BannerItemsModel>> getBannerItems();
 
-    @Query("SELECT * FROM BannerItems WHERE isMega = 1")
-    abstract LiveData<List<BannerItemsModel>> getMegaEvents();
-
-    @Query("SELECT * FROM BannerItems WHERE isMega = 0")
+    @Query("SELECT * FROM BannerItems WHERE isUp == 1")
     abstract LiveData<List<BannerItemsModel>> getUpcomingEvents();
 
     @Transaction
