@@ -19,3 +19,9 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Yes, I'm too lazy to risk breaking things right now.
+-keep public class com.edge2.**
+-keep public class com.edge2.** {
+  *;
+}

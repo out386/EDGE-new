@@ -101,7 +101,6 @@ public abstract class ThemeActivity extends AppCompatActivity {
 
         MaterialDialog dialog = new MaterialDialog.Builder(this)
                 .title(getString(R.string.action_theme))
-                .typeface("kanit.ttf", "open_sans.ttf")
                 .itemsColor(getColor(R.color.textHeader))
                 .items(options)
                 .backgroundColor(getColor(R.color.windowBackground))
