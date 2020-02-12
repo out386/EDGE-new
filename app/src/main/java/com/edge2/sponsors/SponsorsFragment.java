@@ -124,24 +124,25 @@ public class SponsorsFragment extends BaseFragment {
         topView.post(() ->
                 setupScrollListener((NestedScrollView) view, topView.getHeight()));
 
-        setupInsets(view, topView);
+        View content = view.findViewById(R.id.sponsors_root);
+        setupInsets(view, content, topView);
         if (isTransitionFinished) {
             topView.showImage(0);
             setData();
         }
     }
 
-    private void setupInsets(View v, View topView) {
+    private void setupInsets(View v, View content, View topView) {
         mainRecycler.postDelayed(this::startPostponedEnterTransition, 150);
 
-        setupWindowInsets(v, mainRecycler, topView, false,
-                true, (l, t, r, b) -> {
+        setupWindowInsets(v, content, topView, false,
+                false, (l, t, r, b) -> {
                     int itemMargin = context.getResources()
                             .getDimensionPixelSize(R.dimen.margin_huge);
                     if (itemDecoration != null)
                         mainRecycler.removeItemDecoration(itemDecoration);
                     itemDecoration =
-                            new ItemDecoration(layoutManager, b, itemMargin);
+                            new ItemDecoration(layoutManager, 0, itemMargin);
                     mainRecycler.addItemDecoration(itemDecoration);
                 });
     }

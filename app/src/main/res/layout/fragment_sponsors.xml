@@ -10,6 +10,7 @@
     android:scrollbars="vertical">
 
     <LinearLayout
+        android:id="@+id/sponsors_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -44,12 +45,28 @@
             android:layout_height="wrap_content"
             android:layoutAnimation="@anim/slide_in_top"
             tools:layoutAnimation="@null"
-            tools:itemCount="10"
+            tools:itemCount="2"
             tools:spanCount="2"
             tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             tools:listitem="@layout/sponsors_item"
             android:visibility="gone"
             tools:visibility="visible" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="6dp"
+            android:layout_marginTop="@dimen/margin_huge"
+            android:background="@color/divider"/>
+
+        <com.edge2.views.ContactsView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginEnd="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_huge"
+            android:layout_marginBottom="@dimen/margin_huge"
+            app:contact_name="Sroman Guha"
+            app:contact_number="8981570577" />
 
     </LinearLayout>
 
