@@ -21,7 +21,11 @@
 #-renamesourcefileattribute SourceFile
 
 # Yes, I'm too lazy to risk breaking things right now.
--keep public class com.edge2.**
--keep public class com.edge2.** {
-  *;
+-keep class com.edge2.**
+-keep class com.edge2.** {
+  public protected private *;
 }
+-keepattributes InnerClasses
+-keepclassmembers class com.edge2.** {
+    *;
+ }

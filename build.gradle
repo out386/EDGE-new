@@ -17,9 +17,9 @@ buildscript {
 }
 
 ext {
-    compileSdkVersion=28
-    targetSdkVersion=28
-    minSdkVersion=23
+    compileSdkVersion = 28
+    targetSdkVersion = 28
+    minSdkVersion = 23
 }
 
 allprojects {
@@ -30,5 +30,7 @@ allprojects {
 }
 
 task clean(type: Delete) {
-    delete rootProject.buildDir
+    rootProject.allprojects {
+        delete ((it as Project).buildDir)
+    }
 }
