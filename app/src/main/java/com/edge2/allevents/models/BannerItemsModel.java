@@ -198,13 +198,13 @@ public class BannerItemsModel implements Parcelable {
 
     private static void setUri(BannerItemsModel item) {
         if (item.imgName != null && !item.imgName.isEmpty()) {
-            item.imageUri = Uri.parse("android.resource://com.edge2/drawable/" + item.imgName);
+            item.imageUri = Uri.parse("android.resource://com.gx.edg/drawable/" + item.imgName);
         } else if (item.imgUrl != null && !item.imgUrl.isEmpty()) {
             item.imageUri = Uri.parse(item.imgUrl);
         }
 
         if (item.icName != null && !item.icName.isEmpty()) {
-            item.iconUri = Uri.parse("android.resource://com.edge2/drawable/" + item.icName);
+            item.iconUri = Uri.parse("android.resource://com.gx.edg/drawable/" + item.icName);
         } else if (item.icUrl != null && !item.icUrl.isEmpty()) {
             item.iconUri = Uri.parse(item.icUrl);
         }
