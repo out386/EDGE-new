@@ -90,7 +90,7 @@ public class HideEventsModel {
         HideEventsModel item = new HideEventsModel();
         item.hideEvents = prefs.getBoolean(KEY_IS_EVENTS_HIDDEN, true);
         item.imgUrl = prefs.getString(KEY_EVENTS_HIDDEN_URL, null);
-        item.hideIntra = prefs.getBoolean(KEY_IS_INTRA_HIDDEN, true);
+        item.hideIntra = prefs.getBoolean(KEY_IS_INTRA_HIDDEN, false);
         item.intraText = prefs.getString(KEY_INTRA_HIDDEN_TEXT,
                 context.getString(R.string.intra_coming_soon));
         return item;
