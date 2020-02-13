@@ -453,13 +453,36 @@
                 app:strokeColor="@color/cardStroke"
                 app:strokeWidth="1dp" />
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/about_privacy"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:backgroundTintMode="src_in"
+                android:minHeight="45sp"
+                android:layout_marginTop="@dimen/margin_huge"
+                android:paddingStart="15dp"
+                android:paddingEnd="20dp"
+                android:text="@string/about_privacy"
+                android:textAppearance="@style/TextSmallSub"
+                android:textColor="@color/textSub"
+                app:backgroundTint="#00000000"
+                app:cornerRadius="100dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/about_licences"
+                app:rippleColor="@color/lIconFillRedTransparent"
+                app:strokeColor="@color/cardStroke"
+                app:strokeWidth="1dp" />
+
             <View
                 android:id="@+id/view"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/margin_large"
                 android:visibility="invisible"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/about_licences" />
+                app:layout_constraintTop_toBottomOf="@+id/about_privacy" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

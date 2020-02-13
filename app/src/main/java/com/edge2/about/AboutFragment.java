@@ -106,6 +106,7 @@ public class AboutFragment extends BaseFragment {
         View insta = root.findViewById(R.id.about_img_insta);
         View twitter = root.findViewById(R.id.about_img_twitter);
         MaterialButton aboutLicence = root.findViewById(R.id.about_licences);
+        MaterialButton aboutPrivacy = root.findViewById(R.id.about_privacy);
 
         edge.setOnClickListener(view -> startActivity(new Intent(Intent.ACTION_VIEW,
                 Uri.parse("https://edg.co.in"))));
@@ -133,6 +134,10 @@ public class AboutFragment extends BaseFragment {
 
         aboutLicence.setOnClickListener(view -> new LibsBuilder()
                 .start(requireContext()));
+
+        aboutPrivacy.setOnClickListener(view -> startActivity(new Intent(Intent.ACTION_VIEW,
+                Uri.parse("https://firebasestorage.googleapis.com/v0/b/edge-new-a7306.appspot.com/o/privacy.html?alt=media"))));
+
         startPostponedEnterTransition();
     }
 
