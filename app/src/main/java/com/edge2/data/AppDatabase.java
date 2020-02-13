@@ -39,7 +39,7 @@ abstract class AppDatabase extends RoomDatabase {
     /**
      * Make sure that the online DB version and this always stays in sync.
      */
-    static final int DB_VERSION = 20;
+    static final int DB_VERSION = 21;
     private static final String KEY_DB_VERSION = "offlineDbVersion";
 
     private static AppDatabase appDatabase;

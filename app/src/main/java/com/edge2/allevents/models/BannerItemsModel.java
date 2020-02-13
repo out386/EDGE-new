@@ -323,11 +323,18 @@ public class BannerItemsModel implements Parcelable {
         if (item.cN4 == null || item.cN4.isEmpty() || item.cN4.equals("null"))
             item.cN4 = null;
         try {
-            item.cNo1 = Long.parseLong(ob.getString("cNo1"));
-            item.cNo2 = Long.parseLong(ob.getString("cNo2"));
-            item.cNo3 = Long.parseLong(ob.getString("cNo3"));
-            item.cNo4 = Long.parseLong(ob.getString("cNo4"));
-        } catch (NumberFormatException ignored) {
+            item.cNo1 = ob.getLong("cNo1");
+            item.cNo2 = ob.getLong("cNo2");
+            item.cNo3 = ob.getLong("cNo3");
+            item.cNo4 = ob.getLong("cNo4");
+        } catch (JSONException e) {
+            try {
+                item.cNo1 = Long.parseLong(ob.getString("cNo1"));
+                item.cNo2 = Long.parseLong(ob.getString("cNo2"));
+                item.cNo3 = Long.parseLong(ob.getString("cNo3"));
+                item.cNo4 = Long.parseLong(ob.getString("cNo4"));
+            } catch (NumberFormatException | JSONException ignored) {
+            }
         }
         item.prevGuests = ob.getString("pG");
         if (item.prevGuests == null || item.prevGuests.isEmpty() || item.prevGuests.equals("null"))
