@@ -20,11 +20,15 @@ package com.edge2;
  *
  */
 
+import android.content.Intent;
+import android.content.IntentSender;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
+import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
@@ -33,6 +37,12 @@ import androidx.navigation.Navigation;
 import com.edge2.allevents.EventsFragment;
 import com.edge2.utils.DimenUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.play.core.appupdate.AppUpdateInfo;
+import com.google.android.play.core.appupdate.AppUpdateManager;
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.install.model.AppUpdateType;
+import com.google.android.play.core.install.model.UpdateAvailability;
+import com.google.android.play.core.tasks.Task;
 
 public class MainActivity extends ThemeActivity implements OnFragmentScrollListener {
 
@@ -44,6 +54,7 @@ public class MainActivity extends ThemeActivity implements OnFragmentScrollListe
     private int toolbarHeight;
     private ViewPropertyAnimator bottomNavAnimator;
     private ViewPropertyAnimator toolbarAnimator;
+    private AppUpdateManager appUpdateManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +69,54 @@ public class MainActivity extends ThemeActivity implements OnFragmentScrollListe
 
         setupBottomNav();
         setupInsets();
+        checkUpdate();
+    }
+
+    private void checkUpdate() {
+        appUpdateManager = AppUpdateManagerFactory.create(this);
+        Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
+
+        appUpdateInfoTask.addOnSuccessListener(appUpdateInfo -> {
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
+                if (appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                    startUpdate(appUpdateInfo);
+                }
+            }
+        });
+    }
+
+    private void startUpdate(AppUpdateInfo appUpdateInfo) {
+        try {
+            appUpdateManager
+                    .startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE,
+                            this, 2);
+        } catch (IntentSender.SendIntentException ign) {
+            // What do you even want me to do, huh? Open Play? Actually...\
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        appUpdateManager.getAppUpdateInfo()
+                .addOnSuccessListener(appUpdateInfo -> {
+                    if (appUpdateInfo.updateAvailability()
+                            == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
+                        // If an in-app update is already running, resume the update.
+                        startUpdate(appUpdateInfo);
+                    }
+                });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 2) {
+            if (resultCode != RESULT_OK) {
+                Toast.makeText(this, getString(R.string.app_update_cancel), Toast.LENGTH_LONG)
+                        .show();
+            }
+        }
     }
 
     private void setupBottomNav() {

@@ -108,4 +108,5 @@
     <string name="ca_register">Register</string>
     <string name="ca_brochure">Read the brochure</string>
     <string name="intra_coming_soon">Intra events will be announced soon</string>
+    <string name="app_update_cancel">Update canceled. Some data may be out of date.</string>
 </resources>
