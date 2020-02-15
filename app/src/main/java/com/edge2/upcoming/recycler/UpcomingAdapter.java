@@ -87,7 +87,7 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.Events
         if (iconUri != null) {
             Glide.with(imageView.getContext())
                     .load(iconUri)
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .diskCacheStrategy(DiskCacheStrategy.DATA)
                     .into(imageView);
         } else {
             imageView.setImageResource(R.drawable.ic_edge_large);

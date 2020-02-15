@@ -24,14 +24,15 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.DrawableTypeRequest;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestBuilder;
 import com.edge2.R;
 
 import pl.droidsonroids.gif.GifDrawable;
@@ -75,7 +76,7 @@ public class PeopleView extends LinearLayout {
         if (imgUrl == null) {
             imgView.setImageResource(imgRes);
         } else {
-            DrawableTypeRequest<String> req = Glide.with(context)
+            RequestBuilder<Drawable> req = Glide.with(context)
                     .load(imgUrl);
             if (splash != null)
                 req.placeholder(splash)

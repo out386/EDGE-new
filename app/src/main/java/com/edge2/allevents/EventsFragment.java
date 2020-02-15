@@ -297,7 +297,7 @@ public class EventsFragment extends BaseFragment {
         if ((isIntra && !hideEventsModel.isHideIntra())
                 || (!isIntra && !hideEventsModel.isHideEvents())) {
             if (eventsAdapter == null) {
-                viewModel.getGroups(isIntra).observe(this, events -> {
+                viewModel.getGroups(isIntra).observe(getViewLifecycleOwner(), events -> {
                     allEventsList = events;
                     eventsAdapter = new EventsAdapter(allEventsList, isIntra, this::onEventClicked);
                     mainRecycler.setAdapter(eventsAdapter);
@@ -421,14 +421,14 @@ public class EventsFragment extends BaseFragment {
                 return;
             }
 
-            viewModel.getBanner().observe(this, items -> {
+            viewModel.getBanner().observe(getViewLifecycleOwner(), items -> {
                 itemsInBanner = new ArrayList<>(items.size());
                 bannerItemslist = new ArrayList<>(items.size());
                 for (int i = 0; i < items.size(); i++) {
                     BannerItemsModel item = items.get(i);
                     Uri uri = item.getImageUri();
                     if (uri != null) {
-                        bannerItemslist.add(new Slide(i, uri, 0));
+                        bannerItemslist.add(new Slide(i, uri));
                         itemsInBanner.add(item);
                     }
                 }

@@ -71,7 +71,7 @@ public class SponsorsAdapter extends RecyclerView.Adapter<SponsorsAdapter.Sponso
         Glide.with(imageView.getContext())
                 .load(item.getImgUrl())
                 .fitCenter()
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .diskCacheStrategy(DiskCacheStrategy.DATA)
                 .into(imageView);
     }
 
