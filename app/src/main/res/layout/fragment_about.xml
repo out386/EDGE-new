@@ -424,7 +424,7 @@
                 android:paddingEnd="@dimen/margin_large"
                 android:layout_marginTop="4dp"
                 android:gravity="center_horizontal"
-                android:text="EDGE Slice: originally by Jeff Avery (Pandawoyun), and modified by Ritayan Chakraborty"
+                android:text="EDGE Slice: originally by Jeff Avery &amp; Michael Terry &amp; Pandawoyun, and improved by Ritayan Chakraborty"
                 android:lineSpacingMultiplier="1.1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
