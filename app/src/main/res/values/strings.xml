@@ -107,6 +107,22 @@
     </string>
     <string name="ca_register">Register</string>
     <string name="ca_brochure">Read the brochure</string>
+    <string name="ca_account_no_log">If you are already a Campus Ambassador, log in above with the
+        same Google account used to fill the registration form.
+    </string>
+    <string name="ca_account_not_ca">This account does not belong to a Campus Ambassador. If you are
+        already a Campus Ambassador, log in above with the same Google account used to fill the
+        registration form.
+    </string>
+    <string name="ca_firestore_error">Failed to fetch details</string>
+    <string name="ca_points_template">Points: %d</string>
     <string name="intra_coming_soon">Intra events will be announced soon</string>
     <string name="app_update_cancel">Update canceled. Some data may be out of date.</string>
+    <string name="auth_login">Log In</string>
+    <string name="auth_logout">Log Out</string>
+    <string name="auth_failed_name">Unknown User</string>
+    <string name="auth_failed_desc">Please log out and log in again</string>
+    <string name="auth_notlog_name">Not Logged In</string>
+    <string name="auth_notlog_desc">Log in using Google</string>
+    <string name="auth_failed">Failed to sign in. %s</string>
 </resources>

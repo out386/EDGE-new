@@ -34,8 +34,12 @@ import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.edge2.allevents.EventsFragment;
+import com.edge2.ca.CAFragment;
 import com.edge2.utils.DimenUtils;
+import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.auth.IdpResponse;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.play.core.appupdate.AppUpdateInfo;
 import com.google.android.play.core.appupdate.AppUpdateManager;
@@ -43,8 +47,14 @@ import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
 import com.google.android.play.core.install.model.AppUpdateType;
 import com.google.android.play.core.install.model.UpdateAvailability;
 import com.google.android.play.core.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
-public class MainActivity extends ThemeActivity implements OnFragmentScrollListener {
+import java.util.Collections;
+import java.util.List;
+
+public class MainActivity extends ThemeActivity implements OnFragmentScrollListener,
+        CAFragment.OnAuthStartListener {
 
     private BottomNavigationView bottomNav;
     private ConstraintLayout toolbar;
@@ -116,7 +126,43 @@ public class MainActivity extends ThemeActivity implements OnFragmentScrollListe
                 Toast.makeText(this, getString(R.string.app_update_cancel), Toast.LENGTH_LONG)
                         .show();
             }
+        } else if (requestCode == 5) {
+            IdpResponse response = IdpResponse.fromResultIntent(data);
+
+            if (resultCode == RESULT_OK) {
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if (user == null) {
+                    showAuthFailed(null);
+                }
+            } else {
+                String message = null;
+                if (response != null && response.getError() != null) {
+                    message = response.getError().getMessage();
+                }
+                showAuthFailed(message);
+            }
         }
+    }
+
+    private void showAuthFailed(String message) {
+        String msg = String.format(getString(R.string.auth_failed), message == null ? "" : message);
+        new MaterialDialog.Builder(this)
+                .contentColor(getColor(R.color.textHeader))
+                .backgroundColor(getColor(R.color.windowBackground))
+                .content(msg)
+                .positiveColor(getColor(R.color.textHeader))
+                .positiveText("OK")
+                .build()
+                .show();
+    }
+
+    @Override
+    public void logIn() {
+        List<AuthUI.IdpConfig> providers = Collections.singletonList(
+                new AuthUI.IdpConfig.GoogleBuilder().build());
+
+        startActivityForResult(AuthUI.getInstance()
+                .createSignInIntentBuilder().setAvailableProviders(providers).build(), 5);
     }
 
     private void setupBottomNav() {

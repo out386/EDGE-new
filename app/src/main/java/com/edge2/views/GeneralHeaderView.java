@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -32,6 +33,9 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.ViewCompat;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.edge2.R;
 
 public class GeneralHeaderView extends ConstraintLayout {
@@ -109,7 +113,37 @@ public class GeneralHeaderView extends ConstraintLayout {
         }
         if (skipTint)
             iconView.setImageTintList(null);
-        iconView.setImageDrawable(icon);
+        if (icon != null)
+            iconView.setImageDrawable(icon);
+    }
+
+    public void setData(String name, String desc, Uri iconUri, int iconPlaceholderRes,
+                        boolean skipTint) {
+        setData(name, desc, null, skipTint);
+        if (iconUri != null) {
+            Glide.with(getContext())
+                    .load(iconUri)
+                    .apply(RequestOptions.circleCropTransform())
+                    .placeholder(iconPlaceholderRes)
+                    .diskCacheStrategy(DiskCacheStrategy.DATA)
+                    .into(iconView);
+        } else {
+            iconView.setImageResource(iconPlaceholderRes);
+        }
+    }
+
+    public void setDesc(String desc) {
+        if (desc == null || desc.isEmpty()) {
+            descTv.setVisibility(INVISIBLE);
+        } else {
+            descTv.setVisibility(VISIBLE);
+            descTv.setText(desc);
+        }
+    }
+
+    public void setName(String name) {
+        if (name != null && !name.isEmpty())
+            nameTv.setText(name);
     }
 
     public void setNameTransition(String transitionName) {
