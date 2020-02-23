@@ -21,7 +21,6 @@ package com.edge2.ca;
  */
 
 import android.animation.Animator;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -31,9 +30,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.core.widget.NestedScrollView;
 import androidx.transition.Transition;
@@ -50,7 +51,15 @@ import com.google.firebase.auth.UserInfo;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import ir.androidexception.datatable.DataTable;
+import ir.androidexception.datatable.model.DataTableHeader;
+import ir.androidexception.datatable.model.DataTableRow;
 
 public class CAFragment extends BaseFragment {
     private static String URL_BROCHURE = "https://drive.google.com/open?id=10MTheTeHReLNGVpPAl1sFkjaRcT8pAY7";
@@ -66,6 +75,7 @@ public class CAFragment extends BaseFragment {
     private TextView loginPrompt;
     private GeneralHeaderView topView;
     private TextView dataPoints;
+    private DataTable dataTable;
     private int animTime;
     private int animOffset;
     private OnAuthStartListener authStartListener;
@@ -105,6 +115,7 @@ public class CAFragment extends BaseFragment {
         loadingView = view.findViewById(R.id.ca_loading);
         dataHolderView = view.findViewById(R.id.ca_data_holder);
         dataPoints = view.findViewById(R.id.ca_data_points);
+        dataTable = view.findViewById(R.id.ca_data_table);
         errorView = view.findViewById(R.id.ca_error_holder);
         loginPrompt = view.findViewById(R.id.ca_account_prompt);
 
@@ -203,6 +214,7 @@ public class CAFragment extends BaseFragment {
         loginPrompt = null;
         topView = null;
         dataPoints = null;
+        dataTable = null;
     }
 
     private void setupListeners(View rootView) {
@@ -377,7 +389,6 @@ public class CAFragment extends BaseFragment {
                 });
     }
 
-    @SuppressLint("SetTextI18n")
     private void showFirestoreData(DocumentSnapshot document) {
         Object college = document.get("college");
         if (college instanceof String)
@@ -389,9 +400,83 @@ public class CAFragment extends BaseFragment {
         if (points instanceof Number)
             dataPoints.setText(
                     String.format(
-                            getString(R.string.ca_points_template) , ((Number) points).intValue()));
+                            getString(R.string.ca_points_template), ((Number) points).intValue()));
 
+        try {
+            setupTable(document);
+        } catch (ClassCastException e) {
+            e.printStackTrace();
+            showNoTable();
+        }
         showSingleView(dataHolderView);
+    }
+
+    private void showNoTable() {
+        //TODO: Show YET ANOTHER damn view!
+    }
+
+    @SuppressWarnings("unchecked")
+    private void setupTable(DocumentSnapshot document) throws ClassCastException {
+        Object data = document.get("data");
+        if ((data instanceof Map)) {
+            Map tableData = (Map) data;
+            List<String> headers = (List<String>) tableData.get("head");
+            List<String> rowHeaders = (List<String>) tableData.get("rowHead");
+            Map<String, List<String>> rows = (Map<String, List<String>>) tableData.get("rows");
+
+            if (headers == null || headers.size() == 0
+                    || rowHeaders == null || rowHeaders.size() == 0
+                    || rows == null || rows.size() == 0) {
+                showNoTable();
+                return;
+            }
+
+            Set<String> rowsSet = rows.keySet();
+            List<String> rowsSorted = new ArrayList<>(rowsSet);
+            Collections.sort(rowsSorted);
+
+            showTable(headers, rowHeaders, rowsSorted, rows);
+        } else {
+            showNoTable();
+        }
+    }
+
+    private void showTable(List<String> columnHeaders, List<String> rowHeaders, List<String> rowNames,
+                           Map<String, List<String>> rows) {
+        DataTableHeader.Builder tableHeaders = new DataTableHeader.Builder();
+        ArrayList<DataTableRow> tableRows = new ArrayList<>();
+        tableHeaders.item("", 1); // Dummy column to accommodate row headers
+        for (String header : columnHeaders) {
+            tableHeaders.item(header, 1);
+        }
+
+        for (int i = 0; i < rowNames.size(); i++) {
+            String rowName = rowNames.get(i);
+            List<String> row = rows.get(rowName);
+            if (row == null || row.size() != columnHeaders.size()) {
+                // We messed up during data entry.
+                showSingleView(errorView);
+                Context context = getContext();
+                if (context != null)
+                    Toast.makeText(context,
+                            "Inconsistent data. Please contact Geekonix.", Toast.LENGTH_LONG)
+                            .show();
+                return;
+            }
+            DataTableRow.Builder tableRow = new DataTableRow.Builder();
+            tableRow.value(rowHeaders.get(i));    // Setting the row header
+            for (String item : row) {
+                tableRow.value(item);
+            }
+            tableRows.add(tableRow.build());
+        }
+
+        dataTable.setTypeface(ResourcesCompat.getFont(getContext(), R.font.forum));
+        dataTable.setHeader(tableHeaders.build());
+        dataTable.setRows(tableRows);
+        Context context = getContext();
+        if (context != null)
+            dataTable.inflate(context);
     }
 
     private class OnSharedElementListener implements Transition.TransitionListener {

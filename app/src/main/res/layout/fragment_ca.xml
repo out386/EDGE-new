@@ -231,8 +231,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginStart="@dimen/margin_large"
-                android:layout_marginEnd="@dimen/margin_large"
                 android:layout_marginTop="@dimen/margin_huge"
                 android:layout_marginBottom="@dimen/margin_huge"
                 android:visibility="gone"
@@ -243,8 +241,40 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
-                    style="@style/TextHeader"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    style="@style/TextHeaderLarge"
+                    android:textColor="@color/lIconFillRed"
                     tools:text="Points: 50" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="@color/cardStroke"
+                    android:layout_marginTop="@dimen/margin_huge" />
+
+                <!--The px sizes below are actually in sp, 'cause the library has an issue-->
+                <ir.androidexception.datatable.DataTable
+                    android:id="@+id/ca_data_table"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:header_gravity="center"
+                    app:row_gravity="center"
+                    app:header_vertical_padding="@dimen/margin"
+                    app:row_vertical_padding="@dimen/margin"
+                    app:header_horizontal_padding="4dp"
+                    app:row_horizontal_padding="4dp"
+                    app:header_text_size="17px"
+                    app:row_text_size="17px"
+                    app:cardBackgroundColor="@color/windowBackground"
+                    app:row_text_color="@color/textBodyLarge"
+                    app:header_text_color="@color/textHeader"
+                    app:row_background_color="@color/windowBackground"
+                    app:header_background_color="@color/windowBackground"
+                    app:divider_color="@color/cardStroke"
+                    app:corner_radius="2dp"
+                    app:direction="ltr"
+                    app:shadow="0dp" />
 
             </LinearLayout>
 
@@ -261,7 +291,7 @@
                     android:layout_width="200dp"
                     android:layout_height="200dp"
                     android:src="@drawable/ic_error"
-                    android:adjustViewBounds="true"/>
+                    android:adjustViewBounds="true" />
 
                 <TextView
                     android:id="@+id/ca_error_reason"
@@ -269,7 +299,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_huge"
                     style="@style/TextHeaderLarge"
-                    android:text="@string/ca_firestore_error"/>
+                    android:text="@string/ca_firestore_error" />
 
             </LinearLayout>
 
