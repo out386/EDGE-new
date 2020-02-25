@@ -7,10 +7,13 @@
     android:scrollbars="vertical"
     android:transitionName="@string/events_to_quick_root_transition">
 
+    <!--TODO: Please, PLEASE swap all these ViewGroups for Fragments!-->
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginBottom="150dp">
 
         <com.edge2.views.GeneralHeaderView
             android:id="@+id/top_view"
@@ -226,7 +229,7 @@
 
             </LinearLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/ca_data_holder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -236,47 +239,175 @@
                 android:visibility="gone"
                 tools:visibility="visible">
 
-                <TextView
-                    android:id="@+id/ca_data_points"
-                    android:layout_width="match_parent"
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/ca_points_chipgroup"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="@dimen/margin_huge"
                     android:layout_marginStart="@dimen/margin_large"
                     android:layout_marginEnd="@dimen/margin_large"
-                    style="@style/TextHeaderLarge"
-                    android:textColor="@color/lIconFillRed"
-                    tools:text="Points: 50" />
+                    android:layout_centerHorizontal="true"
+                    app:singleSelection="true"
+                    app:selectionRequired="true"
+                    app:checkedChip="@+id/ca_points_chip">
 
-                <View
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/ca_points_chip"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/ca_points_button"
+                        android:textAppearance="@style/TextSmallSub"
+                        android:textColor="@color/textSub"
+                        app:rippleColor="@color/lIconFillRedTransparent"
+                        app:chipBackgroundColor="@drawable/chip_bg"
+                        app:chipStrokeColor="@color/cardStroke"
+                        app:chipStrokeWidth="1dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/ca_rules_chip"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/ca_rules_button"
+                        android:textAppearance="@style/TextSmallSub"
+                        android:textColor="@color/textSub"
+                        app:rippleColor="@color/lIconFillRedTransparent"
+                        app:chipBackgroundColor="@drawable/chip_bg"
+                        app:chipStrokeColor="@color/cardStroke"
+                        app:chipStrokeWidth="1dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/ca_perks_chip"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/ca_perks_button"
+                        android:textAppearance="@style/TextSmallSub"
+                        android:textColor="@color/textSub"
+                        app:rippleColor="@color/lIconFillRedTransparent"
+                        app:chipBackgroundColor="@drawable/chip_bg"
+                        app:chipStrokeColor="@color/cardStroke"
+                        app:chipStrokeWidth="1dp" />
+
+                </com.google.android.material.chip.ChipGroup>
+
+                <LinearLayout
+                    android:id="@+id/ca_points_holder"
                     android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="@color/cardStroke"
-                    android:layout_marginTop="@dimen/margin_huge" />
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:layout_below="@+id/ca_points_chipgroup">
 
-                <!--The px sizes below are actually in sp, 'cause the library has an issue-->
-                <ir.androidexception.datatable.DataTable
-                    android:id="@+id/ca_data_table"
+                    <TextView
+                        android:id="@+id/ca_data_points"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        style="@style/TextHeaderLarge"
+                        android:textColor="@color/lIconFillRed"
+                        tools:text="Points: 50" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/cardStroke"
+                        android:layout_marginTop="@dimen/margin_huge" />
+
+                    <!--The px sizes below are actually in sp, 'cause the library has an issue-->
+                    <ir.androidexception.datatable.DataTable
+                        android:id="@+id/ca_data_table"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:header_gravity="center"
+                        app:row_gravity="center"
+                        app:header_vertical_padding="@dimen/margin"
+                        app:row_vertical_padding="@dimen/margin"
+                        app:header_horizontal_padding="4dp"
+                        app:row_horizontal_padding="4dp"
+                        app:header_text_size="17px"
+                        app:row_text_size="17px"
+                        app:cardBackgroundColor="@color/windowBackground"
+                        app:row_text_color="@color/textBodyLarge"
+                        app:header_text_color="@color/textHeader"
+                        app:row_background_color="@color/windowBackground"
+                        app:header_background_color="@color/windowBackground"
+                        app:divider_color="@color/cardStroke"
+                        app:corner_radius="2dp"
+                        app:direction="ltr"
+                        app:shadow="0dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ca_rules_holder"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:header_gravity="center"
-                    app:row_gravity="center"
-                    app:header_vertical_padding="@dimen/margin"
-                    app:row_vertical_padding="@dimen/margin"
-                    app:header_horizontal_padding="4dp"
-                    app:row_horizontal_padding="4dp"
-                    app:header_text_size="17px"
-                    app:row_text_size="17px"
-                    app:cardBackgroundColor="@color/windowBackground"
-                    app:row_text_color="@color/textBodyLarge"
-                    app:header_text_color="@color/textHeader"
-                    app:row_background_color="@color/windowBackground"
-                    app:header_background_color="@color/windowBackground"
-                    app:divider_color="@color/cardStroke"
-                    app:corner_radius="2dp"
-                    app:direction="ltr"
-                    app:shadow="0dp" />
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:orientation="vertical"
+                    android:layout_below="@+id/ca_points_chipgroup">
 
-            </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/cardStroke" />
+
+                    <!--The px sizes below are actually in sp, 'cause the library has an issue-->
+                    <ir.androidexception.datatable.DataTable
+                        android:id="@+id/ca_rules_table"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:header_gravity="center"
+                        app:row_gravity="center"
+                        app:header_vertical_padding="@dimen/margin"
+                        app:row_vertical_padding="@dimen/margin"
+                        app:header_horizontal_padding="4dp"
+                        app:row_horizontal_padding="4dp"
+                        app:header_text_size="17px"
+                        app:row_text_size="17px"
+                        app:cardBackgroundColor="@color/windowBackground"
+                        app:row_text_color="@color/textBodyLarge"
+                        app:header_text_color="@color/textHeader"
+                        app:row_background_color="@color/windowBackground"
+                        app:header_background_color="@color/windowBackground"
+                        app:divider_color="@color/cardStroke"
+                        app:corner_radius="2dp"
+                        app:direction="ltr"
+                        app:shadow="0dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:justificationMode="inter_word"
+                        android:text="@string/ca_rule_desc"
+                        style="@style/TextBody"
+                        android:layout_marginStart="@dimen/margin_large"
+                        android:layout_marginEnd="@dimen/margin_large"
+                        android:layout_marginTop="@dimen/margin_huge" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ca_perks_holder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:layout_below="@+id/ca_points_chipgroup"
+                    tools:visibility="visible">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/TextBodyLarge"
+                        android:text="@string/ca_perks"
+                        android:layout_marginStart="@dimen/margin_large"
+                        android:layout_marginEnd="@dimen/margin_large" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
 
             <LinearLayout
                 android:id="@+id/ca_error_holder"
@@ -285,7 +416,8 @@
                 android:orientation="vertical"
                 android:layout_marginTop="50dp"
                 android:gravity="center_horizontal"
-                android:visibility="gone">
+                android:visibility="gone"
+                tools:ignore="UseCompoundDrawables">
 
                 <ImageView
                     android:layout_width="200dp"

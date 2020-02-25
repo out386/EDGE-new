@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="ca_rule_evs">
+        <item>@string/ca_rule_ev1</item>
+        <item>@string/ca_rule_ev2</item>
+        <item>@string/ca_rule_ev3</item>
+        <item>@string/ca_rule_ev4</item>
+        <item>@string/ca_rule_ev5</item>
+        <item>@string/ca_rule_ev6</item>
+        <item>@string/ca_rule_ev7</item>
+        <item>@string/ca_rule_ev8</item>
+        <item>@string/ca_rule_ev9</item>
+        <item>@string/ca_rule_ev10</item>
+    </string-array>
+    <string-array name="ca_rule_pts">
+        <item>@string/ca_rule_pt1</item>
+        <item>@string/ca_rule_pt2</item>
+        <item>@string/ca_rule_pt3</item>
+        <item>@string/ca_rule_pt4</item>
+        <item>@string/ca_rule_pt5</item>
+        <item>@string/ca_rule_pt6</item>
+        <item>@string/ca_rule_pt7</item>
+        <item>@string/ca_rule_pt8</item>
+        <item>@string/ca_rule_pt9</item>
+        <item>@string/ca_rule_pt10</item>
+    </string-array>
+</resources>

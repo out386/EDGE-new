@@ -116,6 +116,9 @@
     </string>
     <string name="ca_firestore_error">Failed to fetch details</string>
     <string name="ca_points_template">Points: %d</string>
+    <string name="ca_points_button">Current Points</string>
+    <string name="ca_rules_button">Score Table</string>
+    <string name="ca_perks_button">Perks</string>
     <string name="intra_coming_soon">Intra events will be announced soon</string>
     <string name="app_update_cancel">Update canceled. Some data may be out of date.</string>
     <string name="auth_login">Log In</string>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ca_rule_ev1">1 Poster share through WA, IG or FB story</string>
+    <string name="ca_rule_ev2">Poster on social media platform</string>
+    <string name="ca_rule_ev3">Get students to purchase 1 coupon</string>
+    <string name="ca_rule_ev4">Get students to participate in workshop – [28–29th Mar]</string>
+    <string name="ca_rule_ev5">Get students to participate in Strokes (art competition)</string>
+    <string name="ca_rule_ev6">Get students to participate in 1 event in EDGE</string>
+    <string name="ca_rule_ev7">Get students to participate in workshop [17–19th Apr]</string>
+    <string name="ca_rule_ev8">Purchase EDGE official merchandise</string>
+    <string name="ca_rule_ev9">Display \'EDGE_20\' poster in your college campus (notice board or
+        any prominent place)
+    </string>
+    <string name="ca_rule_ev10">Provide us with student database of 1st &amp; 2nd year students of
+        your college
+    </string>
+
+    <string name="ca_rule_pt1">0.5–1.5 *</string>
+    <string name="ca_rule_pt2">1–2.5 *</string>
+    <string name="ca_rule_pt3">7–10 *</string>
+    <string name="ca_rule_pt4">20</string>
+    <string name="ca_rule_pt5">8</string>
+    <string name="ca_rule_pt6">4</string>
+    <string name="ca_rule_pt7">14</string>
+    <string name="ca_rule_pt8">5–12 *</string>
+    <string name="ca_rule_pt9">4</string>
+    <string name="ca_rule_pt10">45</string>
+
+    <string name="ca_rule_desc">All the * marked Point(s) are to be instructed in the official
+        \'EDGE_20 CA\' Whatsapp group.
+    </string>
+
+    <!--Don't blame me for this mess - a single ul doesn't work, and Spannables are overrated-->
+    <string name="ca_perks">
+        <ul>
+            <li>
+                EDGE_20 Campus Ambassadors will be provided with 1 month of Amazon
+                Prime subscription with <font color='#DF2A26'>minimum 105 points</font> <b>(consisting
+                of at least 3 coupons + 1 workshop [28-29th mar] + 5 EDGE registrations.</b>
+            </li>
+        </ul>
+        \n\n
+        <ul>
+            <li>
+                EDGE_20 Campus Ambassadors will be provided with 1 month of Netflix subscription
+                with <font color='#DF2A26'>minimum 120 points</font> <b>(consisting of at least 4
+                coupons + 2 workshops [28-29th mar] + 5 EDGE registrations.</b>
+            </li>
+        </ul>
+        \n\n
+        <ul>
+            <li>
+                EDGE_20 Campus Ambassadors will be provided with 1 year of Amazon Prime
+                subscription with <font color='#DF2A26'>minimum 250 points</font> <b>(consisting of
+                at least 10 coupons + 4 workshops [28-29th mar] + 10 EDGE registrations.</b>
+            </li>
+        </ul>
+    </string>
+</resources>
