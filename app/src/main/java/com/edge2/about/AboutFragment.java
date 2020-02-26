@@ -133,6 +133,7 @@ public class AboutFragment extends BaseFragment {
                 Uri.parse("https://twitter.com/geekonixedge"))));
 
         aboutLicence.setOnClickListener(view -> new LibsBuilder()
+                .withFields(R.string.class.getFields())
                 .start(requireContext()));
 
         aboutPrivacy.setOnClickListener(view -> startActivity(new Intent(Intent.ACTION_VIEW,

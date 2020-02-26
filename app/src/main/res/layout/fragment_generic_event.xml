@@ -41,6 +41,7 @@
                     android:layout_marginStart="@dimen/margin_large"
                     android:layout_marginEnd="@dimen/margin_large"
                     android:background="@color/windowBackground"
+                    android:autoLink="all"
                     tools:text="@sample/single_event_short_desc" />
 
                 <View
