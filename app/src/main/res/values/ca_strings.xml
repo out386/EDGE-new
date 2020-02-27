@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="ca_rule_ev1">1 Poster share through WA, IG or FB story</string>
-    <string name="ca_rule_ev2">Poster on social media platform</string>
+    <string name="ca_rule_ev1">Share 1 poster through WhatsApp, Insta, or FB story</string>
+    <string name="ca_rule_ev2">Upload posters on social media platforms (FB or Insta)</string>
     <string name="ca_rule_ev3">Get students to purchase 1 coupon</string>
-    <string name="ca_rule_ev4">Get students to participate in workshop – [28–29th Mar]</string>
-    <string name="ca_rule_ev5">Get students to participate in Strokes (art competition)</string>
-    <string name="ca_rule_ev6">Get students to participate in 1 event in EDGE</string>
+    <string name="ca_rule_ev4">Get 1 student to participate in workshop – [28–29th Mar]</string>
+    <string name="ca_rule_ev5">Get 1 student to participate in Strokes (art competition)</string>
+    <string name="ca_rule_ev6">Get 1 student to participate in 1 event in EDGE</string>
     <string name="ca_rule_ev7">Get students to participate in workshop [17–19th Apr]</string>
     <string name="ca_rule_ev8">Purchase EDGE official merchandise</string>
     <string name="ca_rule_ev9">Display \'EDGE_20\' poster in your college campus (notice board or
@@ -15,28 +15,31 @@
         your college
     </string>
 
-    <string name="ca_rule_pt1">0.5–1.5 *</string>
-    <string name="ca_rule_pt2">1–2.5 *</string>
-    <string name="ca_rule_pt3">7–10 *</string>
+    <string name="ca_rule_pt1">0.5/1.5 *</string>
+    <string name="ca_rule_pt2">1/2.5 *</string>
+    <string name="ca_rule_pt3">7/10 *</string>
     <string name="ca_rule_pt4">20</string>
     <string name="ca_rule_pt5">8</string>
     <string name="ca_rule_pt6">4</string>
     <string name="ca_rule_pt7">14</string>
-    <string name="ca_rule_pt8">5–12 *</string>
+    <string name="ca_rule_pt8">5/12 *</string>
     <string name="ca_rule_pt9">4</string>
     <string name="ca_rule_pt10">45</string>
 
     <string name="ca_rule_desc">All the * marked Point(s) are to be instructed in the official
         \'EDGE_20 CA\' Whatsapp group.
     </string>
+    <string name="ca_perks_title">Perks for our CAs</string>
+    <string name="ca_rules_title">Rewards</string>
 
-    <!--Don't blame me for this mess - a single ul doesn't work, and Spannables are overrated-->
-    <string name="ca_perks">
+    <!--Don't blame me for this mess - a single ul doesn't work, and Spannables and CDATA are overrated-->
+    <string name="ca_rewards">
         <ul>
             <li>
                 EDGE_20 Campus Ambassadors will be provided with 1 month of Amazon
-                Prime subscription with <font color='#DF2A26'>minimum 105 points</font> <b>(consisting
-                of at least 3 coupons + 1 workshop [28-29th mar] + 5 EDGE registrations.</b>
+                Prime subscription with <font color='#DF2A26'>minimum 105 points</font>
+                <b>(consisting of at least 3 coupons + 1 student for workshop [28-29th mar] +
+                5 EDGE registrations.</b>
             </li>
         </ul>
         \n\n
@@ -44,7 +47,7 @@
             <li>
                 EDGE_20 Campus Ambassadors will be provided with 1 month of Netflix subscription
                 with <font color='#DF2A26'>minimum 120 points</font> <b>(consisting of at least 4
-                coupons + 2 workshops [28-29th mar] + 5 EDGE registrations.</b>
+                coupons + 2 students for workshop [28-29th mar] + 5 EDGE registrations.</b>
             </li>
         </ul>
         \n\n
@@ -52,8 +55,37 @@
             <li>
                 EDGE_20 Campus Ambassadors will be provided with 1 year of Amazon Prime
                 subscription with <font color='#DF2A26'>minimum 250 points</font> <b>(consisting of
-                at least 10 coupons + 4 workshops [28-29th mar] + 10 EDGE registrations.</b>
+                at least 10 coupons + 4 students for workshop [28-29th mar] + 10 EDGE
+                registrations.</b>
             </li>
+        </ul>
+    </string>
+
+    <string name="ca_perks">
+        <ul>
+          <li>Imbue leadership and management skills.</li>
+        </ul>
+        \n
+        <ul>
+          <li>Top 10 CAs get assured e-certificates.</li>
+        </ul>
+        \n
+        <ul>
+          <li>A chance to win exciting gifts and accessories.</li>
+        </ul>
+        \n
+        <ul>
+          <li>The top 5 Campus Ambassadors will get certificates along with goodies.</li>
+        </ul>
+        \n
+        <ul>
+          <li>Top 3 CAs will get goodies, certificates and a recommendation letter from the teacher
+              convenor of our Technical Committee as well as LinkedIn recommendation from our
+              official page.</li>
+        </ul>
+        \n
+        <ul>
+          <li>An unparalleled experience of associating with EDGE.</li>
         </ul>
     </string>
 </resources>

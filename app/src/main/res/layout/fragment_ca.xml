@@ -342,7 +342,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/ca_rules_holder"
+                    android:id="@+id/ca_fixedpoints_holder"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
@@ -390,12 +390,21 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/ca_perks_holder"
+                    android:id="@+id/ca_rules_holder"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
+                    android:orientation="vertical"
                     android:layout_below="@+id/ca_points_chipgroup"
                     tools:visibility="visible">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/ca_perks_title"
+                        style="@style/TextHeader"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="@dimen/margin_large" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -404,6 +413,30 @@
                         android:text="@string/ca_perks"
                         android:layout_marginStart="@dimen/margin_large"
                         android:layout_marginEnd="@dimen/margin_large" />
+
+                    <View
+                        android:id="@+id/divider4"
+                        android:layout_width="match_parent"
+                        android:layout_height="6dp"
+                        android:layout_marginTop="@dimen/margin_huge"
+                        android:background="@color/divider" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/ca_rules_title"
+                        style="@style/TextHeader"
+                        android:layout_marginTop="@dimen/margin_huge"
+                        android:layout_gravity="center_horizontal" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/TextBodyLarge"
+                        android:text="@string/ca_rewards"
+                        android:layout_marginStart="@dimen/margin_large"
+                        android:layout_marginEnd="@dimen/margin_large"
+                        android:layout_marginTop="@dimen/margin_large" />
 
                 </LinearLayout>
 

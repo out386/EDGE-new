@@ -127,8 +127,8 @@ public class CAFragment extends BaseFragment {
         rulesTable = view.findViewById(R.id.ca_rules_table);
         pointsChipGroup = view.findViewById(R.id.ca_points_chipgroup);
         pointsHolder = view.findViewById(R.id.ca_points_holder);
-        rulesHolder = view.findViewById(R.id.ca_rules_holder);
-        perksHolder = view.findViewById(R.id.ca_perks_holder);
+        rulesHolder = view.findViewById(R.id.ca_fixedpoints_holder);
+        perksHolder = view.findViewById(R.id.ca_rules_holder);
         errorView = view.findViewById(R.id.ca_error_holder);
         loginPrompt = view.findViewById(R.id.ca_account_prompt);
 
@@ -548,8 +548,8 @@ public class CAFragment extends BaseFragment {
         String[] rowHeaders = getResources().getStringArray(R.array.ca_rule_evs);
         String[] data = getResources().getStringArray(R.array.ca_rule_pts);
         DataTableHeader.Builder tableHeaders = new DataTableHeader.Builder()
-                .item("PARTICULARS", 2)
-                .item("POINTS", 1);
+                .item("EVENTS", 2)
+                .item("POINTS YOU GET", 1);
 
         for (int i = 0; i < rowHeaders.length; i++) {
             DataTableRow.Builder tableRow = new DataTableRow.Builder();
