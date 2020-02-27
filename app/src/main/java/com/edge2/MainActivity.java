@@ -83,7 +83,7 @@ public class MainActivity extends ThemeActivity implements OnFragmentScrollListe
     }
 
     private void checkUpdate() {
-        appUpdateManager = AppUpdateManagerFactory.create(this);
+        appUpdateManager = AppUpdateManagerFactory.create(getApplicationContext());
         Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
 
         appUpdateInfoTask.addOnSuccessListener(appUpdateInfo -> {
