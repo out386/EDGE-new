@@ -473,7 +473,7 @@ public class CAFragment extends BaseFragment {
             List<Integer> tableData = convertToIntList((List) data);
 
             // Not translatable; I don't care. Move it to Strings if you do.
-            String[] headers = {"PARTICULARS", "POINTS"};
+            String[] headers = {"EVENTS", "POINTS"};
             String[] rowHeaders = {"Poster", "Merchandise", "Workshop [on 28-29th Mar]", "Strokes",
                     "Coupon(s)", "EDGE event registration", "Workshop [17-19th Apr]"};
             showTable(headers, rowHeaders, tableData);
