@@ -6,8 +6,8 @@ android {
         applicationId "com.gx.edg"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 25
-        versionName "3.0.2"
+        versionCode 26
+        versionName "3.1.0"
     }
     buildTypes {
         release {
