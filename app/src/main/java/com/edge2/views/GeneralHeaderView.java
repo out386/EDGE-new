@@ -103,7 +103,7 @@ public class GeneralHeaderView extends ConstraintLayout {
         setData(name, desc, icon, skipTint);
     }
 
-    private void setData(String name, String desc, Drawable icon, boolean skipTint) {
+    public void setData(String name, String desc, Drawable icon, boolean skipTint) {
         nameTv.setText(name);
         if (desc == null || desc.isEmpty()) {
             descTv.setVisibility(INVISIBLE);

@@ -39,6 +39,7 @@ import java.util.List;
 public class DataViewModel extends AndroidViewModel {
     private DataRepo dataRepo;
     private MutableLiveData<HideEventsModel> hideEventsLD;
+    private MutableLiveData<String> resultStatLD;
     private Context context;
 
     public DataViewModel(Application app) {
@@ -52,6 +53,13 @@ public class DataViewModel extends AndroidViewModel {
             hideEventsLD = new MutableLiveData<>();
         dataRepo.fetchIsEventsHidden(context, hideEventsLD);
         return hideEventsLD;
+    }
+
+    public LiveData<String> getResultStat() {
+        if (resultStatLD == null)
+            resultStatLD = new MutableLiveData<>();
+        dataRepo.fetchResultStat(resultStatLD);
+        return resultStatLD;
     }
 
     public LiveData<List<BannerItemsModel>> getBanner() {

@@ -133,7 +133,15 @@
         android:id="@+id/resultsFragment"
         android:name="com.edge2.results.ResultsFragment"
         android:label="fragment_results"
-        tools:layout="@layout/fragment_placeholder" />
+        tools:layout="@layout/fragment_placeholder">
+        <action
+            android:id="@+id/action_results_to_resultsEvents"
+            app:destination="@id/resultsEventsFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+    </fragment>
     <fragment
         android:id="@+id/upcomingFragment"
         android:name="com.edge2.upcoming.UpcomingFragment"
@@ -157,4 +165,22 @@
         android:name="com.edge2.ca.CAFragment"
         android:label="fragment_ca"
         tools:layout="@layout/fragment_ca" />
+    <fragment
+        android:id="@+id/resultsEventsFragment"
+        android:name="com.edge2.results.ResultsEventsFragment"
+        android:label="fragment_results_events"
+        tools:layout="@layout/fragment_results_events">
+        <action
+            android:id="@+id/action_resultsEvents_to_details"
+            app:destination="@id/resultsDetailsFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/resultsDetailsFragment"
+        android:name="com.edge2.results.ResultsDetailsFragment"
+        android:label="fragment_results_details"
+        tools:layout="@layout/fragment_results_details" />
 </navigation>

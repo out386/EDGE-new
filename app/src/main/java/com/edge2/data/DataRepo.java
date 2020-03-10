@@ -40,6 +40,7 @@ import com.edge2.allevents.models.GroupsModel;
 import com.edge2.allevents.models.HideEventsModel;
 import com.edge2.event.EventCategoryModel;
 import com.edge2.eventdetails.models.EventDetailsModel;
+import com.edge2.results.ResultsFragment;
 import com.edge2.sponsors.SponsorsModel;
 import com.edge2.utils.Logger;
 
@@ -426,6 +427,17 @@ public class DataRepo {
             eventsHiddenListener.setLd(liveData);
         }
         requestQueue.add(isEventsHiddenRequest);
+    }
+
+    void fetchResultStat(MutableLiveData<String> liveData) {
+        StringRequest resultStatRequest = new StringRequest(Request.Method.GET,
+                BuildConfig.URL_RESULT_STAT,
+                liveData::setValue,
+                error -> liveData.setValue(ResultsFragment.STAT_FETCH_ERR));
+        resultStatRequest.setShouldCache(false).setRetryPolicy(
+                new DefaultRetryPolicy(15000, 0, 1f));
+
+        requestQueue.add(resultStatRequest);
     }
 
     private class EventsHiddenListener implements Response.Listener<String> {

@@ -22,12 +22,13 @@ package com.edge2.results;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -44,6 +45,9 @@ import com.edge2.BaseFragment;
 import com.edge2.R;
 import com.edge2.allevents.models.GroupsModel;
 import com.edge2.data.DataViewModel;
+import com.edge2.event.EventCategoryModel;
+import com.edge2.event.EventFragment;
+import com.edge2.results.recycler.EventsAdapter;
 import com.edge2.results.recycler.GroupsAdapter;
 import com.edge2.results.recycler.ItemDecoration;
 import com.edge2.transitions.MoveTransition;
@@ -52,102 +56,84 @@ import com.edge2.views.GeneralHeaderView;
 
 import java.util.List;
 
-public class ResultsFragment extends BaseFragment {
-    public static final String STAT_FETCH_ERR = "err";
-    public static final String KEY_IS_INTRA = "isIntra";
+public class ResultsEventsFragment extends BaseFragment {
+    static final String KEY_GROUP_NAME = "groupName";
+    static final String KEY_GROUP_IMAGE = "groupImage";
 
-    private OnSharedElementListener sharedElementListener;
-    private MoveTransition transition;
+    //private OnSharedElementListener sharedElementListener;
+    //private MoveTransition transition;
     private GeneralHeaderView topView;
     private RecyclerView recyclerView;
-    private GroupsAdapter adapter;
+    private EventsAdapter adapter;
     private ItemDecoration itemDecoration;
-    private TextView messageView;
-    private View contentView;
-    private List<GroupsModel> allEventsList;
-    private boolean isIntra = true;
+    private List<EventCategoryModel> eventsList;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        //postponeEnterTransition();
-        View v = inflater.inflate(R.layout.fragment_results, container, false);
+        View v = inflater.inflate(R.layout.fragment_results_events, container, false);
 
         topView = v.findViewById(R.id.top_view);
-        messageView = v.findViewById(R.id.result_msg_view);
         recyclerView = v.findViewById(R.id.result_recycler);
-        transition = new MoveTransition(null);
-        setSharedElementEnterTransition(transition);
-        setSharedElementReturnTransition(transition);
+        //transition = new MoveTransition(null);
+        //setSharedElementEnterTransition(transition);
+        //setSharedElementReturnTransition(transition);
+
+        Bundle args = getArguments();
+        if (args == null) {
+            Context context = getContext();
+            if (context == null)
+                return v;
+            Toast.makeText(context, "Internal error", Toast.LENGTH_SHORT).show();
+            return v;
+        }
+
+        topView.setData(getString(R.string.results_title), args.getString(KEY_GROUP_NAME),
+                getResources().getDrawable(args.getInt(KEY_GROUP_IMAGE), null), false);
         return v;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        contentView = view.findViewById(R.id.placeholder_content);
         NestedScrollView scrollView = view.findViewById(R.id.placeholder_scroll);
 
         topView.setNameTransition(getString(R.string.events_to_quick_title_transition));
         topView.setDescTransition(getString(R.string.events_to_quick_desc_transition));
         topView.setIconTransition(getString(R.string.events_to_quick_icon_transition));
-        topView.setData(R.string.results_title, R.string.results_wait,
-                R.drawable.ic_result, false);
 
-        if (sharedElementListener != null) {
+        /*if (sharedElementListener != null) {
             transition.removeListener(sharedElementListener);
         }
-        sharedElementListener = new OnSharedElementListener(topView, contentView);
-        transition.addListener(sharedElementListener);
+        sharedElementListener = new OnSharedElementListener(topView, recyclerView);
+        transition.addListener(sharedElementListener);*/
 
         // Show the toolbar
         onFragmentScrollListener.onListScrolled(0, Integer.MAX_VALUE);
-        setupWindowInsets(view, contentView, topView, false,
+        setupWindowInsets(view, recyclerView, topView, false,
                 false, null);
         topView.post(() ->
                 setupScrollListener(scrollView, topView.getHeight()));
 
         //if (savedInstanceState != null)
-            topView.showImage(0);
-        setupResults();
-    }
-
-    private void setupResults() {
-        FragmentActivity activity = getActivity();
-        if (activity == null)
-            return;
-        DataViewModel viewModel = ViewModelProviders.of(activity).get(DataViewModel.class);
-        if (getView() != null) {
-            viewModel.getResultStat()
-                    .observe(getViewLifecycleOwner(), res -> {
-                        if (STAT_FETCH_ERR.equals(res)) {
-                            messageView.setText(getString(R.string.results_fetch_fail));
-                            messageView.setVisibility(View.VISIBLE);
-                            recyclerView.setVisibility(View.GONE);
-                        } else if (res == null) {
-                            messageView.setText(getString(R.string.results_not_decl));
-                            messageView.setVisibility(View.VISIBLE);
-                            recyclerView.setVisibility(View.GONE);
-                        } else {
-                            // TODO: Replace this insanely ugly isIntra check
-                            isIntra = res.contains("Intra");
-                            topView.setDesc(res);
-                            messageView.setVisibility(View.GONE);
-                            recyclerView.setVisibility(View.VISIBLE);
-                            setupRecycler(viewModel, isIntra);
-                        }
-                    });
-        } else {
-            messageView.setText(getString(R.string.results_fetch_fail));
-            recyclerView.setVisibility(View.GONE);
+        //    topView.showImage(0);
+        Bundle args = getArguments();
+        if (args != null) {
+            setupRecycler(args.getBoolean(ResultsFragment.KEY_IS_INTRA),
+                    args.getString(KEY_GROUP_NAME));
         }
-
     }
 
-    private void setupRecycler(DataViewModel viewModel, boolean isIntra) {
-        Context context = getContext();
+    private void setupRecycler(boolean isIntra, String groupName) {
+        FragmentActivity context = getActivity();
         if (context == null)
             return;
+        DataViewModel viewModel = ViewModelProviders.of(context).get(DataViewModel.class);
 
         if (recyclerView.getLayoutManager() == null) {
             float itemSize = getResources().getDimensionPixelSize(R.dimen.allevents_main_events_img_w) +
@@ -160,24 +146,25 @@ public class ResultsFragment extends BaseFragment {
 
         if (adapter == null) {
             if (getView() != null) {
-                viewModel.getGroups(isIntra).observe(getViewLifecycleOwner(), events -> {
-                    allEventsList = events;
-                    adapter = new GroupsAdapter(allEventsList, isIntra, (p, rv, iv, nv, cv, v5) ->
+                viewModel.getCategories(isIntra, groupName).observe(getViewLifecycleOwner(), events -> {
+                    eventsList = events;
+                    adapter = new EventsAdapter(eventsList, isIntra, (p, rv, iv, nv, cv, v5) ->
                             onEventClicked(p, rv, iv, nv, isIntra));
                     recyclerView.setAdapter(adapter);
                 });
+                recyclerView.setVisibility(View.VISIBLE);
             } else {
-                messageView.setText(getString(R.string.results_fetch_fail));
                 recyclerView.setVisibility(View.GONE);
             }
         } else {
+            recyclerView.setVisibility(View.VISIBLE);
             recyclerView.setAdapter(adapter);
         }
     }
 
     private void onEventClicked(int position, View rootView, View imageView,
                                 View nameView, boolean isIntra) {
-        GroupsModel item = allEventsList.get(position);
+        EventCategoryModel item = eventsList.get(position);
         String transitionImgName = getString(R.string.events_to_sub_img_transition);
         String transitionNameName = getString(R.string.events_to_sub_name_transition);
         String transitionRootName = getString(R.string.events_to_sub_root_transition);
@@ -190,17 +177,15 @@ public class ResultsFragment extends BaseFragment {
                 .build();
 
         Bundle args = new Bundle();
-        args.putString(ResultsEventsFragment.KEY_GROUP_NAME, item.getName());
-        args.putInt(ResultsEventsFragment.KEY_GROUP_IMAGE, item.getImage());
-        args.putBoolean(KEY_IS_INTRA, isIntra);
+        args.putString(ResultsDetailsFragment.KEY_EVENT_NAME, item.getName());
+        args.putInt(ResultsDetailsFragment.KEY_EVENT_IMAGE, item.getIcon());
 
         NavHostFragment.findNavController(this)
-                .navigate(R.id.action_results_to_resultsEvents, args, null, extras);
+                .navigate(R.id.action_resultsEvents_to_details, args, null, extras);
     }
 
     private int getRecyclerColumnCount(Context context, View child, float pxWidth) {
-        int totalPadding = contentView.getPaddingRight() + contentView.getPaddingLeft()
-                + child.getPaddingRight() + child.getPaddingLeft();
+        int totalPadding = child.getPaddingRight() + child.getPaddingLeft();
         pxWidth += child.getPaddingRight() + child.getPaddingLeft();
         int screenWidth = DimenUtils.getWindowWidth(context) - totalPadding;
         int columnCount = (int) Math.floor(screenWidth / pxWidth) - 1;
@@ -210,18 +195,16 @@ public class ResultsFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (sharedElementListener != null) {
+        /*if (sharedElementListener != null) {
             transition.removeListener(sharedElementListener);
             sharedElementListener = null;
         }
         transition.onDestroy();
-        transition = null;
+        transition = null;*/
         topView = null;
         recyclerView.setAdapter(null);
         recyclerView.removeItemDecoration(itemDecoration);
         itemDecoration = null;
-        messageView = null;
-        contentView = null;
     }
 
     private class OnSharedElementListener implements Transition.TransitionListener {
@@ -231,6 +214,7 @@ public class ResultsFragment extends BaseFragment {
         private View contentView;
         private Interpolator interpolator;
 
+        // TODO: Use itemanimator instead of translation
         OnSharedElementListener(GeneralHeaderView topView, View contentView) {
             animTime = getResources().getInteger(android.R.integer.config_mediumAnimTime);
             animOffset = getResources().getDimensionPixelOffset(R.dimen.item_animate_h_offset);
