@@ -30,22 +30,21 @@ import androidx.annotation.NonNull;
 import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.edge2.R;
-import com.edge2.allevents.models.GroupsModel;
-import com.edge2.event.EventCategoryModel;
+import com.edge2.results.ResultsModel;
 import com.edge2.views.CustomViewOnClickedListener;
 import com.edge2.views.OnClickListener;
 
 import java.util.List;
 
-public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsViewHolder> {
-    private List<EventCategoryModel> items;
-    private boolean isIntra;
+public class SubsAdapter extends RecyclerView.Adapter<SubsAdapter.EventsViewHolder> {
+    private List<ResultsModel.ScreenItem> items;
     private CustomViewOnClickedListener listener;
 
-    public EventsAdapter(List<EventCategoryModel> items, boolean isIntra, @NonNull OnClickListener listener) {
+    public SubsAdapter(List<ResultsModel.ScreenItem> items, @NonNull OnClickListener listener) {
         this.items = items;
-        this.isIntra = isIntra;
         this.listener = new CustomViewOnClickedListener(listener);
     }
 
@@ -59,24 +58,36 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsView
 
     @Override
     public void onBindViewHolder(@NonNull EventsViewHolder holder, int position) {
-        EventCategoryModel item = items.get(position);
+        ResultsModel.ScreenItem item = items.get(position);
         View root = holder.rootView;
-        TextView name = holder.eventName;
-        TextView count = holder.eventSubCount;
-        ImageView imageView = holder.eventImage;
-        holder.eventName.setText(item.getName());
-        holder.eventSubCount.setVisibility(View.GONE);
-        imageView.setImageResource(item.getIcon());
+        TextView name = holder.screenName;
+        TextView desc = holder.screenDesc;
+        ImageView imageView = holder.screenImage;
+        String descStr = item.getDesc();
+
+        name.setText(item.getName());
+        if (descStr == null || "".equals(descStr)) {
+            desc.setVisibility(View.GONE);
+        } else {
+            desc.setVisibility(View.VISIBLE);
+            desc.setText(descStr);
+        }
+
+        imageView.setColorFilter(imageView.getContext().getColor(R.color.lIconFillRed));
+        Glide.with(imageView.getContext())
+                .load(item.getIconUriString())
+                .diskCacheStrategy(DiskCacheStrategy.DATA)
+                .into(imageView);
 
         ViewCompat.setTransitionName(imageView, "img" + position);
         ViewCompat.setTransitionName(name, "name" + position);
         ViewCompat.setTransitionName(root, "root" + position);
 
         root.setOnClickListener(view ->
-                listener.onClick(position, root, imageView, name, count, null)
+                listener.onClick(position, root, imageView, name, desc, null)
         );
-        holder.eventButton.setOnClickListener(view ->
-                listener.onClick(position, root, imageView, name, count, null)
+        holder.screenButton.setOnClickListener(view ->
+                listener.onClick(position, root, imageView, name, desc, null)
         );
     }
 
@@ -87,18 +98,18 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsView
 
     static class EventsViewHolder extends RecyclerView.ViewHolder {
         View rootView;
-        ImageView eventImage;
-        ImageView eventButton;
-        TextView eventName;
-        TextView eventSubCount;
+        ImageView screenImage;
+        ImageView screenButton;
+        TextView screenName;
+        TextView screenDesc;
 
         EventsViewHolder(View item) {
             super(item);
             rootView = item;
-            eventImage = item.findViewById(R.id.event_image);
-            eventButton = item.findViewById(R.id.event_button);
-            eventName = item.findViewById(R.id.event_name);
-            eventSubCount = item.findViewById(R.id.event_num_sub);
+            screenImage = item.findViewById(R.id.event_image);
+            screenButton = item.findViewById(R.id.event_button);
+            screenName = item.findViewById(R.id.event_name);
+            screenDesc = item.findViewById(R.id.event_num_sub);
         }
     }
 

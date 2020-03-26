@@ -21,7 +21,8 @@ android {
             buildConfigField('String', 'URL_DETAILS_DB_VERSION', url_details_db_version)
             buildConfigField('String', 'URL_BANNER_DB_VERSION', url_banner_db_version)
             buildConfigField('String', 'URL_EVENTS_HIDDEN', url_events_hidden)
-            buildConfigField('String', 'URL_RESULT_STAT', url_result_stat)
+            buildConfigField('String', 'URL_RESULT_BASE', url_result_base)
+            buildConfigField('String', 'URL_RESULT_PICS', url_result_pics)
         }
         debug {
             minifyEnabled false
@@ -31,7 +32,8 @@ android {
             buildConfigField('String', 'URL_DETAILS_DB_VERSION', url_details_db_version_dev)
             buildConfigField('String', 'URL_BANNER_DB_VERSION', url_banner_db_version_dev)
             buildConfigField('String', 'URL_EVENTS_HIDDEN', url_events_hidden_dev)
-            buildConfigField('String', 'URL_RESULT_STAT', url_result_stat_dev)
+            buildConfigField('String', 'URL_RESULT_BASE', url_result_base_dev)
+            buildConfigField('String', 'URL_RESULT_PICS', url_result_pics_dev)
         }
     }
     compileOptions {
@@ -69,6 +71,7 @@ dependencies {
 
     implementation 'com.mikepenz:aboutlibraries-core:8.0.0-b05'
     implementation 'com.mikepenz:aboutlibraries:8.0.0-b05'
+    implementation 'com.squareup.moshi:moshi:1.9.2'
 
     releaseImplementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta01'
     releaseImplementation 'com.google.firebase:firebase-analytics:17.2.2'

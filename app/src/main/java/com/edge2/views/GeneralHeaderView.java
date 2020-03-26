@@ -34,6 +34,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.ViewCompat;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.edge2.R;
@@ -116,15 +117,20 @@ public class GeneralHeaderView extends ConstraintLayout {
         if (icon != null)
             iconView.setImageDrawable(icon);
     }
-
     public void setData(String name, String desc, Uri iconUri, int iconPlaceholderRes,
                         boolean skipTint) {
+        setData(name, desc, iconUri, iconPlaceholderRes, skipTint, false);
+    }
+
+    public void setData(String name, String desc, Uri iconUri, int iconPlaceholderRes,
+                        boolean skipTint, boolean skipCircle) {
         setData(name, desc, null, skipTint);
         if (iconUri != null) {
-            Glide.with(getContext())
-                    .load(iconUri)
-                    .apply(RequestOptions.circleCropTransform())
-                    .placeholder(iconPlaceholderRes)
+            RequestBuilder<Drawable> builder = Glide.with(getContext())
+                    .load(iconUri);
+            if (!skipCircle)
+                builder.apply(RequestOptions.circleCropTransform());
+            builder.placeholder(iconPlaceholderRes)
                     .diskCacheStrategy(DiskCacheStrategy.DATA)
                     .into(iconView);
         } else {

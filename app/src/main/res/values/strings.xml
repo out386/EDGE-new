@@ -86,7 +86,7 @@
     <string name="registration_title">Registration</string>
     <string name="registration_desc">Registrations are not open yet</string>
     <string name="results_title">Results</string>
-    <string name="results_desc">Results for Intra College Fest \'20</string>
+    <string name="results_desc">Results for events under EDGE</string>
     <string name="results_wait">Fetching details</string>
     <string name="results_fetch_fail">Failed to fetch results</string>
     <string name="results_not_decl">Results have not been declared yet</string>

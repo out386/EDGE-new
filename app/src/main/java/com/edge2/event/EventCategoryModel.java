@@ -50,6 +50,7 @@ public class EventCategoryModel {
         this.desc = desc;
         this.isInEdge = isInEdge;
         this.isInIntra = isInIntra;
+        this.iconName = iconName;
     }
 
     @NonNull

@@ -53,6 +53,7 @@ public class GroupsModel {
         numEventsIntra = String.format(MainApplication.getResString(R.string.sub_events_num),
                 countEventsIntra, countEventsIntra == 1 ? "" : "s");
         this.desc = desc;
+        this.imageName = imageName;
     }
 
     public String getName() {

@@ -39,17 +39,7 @@
 
                 <TextView
                     android:id="@+id/result_msg_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/loading"
-                    style="@style/TextHeader"
-                    android:gravity="center_horizontal"
-                    android:layout_marginTop="80dp"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginEnd="30dp"
-                    android:paddingTop="40dp"
-                    android:paddingBottom="40dp"
-                    android:background="@drawable/card_bg"
+                    style="@style/MessageView"
                     tools:visibility="gone"/>
 
                 <androidx.recyclerview.widget.RecyclerView

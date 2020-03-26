@@ -21,20 +21,21 @@ package com.edge2.results;
  */
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.FragmentNavigator;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -43,30 +44,31 @@ import androidx.transition.Transition;
 
 import com.edge2.BaseFragment;
 import com.edge2.R;
-import com.edge2.allevents.models.GroupsModel;
-import com.edge2.data.DataViewModel;
-import com.edge2.event.EventCategoryModel;
-import com.edge2.event.EventFragment;
-import com.edge2.results.recycler.EventsAdapter;
-import com.edge2.results.recycler.GroupsAdapter;
 import com.edge2.results.recycler.ItemDecoration;
-import com.edge2.transitions.MoveTransition;
+import com.edge2.results.recycler.SubsAdapter;
 import com.edge2.utils.DimenUtils;
 import com.edge2.views.GeneralHeaderView;
 
 import java.util.List;
+import java.util.Map;
 
-public class ResultsEventsFragment extends BaseFragment {
-    static final String KEY_GROUP_NAME = "groupName";
-    static final String KEY_GROUP_IMAGE = "groupImage";
+public class ResultsSubsFragment extends BaseFragment {
+    static final String KEY_DISPLAY_NAME = "displayName";
+    static final String KEY_DEST_URL = "destUrl";
+    static final String KEY_DESC = "desc";
+    static final String KEY_IMAGE = "image";
+    static final String KEY_SCREEN_NAME = "screenName";
 
     //private OnSharedElementListener sharedElementListener;
     //private MoveTransition transition;
+    private String screenName;
+    private String url;
     private GeneralHeaderView topView;
     private RecyclerView recyclerView;
-    private EventsAdapter adapter;
+    private TextView messageView;
+    private SubsAdapter adapter;
     private ItemDecoration itemDecoration;
-    private List<EventCategoryModel> eventsList;
+    private List<ResultsModel.ScreenItem> screenItems;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,6 +82,7 @@ public class ResultsEventsFragment extends BaseFragment {
 
         topView = v.findViewById(R.id.top_view);
         recyclerView = v.findViewById(R.id.result_recycler);
+        messageView = v.findViewById(R.id.result_msg_view);
         //transition = new MoveTransition(null);
         //setSharedElementEnterTransition(transition);
         //setSharedElementReturnTransition(transition);
@@ -93,8 +96,11 @@ public class ResultsEventsFragment extends BaseFragment {
             return v;
         }
 
-        topView.setData(getString(R.string.results_title), args.getString(KEY_GROUP_NAME),
-                getResources().getDrawable(args.getInt(KEY_GROUP_IMAGE), null), false);
+        url = args.getString(KEY_DEST_URL);
+        screenName = args.getString(KEY_SCREEN_NAME) == null ? "default" : args.getString(KEY_SCREEN_NAME);
+        Uri iconUri = Uri.parse(args.getString(KEY_IMAGE));
+        topView.setData(getString(R.string.results_title), args.getString(KEY_DISPLAY_NAME),
+                iconUri, R.drawable.ic_result, false, true);
         return v;
     }
 
@@ -122,49 +128,59 @@ public class ResultsEventsFragment extends BaseFragment {
 
         //if (savedInstanceState != null)
         //    topView.showImage(0);
-        Bundle args = getArguments();
-        if (args != null) {
-            setupRecycler(args.getBoolean(ResultsFragment.KEY_IS_INTRA),
-                    args.getString(KEY_GROUP_NAME));
-        }
+        setupRecycler();
     }
 
-    private void setupRecycler(boolean isIntra, String groupName) {
-        FragmentActivity context = getActivity();
-        if (context == null)
+    private void setupRecycler() {
+        FragmentActivity activity = getActivity();
+        if (activity == null)
             return;
-        DataViewModel viewModel = ViewModelProviders.of(context).get(DataViewModel.class);
+        ResultsViewModel viewModel = new ViewModelProvider(activity).get(ResultsViewModel.class);
 
         if (recyclerView.getLayoutManager() == null) {
             float itemSize = getResources().getDimensionPixelSize(R.dimen.allevents_main_events_img_w) +
                     2 * getResources().getDimension(R.dimen.allevents_main_events_padding_h);
-            int columnCount = getRecyclerColumnCount(context, recyclerView, itemSize);
-            RecyclerView.LayoutManager mainLayoutManager = new GridLayoutManager(context, columnCount);
+            int columnCount = getRecyclerColumnCount(activity, recyclerView, itemSize);
+            RecyclerView.LayoutManager mainLayoutManager = new GridLayoutManager(activity, columnCount);
             recyclerView.setHasFixedSize(true);
             recyclerView.setLayoutManager(mainLayoutManager);
         }
 
         if (adapter == null) {
-            if (getView() != null) {
-                viewModel.getCategories(isIntra, groupName).observe(getViewLifecycleOwner(), events -> {
-                    eventsList = events;
-                    adapter = new EventsAdapter(eventsList, isIntra, (p, rv, iv, nv, cv, v5) ->
-                            onEventClicked(p, rv, iv, nv, isIntra));
-                    recyclerView.setAdapter(adapter);
-                });
-                recyclerView.setVisibility(View.VISIBLE);
-            } else {
-                recyclerView.setVisibility(View.GONE);
-            }
+            viewModel.getSubscreens(url).observe(getViewLifecycleOwner(), downloadModel -> {
+                if (downloadModel.isError() || downloadModel.getData() == null) {
+                    messageView.setText(getString(R.string.results_fetch_fail));
+                    messageView.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
+                } else {
+                    Map<String, List<ResultsModel.ScreenItem>> eventsList =
+                            downloadModel.getData().getScreens();
+
+                    if (eventsList == null || eventsList.get(screenName) == null) {
+                        messageView.setText(getString(R.string.results_fetch_fail));
+                        messageView.setVisibility(View.VISIBLE);
+                        recyclerView.setVisibility(View.GONE);
+                    } else {
+                        messageView.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
+
+                        screenItems = eventsList.get(screenName);
+                        adapter = new SubsAdapter(screenItems, (p, rv, iv, nv, cv, v5) ->
+                                onEventClicked(p, rv, iv, nv));
+                        recyclerView.setAdapter(adapter);
+                    }
+                }
+            });
         } else {
             recyclerView.setVisibility(View.VISIBLE);
+            messageView.setVisibility(View.GONE);
             recyclerView.setAdapter(adapter);
         }
     }
 
     private void onEventClicked(int position, View rootView, View imageView,
-                                View nameView, boolean isIntra) {
-        EventCategoryModel item = eventsList.get(position);
+                                View nameView) {
+        ResultsModel.ScreenItem item = screenItems.get(position);
         String transitionImgName = getString(R.string.events_to_sub_img_transition);
         String transitionNameName = getString(R.string.events_to_sub_name_transition);
         String transitionRootName = getString(R.string.events_to_sub_root_transition);
@@ -177,11 +193,20 @@ public class ResultsEventsFragment extends BaseFragment {
                 .build();
 
         Bundle args = new Bundle();
-        args.putString(ResultsDetailsFragment.KEY_EVENT_NAME, item.getName());
-        args.putInt(ResultsDetailsFragment.KEY_EVENT_IMAGE, item.getIcon());
+        args.putString(KEY_DISPLAY_NAME, item.getName());
+        args.putString(KEY_DEST_URL, url);
+        args.putString(KEY_DESC, item.getDesc());
+        args.putString(KEY_IMAGE, item.getIconUriString());
+        args.putString(KEY_SCREEN_NAME, item.getDest());
+
+        int destination;
+        if (item.isNextScreen())
+            destination = R.id.action_resultsSubs_to_subs;
+        else
+            destination = R.id.action_resultsSubs_to_details;
 
         NavHostFragment.findNavController(this)
-                .navigate(R.id.action_resultsEvents_to_details, args, null, extras);
+                .navigate(destination, args, null, extras);
     }
 
     private int getRecyclerColumnCount(Context context, View child, float pxWidth) {
@@ -202,8 +227,12 @@ public class ResultsEventsFragment extends BaseFragment {
         transition.onDestroy();
         transition = null;*/
         topView = null;
-        recyclerView.setAdapter(null);
-        recyclerView.removeItemDecoration(itemDecoration);
+        messageView = null;
+        if (recyclerView != null) {
+            recyclerView.setAdapter(null);
+            recyclerView.removeItemDecoration(itemDecoration);
+            recyclerView = null;
+        }
         itemDecoration = null;
     }
 

@@ -1,0 +1,947 @@
+{
+  "results": {
+    "poster-presentation": [
+      {
+      "members": [{
+        "name": "Debarya Pal"
+      }],
+      "rank": 1
+    }, {
+      "members": [{
+        "name": "Soumi Biswas"
+      }, {
+        "name": "Saantani Biswas"
+      }],
+      "rank": 2
+    }, {
+      "members": [{
+        "name": "Retankar Ghosh"
+      }],
+      "rank": 3
+    }
+  ],
+    "cs-1.6": [{
+      "members": [{
+        "name": "Archisman Dey"
+      }, {
+        "name": "Bikram Karmakar"
+      }, {
+        "name": "Debadittya Mukherjee"
+      }, {
+        "name": "Abdul Baquiur"
+      }, {
+        "name": "Arghya Datta"
+      }],
+      "rank": 2
+    }],
+    "web-dev": [{
+      "members": [{
+        "name": "Priyankar Mitra"
+      }, {
+        "name": "Subham Kumar"
+      }],
+      "rank": 1,
+      "tName": "SSID"
+    }, {
+      "members": [{
+        "name": "Ankit Poddar"
+      }, {
+        "name": "Ayam Dayal"
+      }],
+      "rank": 2,
+      "tName": "Runtime Terror"
+    }, {
+      "members": [{
+        "name": "Aditya"
+      }, {
+        "name": "Rahul Kumar"
+      }],
+      "rank": 3,
+      "tName": "300IQ"
+    }],
+    "youth-parliament": [{
+      "members": [{
+        "name": "Atul Kumar"
+      }],
+      "rank": 1,
+      "tName": "FOR THE MOTION"
+    }, {
+      "members": [{
+        "name": "Sachin Kumar Mishra"
+      }],
+      "rank": 2,
+      "tName": "AGAINST THE MOTION"
+    }],
+    "robo-soccer": [{
+      "members": [{
+        "name": "Kaushal Kishore"
+      }, {
+        "name": "Aniket Kumar"
+      }, {
+        "name": "Rohit Kr Singh"
+      }, {
+        "name": "Rajeev Tiwari"
+      }],
+      "rank": 1,
+      "tName": "ROBO SAPIENZ OMEGA"
+    }, {
+      "members": [{
+        "name": "Richa Chowdhary"
+      }, {
+        "name": "Arju Singh"
+      }],
+      "rank": 2,
+      "tName": "PATRONUS"
+    }, {
+      "members": [{
+        "name": "Souvik Saha"
+      }, {
+        "name": "Rajsekhar Paul"
+      }, {
+        "name": "Sayan Roy"
+      }, {
+        "name": "Supriya Singha"
+      }],
+      "rank": 3,
+      "tName": "ROBO TYPHON"
+    }],
+    "nirmaan": [{
+      "members": [{
+        "name": "Kr. Karan Raj"
+      }, {
+        "name": "Rohit Soni"
+      }, {
+        "name": "Pratham Chandra"
+      }, {
+        "name": "Azquan Wali"
+      }],
+      "rank": 1
+    }, {
+      "members": [{
+        "name": "Sonali"
+      }, {
+        "name": "Roza"
+      }, {
+        "name": "Ayushi"
+      }, {
+        "name": "Priti"
+      }],
+      "rank": 2
+    }, {
+      "members": [{
+        "name": "Sudeshna Pal"
+      }, {
+        "name": "Debarya Pal"
+      }, {
+        "name": "Aditi Samanta"
+      }, {
+        "name": "Sinjini Biswas"
+      }],
+      "rank": 3
+    }],
+    "flawless": [{
+      "members": [{
+        "name": "Ankit Poddar"
+      }, {
+        "name": "Dipanjan"
+      }],
+      "rank": 1,
+      "tName": "Runtime Terror"
+    }, {
+      "members": [{
+        "name": "Amartya Basu"
+      }, {
+        "name": "Rajarshi"
+      }, {
+        "name": "Sanbid Roy Chowdhury"
+      }],
+      "rank": 2,
+      "tName": "Flawless_a"
+    }],
+    "block-city": [{
+      "members": [{
+        "name": "Animesh Arya"
+      }, {
+        "name": "Hemant Kumar"
+      }, {
+        "name": "Aditya Navya Shukla"
+      }, {
+        "name": "Md. Riyan Alam"
+      }],
+      "rank": 1,
+      "tName": "SNICRUX"
+    }, {
+      "members": [{
+        "name": "Debaditya Mukherjee"
+      }, {
+        "name": "Rajdip Saha"
+      }, {
+        "name": "Anushka Das"
+      }, {
+        "name": "Aniruddha Saha"
+      }],
+      "rank": 2,
+      "tName": "EMBARRESMENT"
+    }, {
+      "members": [{
+        "name": "Sreerupa Sengupta"
+      }, {
+        "name": "Prayash Kumar Saha"
+      }, {
+        "name": "Ankan Nath"
+      }],
+      "rank": 3,
+      "tName": "ROBOKON"
+    }],
+    "animate": [{
+      "members": [{
+        "name": "Adnan Ahmed Hussain"
+      }, {
+        "name": "Archisman Dey"
+      }],
+      "rank": 1
+    }, {
+      "members": [{
+        "name": "Sagnik Saha"
+      }],
+      "rank": 2
+    }, {
+      "members": [{
+        "name": "Abantika Chail"
+      }, {
+        "name": "Prerona Chowdhury"
+      }],
+      "rank": 3
+    }],
+    "business-quiz": [{
+      "members": [{
+        "name": "Dipanjan Guchait"
+      }, {
+        "name": "Nikhil Agarwal"
+      }],
+      "rank": 1
+    }, {
+      "members": [{
+        "name": "Kumar Ankit"
+      }, {
+        "name": "Ashutosh Prakash"
+      }],
+      "rank": 2
+    }, {
+      "members": [{
+        "name": "Ayushi Dey"
+      }, {
+        "name": "Arghya Bandyopadhyay"
+      }],
+      "rank": 3
+    }],
+    "crypto-quest": [{
+      "members": [{
+        "name": "Soumit Saha"
+      }, {
+        "name": "Subham Bhattacharya"
+      }],
+      "rank": 1,
+      "tName": "The Incredibles"
+    }, {
+      "members": [{
+        "name": "Aditi Sarawgi"
+      }, {
+        "name": "Avdesh"
+      }],
+      "rank": 2,
+      "tName": "Double A"
+    }, {
+      "members": [{
+        "name": "Anshuman Dubey"
+      }],
+      "rank": 3,
+      "tName": "Anshuman_D"
+    }],
+    "track-hunter": [{
+      "members": [{
+        "name": "Animesh Arya"
+      }, {
+        "name": "Hemant Kumar"
+      }, {
+        "name": "Aditya Navya Shukla"
+      }, {
+        "name": "Md. Riyan Alam"
+      }],
+      "rank": 1,
+      "tName": "SNICRUX"
+    }, {
+      "members": [{
+        "name": "Sreerupa Sengupta"
+      }, {
+        "name": "Prayash Kumar Saha"
+      }, {
+        "name": "Ankan Nath"
+      }],
+      "rank": 2,
+      "tName": "ROBOKON"
+    }, {
+      "members": [{
+        "name": "Priyanka Kumari"
+      }],
+      "rank": 3,
+      "tName": "ASYMPTOTE"
+    }],
+    "2-minutes-to-sell": [{
+      "members": [{
+        "name": "Pratyush Biswakarma"
+      }, {
+        "name": "Raksha Agarwal"
+      }],
+      "rank": 1
+    }, {
+      "members": [{
+        "name": "Vishal Singh"
+      }, {
+        "name": "Ashutosh Singh"
+      }],
+      "rank": 2
+    }, {
+      "members": [{
+        "name": "Soumita Kar"
+      }, {
+        "name": "Kumari Sumiran Gupta"
+      }, {
+        "name": "Shalini Kumari"
+      }],
+      "rank": 3
+    }],
+    "business-model-plan": [{
+      "members": [{
+        "name": "Rishita Banik"
+      }, {
+        "name": "Abhiroop Basak"
+      }],
+      "rank": 1,
+      "tName": "TECHNO CRATS"
+    }, {
+      "members": [{
+        "name": "Aditya Kumar"
+      }],
+      "rank": 2,
+      "tName": "REPAIRGENT"
+    }, {
+      "members": [{
+        "name": "Vanisha Patwali"
+      }],
+      "rank": 3,
+      "tName": "MAID DHUNDO"
+    }],
+    "xquizit": [{
+      "members": [{
+        "name": "Alankriti Mallik"
+      }, {
+        "name": "Vishwa Raj Shah"
+      }],
+      "rank": 1
+    }, {
+      "members": [{
+        "name": "Vishal Shaw"
+      }, {
+        "name": "Shivam Gupta"
+      }],
+      "rank": 2
+    }, {
+      "members": [{
+        "name": "Prerna Chowdhury"
+      }, {
+        "name": "Abantika Chail"
+      }, {
+        "name": "Adrija Bhowmik"
+      }],
+      "rank": 3
+    }],
+    "photo-story": [{
+      "members": [{
+        "name": "Sreeparno Dhar"
+      }],
+      "rank": 1
+    }, {
+      "members": [{
+        "name": "Avishek Prasad"
+      }],
+      "rank": 2
+    }],
+    "micromachina": [{
+      "members": [{
+        "name": "Debaditya Mukherjee"
+      }, {
+        "name": "Rajdip Saha"
+      }, {
+        "name": "Anushka Das"
+      }, {
+        "name": "Aniruddha Saha"
+      }],
+      "rank": 1,
+      "tName": "EMBARRESMENT"
+    }, {
+      "members": [{
+        "name": "Animesh Arya"
+      }, {
+        "name": "Hemant Kumar"
+      }, {
+        "name": "Aditya Navya Shukla"
+      }, {
+        "name": "Md. Riyan Alam"
+      }],
+      "rank": 2,
+      "tName": "SNICRUX"
+    }],
+    "mekanix": [{
+      "members": [{
+        "name": "Aniket Chakraborty"
+      }, {
+        "name": "Dwaipayan Bakshi"
+      }],
+      "rank": 1,
+      "tName": "ALASKA-2"
+    }, {
+      "members": [{
+        "name": "Utkarsh Kumar"
+      }, {
+        "name": "Shivam Gupta"
+      }, {
+        "name": "Komal Tater"
+      }, {
+        "name": "Vishal Shaw"
+      }],
+      "rank": 2,
+      "tName": "GO"
+    }, {
+      "members": [{
+        "name": "Sankha Chakraborty"
+      }, {
+        "name": "Sarthak Dutta"
+      }, {
+        "name": "Souvik Chattaraj"
+      }, {
+        "name": "Prithis Ganguly"
+      }],
+      "rank": 3,
+      "tName": "BONG AZTECHS"
+    }],
+    "need-for-speed": [{
+      "members": [{
+        "name": "Samrat Das"
+      }],
+      "rank": 1
+    }, {
+      "members": [{
+        "name": "Suman Debnath"
+      }],
+      "rank": 2
+    }, {
+      "members": [{
+        "name": "Adarsh Bapsy"
+      }],
+      "rank": 3
+    }],
+    "quiz": [{
+      "members": [{
+        "name": "Arkadipta Paul"
+      }, {
+        "name": "Ayandip Guha"
+      }, {
+        "name": "Sayanta Kundu"
+      }],
+      "rank": 1,
+      "tName": "WINNERS EVERYWHERE"
+    }, {
+      "members": [{
+        "name": "Suvradeep Raha"
+      }, {
+        "name": "Abhisek Chowdhury"
+      }, {
+        "name": "Shambo Chatterjee"
+      }],
+      "rank": 2,
+      "tName": "HONOURABLE MENTIONS"
+    }, {
+      "members": [{
+        "name": "Aniket Chakrabort"
+      }, {
+        "name": "Shamik Banerjee"
+      }, {
+        "name": "Soumyabrata Chakraborty"
+      }],
+      "rank": 3,
+      "tName": "BOYS IN AREA 51"
+    }],
+    "bughunt": [{
+      "members": [{
+        "name": "Anshuman Dubey"
+      }],
+      "rank": 1
+    }, {
+      "members": [{
+        "name": "Soumit Saha"
+      }],
+      "rank": 2
+    }, {
+      "members": [{
+        "name": "Ayush Jain"
+      }],
+      "rank": 3
+    }],
+    "shootmup": [{
+      "members": [{
+        "name": "Soubhaggya Mallick"
+      }],
+      "rank": 1
+    }, {
+      "members": [{
+        "name": "Avishek Prasad"
+      }],
+      "rank": 2
+    }, {
+      "members": [{
+        "name": "Anmol Prakash"
+      }],
+      "rank": 3
+    }],
+    "food-relay": [{
+      "members": [{
+        "name": "Sabarna Sen"
+      }, {
+        "name": "Ruchidrita Das"
+      }, {
+        "name": "Vishal Singh"
+      }],
+      "rank": 1
+    }, {
+      "members": [{
+        "name": "Vishwa Raj Shah"
+      }, {
+        "name": "Megha Konar"
+      }],
+      "rank": 2
+    }, {
+      "members": [{
+        "name": "Kaustav De"
+      }, {
+        "name": "Mahim Majhel"
+      }, {
+        "name": "Abhinaba Paul"
+      }],
+      "rank": 3
+    }],
+    "robo-race": [{
+      "members": [{
+        "name": "Ritam Roy"
+      }, {
+        "name": "Shounak Basu"
+      }, {
+        "name": "Aman Kr. Roy"
+      }, {
+        "name": "Pratay Ghosh"
+      }],
+      "rank": 1,
+      "tName": "ROBO SPAARX"
+    }, {
+      "members": [{
+        "name": "Kundan Kumar"
+      }, {
+        "name": "Arpit Mahi"
+      }],
+      "rank": 2,
+      "tName": "LOLITA"
+    }, {
+      "members": [{
+        "name": "Arju Singh"
+      }, {
+        "name": "Risha Chowdhary"
+      }],
+      "rank": 3,
+      "tName": "PATRONUS"
+    }],
+    "process-puzzle": [{
+      "members": [{
+        "name": "Soumi Dolui"
+      }, {
+        "name": "Debolina Saha"
+      }, {
+        "name": "Shalabdi Munshi"
+      }],
+      "rank": 1
+    }, {
+      "members": [{
+        "name": "Sneha Verma"
+      }, {
+        "name": "Anamitra Ghosh"
+      }, {
+        "name": "Manisha Kumari"
+      }],
+      "rank": 2
+    }, {
+      "members": [{
+        "name": "Rishita Banik"
+      }, {
+        "name": "Abhiroop Basak"
+      }],
+      "rank": 3,
+      "tName": "TEAM 1"
+    }, {
+      "members": [{
+        "name": "Md.shaqkid"
+      }, {
+        "name": "Megha Buruwal"
+      }, {
+        "name": "Debarshi Bhattacharya"
+      }],
+      "rank": 3,
+      "tName": "TEAM 2"
+    }],
+    "paperovation": [{
+      "members": [{
+        "name": "Pratham Chandra"
+      }, {
+        "name": "Azquan Wali"
+      }, {
+        "name": "Kr Karan Raj"
+      }, {
+        "name": "Rohit Pani"
+      }],
+      "rank": 1
+    }, {
+      "members": [{
+        "name": "Nishkarsh Kumar"
+      }, {
+        "name": "Shrestha Raj"
+      }],
+      "rank": 2
+    }],
+    "electronically-yours": [{
+      "members": [{
+        "name": "Anif Hussain"
+      }, {
+        "name": "Md Aftab Alam"
+      }, {
+        "name": "Debojyoti Pramanik"
+      }],
+      "rank": 1
+    }, {
+      "members": [{
+        "name": "Niladri Dey"
+      }, {
+        "name": "Prashant Kr. Shaw"
+      }],
+      "rank": 2
+    }, {
+      "members": [{
+        "name": "Ishika Mondal"
+      }, {
+        "name": "Aditi Sarawgi"
+      }, {
+        "name": "Awadhesh"
+      }],
+      "rank": 3
+    }],
+    "crumbs": [{
+      "members": [{
+        "name": "Suhrid Pal"
+      }],
+      "rank": 1
+    }, {
+      "members": [{
+        "name": "Barish Rahaman"
+      }],
+      "rank": 2
+    }, {
+      "members": [{
+        "name": "Subrajit Roy"
+      }],
+      "rank": 3
+    }],
+    "fifa-11": [{
+      "members": [{
+        "name": "Rhid Bhowmick"
+      }],
+      "rank": 1
+    }, {
+      "members": [{
+        "name": "Rohan Chakraborty"
+      }],
+      "rank": 2
+    }, {
+      "members": [{
+        "name": "Subhra Sankar Roy"
+      }],
+      "rank": 3
+    }],
+    "rumble": [{
+      "members": [{
+        "name": "Trina Raut"
+      }, {
+        "name": "Suryanath"
+      }, {
+        "name": "Prusha Sengupta"
+      }, {
+        "name": "Writ Pal"
+      }],
+      "rank": 1,
+      "tName": "DROID PANTHER"
+    }, {
+      "members": [{
+        "name": "Abhishek Maheswari"
+      }],
+      "rank": 2,
+      "tName": "ROBO SAPIENZ DELTA"
+    }, {
+      "members": [{
+        "name": "Krishna Sharma"
+      }, {
+        "name": "Aniket Kumar"
+      }],
+      "rank": 3,
+      "tName": "ROBO SAPIENZ OMEGA"
+    }],
+    "pubg": [{
+      "members": [{
+        "name": "Reetam Das"
+      }, {
+        "name": "Subhajit Konar"
+      }],
+      "rank": 1
+    }, {
+      "members": [{
+        "name": "Arnab Dhara"
+      }, {
+        "name": "Aryan Majumdar"
+      }],
+      "rank": 2
+    }, {
+      "members": [{
+        "name": "Aniket Dey"
+      }, {
+        "name": "Aniket Rout"
+      }],
+      "rank": 3
+    }]
+  },
+  "screens": {
+    "elevation": [{
+      "dest": "nirmaan",
+      "icName": "ic_event_nirmaan",
+      "isNextScreen": false,
+      "name": "Nirmaan"
+    }, {
+      "dest": "paperovation",
+      "icName": "ic_event_povation",
+      "isNextScreen": false,
+      "name": "Paper-o-vation"
+    }],
+    "compute@id": [{
+      "dest": "flawless",
+      "icName": "ic_event_flawless",
+      "isNextScreen": false,
+      "name": "Flawless"
+    }, {
+      "dest": "bughunt",
+      "icName": "ic_event_bughunt",
+      "isNextScreen": false,
+      "name": "Bughunt"
+    }, {
+      "dest": "crypto-quest",
+      "icName": "ic_event_crypto",
+      "isNextScreen": false,
+      "name": "Crypto Quest"
+    }, {
+      "dest": "web-dev",
+      "icName": "ic_event_webdev",
+      "isNextScreen": false,
+      "name": "Web Dev"
+    }],
+    "default": [{
+      "desc": "6 events",
+      "dest": "robotics",
+      "icName": "ic_event_robotics",
+      "isNextScreen": true,
+      "name": "Robotics"
+    }, {
+      "desc": "4 events",
+      "dest": "compute@id",
+      "icName": "ic_event_computeaid",
+      "isNextScreen": true,
+      "name": "Compute@id"
+    }, {
+      "desc": "2 events",
+      "dest": "ciic-money-matters",
+      "icName": "ic_event_ciic",
+      "isNextScreen": true,
+      "name": "CIIC Money Matters"
+    }, {
+      "desc": "4 events",
+      "dest": "cyber-crusade",
+      "icName": "ic_event_cybercrusade",
+      "isNextScreen": true,
+      "name": "Cyber Crusade"
+    }, {
+      "desc": "3 events",
+      "dest": "infocus",
+      "icName": "ic_event_infocus",
+      "isNextScreen": true,
+      "name": "Infocus"
+    }, {
+      "desc": "2 events",
+      "dest": "elevation",
+      "icName": "ic_event_elevation",
+      "isNextScreen": true,
+      "name": "Elevation"
+    }, {
+      "desc": "3 events",
+      "dest": "newron",
+      "icName": "ic_event_newron",
+      "isNextScreen": true,
+      "name": "Newron"
+    }, {
+      "desc": "6 events",
+      "dest": "food-for-fun",
+      "icName": "ic_event_fff",
+      "isNextScreen": true,
+      "name": "Food For Fun"
+    }, {
+      "desc": "1 event",
+      "dest": "create-it",
+      "icName": "ic_event_create",
+      "isNextScreen": true,
+      "name": "Create It"
+    }],
+    "create-it": [{
+      "dest": "mekanix",
+      "icName": "ic_event_mekanix",
+      "isNextScreen": false,
+      "name": "Mekanix"
+    }],
+    "infocus": [{
+      "dest": "shootmup",
+      "icName": "ic_event_shootmup",
+      "isNextScreen": false,
+      "name": "Shoot-M-Up"
+    }, {
+      "dest": "photo-story",
+      "icName": "ic_event_instaclick",
+      "isNextScreen": false,
+      "name": "Photo Story"
+    }, {
+      "dest": "crumbs",
+      "icName": "ic_event_crumbs",
+      "isNextScreen": false,
+      "name": "Crumbs"
+    }],
+    "food-for-fun": [{
+      "dest": "food-relay",
+      "icName": "ic_event_foodrelay",
+      "isNextScreen": false,
+      "name": "Food Relay"
+    }, {
+      "dest": "xquizit",
+      "icName": "ic_event_xquiz",
+      "isNextScreen": false,
+      "name": "Xquizit"
+    }, {
+      "dest": "2-minutes-to-sell",
+      "icName": "ic_event_dpresent",
+      "isNextScreen": false,
+      "name": "2 Minutes To Sell"
+    }, {
+      "dest": "animate",
+      "icName": "ic_event_addomedia",
+      "isNextScreen": false,
+      "name": "Animate"
+    }, {
+      "dest": "poster-presentation",
+      "icName": "ic_event_fplabel",
+      "isNextScreen": false,
+      "name": "Poster Presentation"
+    }, {
+      "dest": "process-puzzle",
+      "icName": "ic_event_creationx",
+      "isNextScreen": false,
+      "name": "Process Puzzle"
+    }],
+    "robotics": [{
+      "dest": "robo-race",
+      "icName": "ic_event_roborace",
+      "isNextScreen": false,
+      "name": "Robo Race"
+    }, {
+      "dest": "robo-soccer",
+      "icName": "ic_event_robosoccer",
+      "isNextScreen": false,
+      "name": "Robo Soccer"
+    }, {
+      "dest": "micromachina",
+      "icName": "ic_event_jigsaw",
+      "isNextScreen": false,
+      "name": "Micro-Machina"
+    }, {
+      "dest": "track-hunter",
+      "icName": "ic_event_stalker",
+      "isNextScreen": false,
+      "name": "Track Hunter"
+    }, {
+      "dest": "rumble",
+      "icName": "ic_event_blitz",
+      "isNextScreen": false,
+      "name": "Rumble"
+    }, {
+      "dest": "block-city",
+      "icName": "ic_event_wallstreet",
+      "isNextScreen": false,
+      "name": "Block City"
+    }],
+    "ciic-money-matters": [{
+      "dest": "business-quiz",
+      "icName": "ic_event_bquiz",
+      "isNextScreen": false,
+      "name": "Business Quiz"
+    }, {
+      "dest": "business-model-plan",
+      "icName": "ic_event_bplan",
+      "isNextScreen": false,
+      "name": "Business model plan"
+    }],
+    "newron": [{
+      "dest": "electronically-yours",
+      "icName": "ic_event_electronically",
+      "isNextScreen": false,
+      "name": "Electronically Yours"
+    }, {
+      "dest": "quiz",
+      "icName": "ic_event_thequiz",
+      "isNextScreen": false,
+      "name": "Quiz"
+    }, {
+      "dest": "youth-parliament",
+      "icName": "ic_event_yp",
+      "isNextScreen": false,
+      "name": "Youth Parliament"
+    }],
+    "cyber-crusade": [{
+      "dest": "pubg",
+      "icName": "ic_event_cybercrusade",
+      "isNextScreen": false,
+      "name": "PUBG"
+    }, {
+      "dest": "need-for-speed",
+      "icName": "ic_event_cybercrusade",
+      "isNextScreen": false,
+      "name": "Need For Speed"
+    }, {
+      "dest": "cs-1.6",
+      "icName": "ic_event_cybercrusade",
+      "isNextScreen": false,
+      "name": "CS 1.6"
+    }, {
+      "dest": "fifa-11",
+      "icName": "ic_event_cybercrusade",
+      "isNextScreen": false,
+      "name": "FIFA 11"
+    }]
+  }
+}

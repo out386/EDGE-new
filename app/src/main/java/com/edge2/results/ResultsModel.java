@@ -20,26 +20,104 @@ package com.edge2.results;
  *
  */
 
+import android.net.Uri;
+
+import com.edge2.BuildConfig;
+
+import java.util.List;
+import java.util.Map;
+
 public class ResultsModel {
-    private int pos;
-    private String teamName;
-    private String[] members;
+    private Map<String, List<ScreenItem>> screens;
+    private Map<String, List<Result>> results;
 
-    ResultsModel(int pos, String teamName, String members) {
-        this.pos = pos;
-        this.teamName = teamName;
-        this.members = members.split("\n");
+    public Map<String, List<ScreenItem>> getScreens() {
+        return screens;
     }
 
-    public int getPos() {
-        return pos;
+    public Map<String, List<Result>> getResults() {
+        return results;
     }
 
-    public String getTeamName() {
-        return teamName;
+    public static class ScreenItem {
+        private String icUrl;
+        private String icName;
+        private String name;
+        private String desc;
+        private String dest;
+        private boolean isNextScreen;
+
+        public String getName() {
+            return name;
+        }
+
+        public String getDesc() {
+            return desc;
+        }
+
+        String getDest() {
+            return dest;
+        }
+
+        boolean isNextScreen() {
+            return isNextScreen;
+        }
+
+        public String getIconUriString() {
+            if (icName != null && !icName.isEmpty()) {
+                return String.format("android.resource://%s/drawable/%s",
+                                BuildConfig.APPLICATION_ID, icName);
+            } else if (icUrl != null && !icUrl.isEmpty()) {
+                return BuildConfig.URL_RESULT_PICS + icUrl;
+            } else {
+                return null;
+            }
+        }
     }
 
-    public String[] getMembers() {
-        return members;
+    public static class Result {
+        private int rank;
+        private List<Member> members;
+        private String tName;
+        private List<String> imgs;
+
+        public int getRank() {
+            return rank;
+        }
+
+        public List<Member> getMembers() {
+            return members;
+        }
+
+        public String getTName() {
+            return tName;
+        }
+
+        public List<String> getImgs() {
+            return imgs;
+        }
+    }
+
+    public static class Member {
+        private String name;
+        private String clg;
+        private String dept;
+        private int year;
+
+        public String getName() {
+            return name;
+        }
+
+        public String getClg() {
+            return clg;
+        }
+
+        public String getDept() {
+            return dept;
+        }
+
+        public int getYear() {
+            return year;
+        }
     }
 }

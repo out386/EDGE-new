@@ -33,7 +33,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.FragmentNavigator;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -42,30 +42,25 @@ import androidx.transition.Transition;
 
 import com.edge2.BaseFragment;
 import com.edge2.R;
-import com.edge2.allevents.models.GroupsModel;
-import com.edge2.data.DataViewModel;
-import com.edge2.results.recycler.GroupsAdapter;
 import com.edge2.results.recycler.ItemDecoration;
+import com.edge2.results.recycler.MainScreenAdapter;
 import com.edge2.transitions.MoveTransition;
 import com.edge2.utils.DimenUtils;
 import com.edge2.views.GeneralHeaderView;
+import com.edge2.results.MainScreenModel.MainScreenItem;
 
 import java.util.List;
 
-public class ResultsFragment extends BaseFragment {
-    public static final String STAT_FETCH_ERR = "err";
-    public static final String KEY_IS_INTRA = "isIntra";
-
+public class MainScreenFragment extends BaseFragment {
     private OnSharedElementListener sharedElementListener;
     private MoveTransition transition;
     private GeneralHeaderView topView;
     private RecyclerView recyclerView;
-    private GroupsAdapter adapter;
+    private MainScreenAdapter adapter;
     private ItemDecoration itemDecoration;
     private TextView messageView;
     private View contentView;
-    private List<GroupsModel> allEventsList;
-    private boolean isIntra = true;
+    private List<MainScreenItem> allEventsList;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -91,7 +86,7 @@ public class ResultsFragment extends BaseFragment {
         topView.setNameTransition(getString(R.string.events_to_quick_title_transition));
         topView.setDescTransition(getString(R.string.events_to_quick_desc_transition));
         topView.setIconTransition(getString(R.string.events_to_quick_icon_transition));
-        topView.setData(R.string.results_title, R.string.results_wait,
+        topView.setData(R.string.results_title, R.string.results_desc,
                 R.drawable.ic_result, false);
 
         if (sharedElementListener != null) {
@@ -108,7 +103,7 @@ public class ResultsFragment extends BaseFragment {
                 setupScrollListener(scrollView, topView.getHeight()));
 
         //if (savedInstanceState != null)
-            topView.showImage(0);
+        topView.showImage(0);
         setupResults();
     }
 
@@ -116,35 +111,31 @@ public class ResultsFragment extends BaseFragment {
         FragmentActivity activity = getActivity();
         if (activity == null)
             return;
-        DataViewModel viewModel = ViewModelProviders.of(activity).get(DataViewModel.class);
+        ResultsViewModel viewModel = new ViewModelProvider(activity).get(ResultsViewModel.class);
         if (getView() != null) {
-            viewModel.getResultStat()
+            viewModel.getMainScreen()
                     .observe(getViewLifecycleOwner(), res -> {
-                        if (STAT_FETCH_ERR.equals(res)) {
+                        if (res.isError()) {
                             messageView.setText(getString(R.string.results_fetch_fail));
                             messageView.setVisibility(View.VISIBLE);
                             recyclerView.setVisibility(View.GONE);
-                        } else if (res == null) {
+                        } /*else if (res == null) {
                             messageView.setText(getString(R.string.results_not_decl));
                             messageView.setVisibility(View.VISIBLE);
                             recyclerView.setVisibility(View.GONE);
-                        } else {
-                            // TODO: Replace this insanely ugly isIntra check
-                            isIntra = res.contains("Intra");
-                            topView.setDesc(res);
+                        }*/ else {
                             messageView.setVisibility(View.GONE);
                             recyclerView.setVisibility(View.VISIBLE);
-                            setupRecycler(viewModel, isIntra);
+                            setupRecycler(res.getData());
                         }
                     });
         } else {
             messageView.setText(getString(R.string.results_fetch_fail));
             recyclerView.setVisibility(View.GONE);
         }
-
     }
 
-    private void setupRecycler(DataViewModel viewModel, boolean isIntra) {
+    private void setupRecycler(MainScreenModel mainScreen) {
         Context context = getContext();
         if (context == null)
             return;
@@ -159,25 +150,18 @@ public class ResultsFragment extends BaseFragment {
         }
 
         if (adapter == null) {
-            if (getView() != null) {
-                viewModel.getGroups(isIntra).observe(getViewLifecycleOwner(), events -> {
-                    allEventsList = events;
-                    adapter = new GroupsAdapter(allEventsList, isIntra, (p, rv, iv, nv, cv, v5) ->
-                            onEventClicked(p, rv, iv, nv, isIntra));
-                    recyclerView.setAdapter(adapter);
-                });
-            } else {
-                messageView.setText(getString(R.string.results_fetch_fail));
-                recyclerView.setVisibility(View.GONE);
-            }
+            allEventsList = mainScreen.getItems();
+            adapter = new MainScreenAdapter(allEventsList, (p, rv, iv, nv, cv, v5) ->
+                    onEventClicked(p, rv, iv, nv));
+            recyclerView.setAdapter(adapter);
         } else {
             recyclerView.setAdapter(adapter);
         }
     }
 
     private void onEventClicked(int position, View rootView, View imageView,
-                                View nameView, boolean isIntra) {
-        GroupsModel item = allEventsList.get(position);
+                                View nameView) {
+        MainScreenItem item = allEventsList.get(position);
         String transitionImgName = getString(R.string.events_to_sub_img_transition);
         String transitionNameName = getString(R.string.events_to_sub_name_transition);
         String transitionRootName = getString(R.string.events_to_sub_root_transition);
@@ -190,12 +174,13 @@ public class ResultsFragment extends BaseFragment {
                 .build();
 
         Bundle args = new Bundle();
-        args.putString(ResultsEventsFragment.KEY_GROUP_NAME, item.getName());
-        args.putInt(ResultsEventsFragment.KEY_GROUP_IMAGE, item.getImage());
-        args.putBoolean(KEY_IS_INTRA, isIntra);
+        args.putString(ResultsSubsFragment.KEY_DISPLAY_NAME, item.getName());
+        args.putString(ResultsSubsFragment.KEY_DEST_URL, item.getDest());
+        args.putString(ResultsSubsFragment.KEY_DESC, item.getlDesc());
+        args.putString(ResultsSubsFragment.KEY_IMAGE, item.getIc());
 
         NavHostFragment.findNavController(this)
-                .navigate(R.id.action_results_to_resultsEvents, args, null, extras);
+                .navigate(R.id.action_resultsMain_to_resultsSubs, args, null, extras);
     }
 
     private int getRecyclerColumnCount(Context context, View child, float pxWidth) {
@@ -217,8 +202,11 @@ public class ResultsFragment extends BaseFragment {
         transition.onDestroy();
         transition = null;
         topView = null;
-        recyclerView.setAdapter(null);
-        recyclerView.removeItemDecoration(itemDecoration);
+        if (recyclerView != null) {
+            recyclerView.setAdapter(null);
+            recyclerView.removeItemDecoration(itemDecoration);
+            recyclerView = null;
+        }
         itemDecoration = null;
         messageView = null;
         contentView = null;

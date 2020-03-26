@@ -20,7 +20,6 @@ package com.edge2.results.recycler;
  *
  */
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,9 +35,9 @@ import com.edge2.results.ResultsModel;
 import java.util.List;
 
 public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.ResultsViewHolder> {
-    private List<ResultsModel> items;
+    private List<ResultsModel.Result> items;
 
-    public DetailsAdapter(List<ResultsModel> items) {
+    public DetailsAdapter(List<ResultsModel.Result> items) {
         this.items = items;
     }
 
@@ -52,23 +51,24 @@ public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.ResultsV
 
     @Override
     public void onBindViewHolder(@NonNull ResultsViewHolder holder, int position) {
-        ResultsModel item = items.get(position);
-        holder.pos.setText(String.valueOf(item.getPos()));
-        if (item.getTeamName() != null && !item.getTeamName().equals(""))
-            holder.team.setText(item.getTeamName().trim());
-        else
+        ResultsModel.Result item = items.get(position);
+        holder.pos.setText(String.valueOf(item.getRank()));
+        if (item.getTName() != null && !item.getTName().isEmpty()) {
+            holder.team.setVisibility(View.VISIBLE);
+            holder.team.setText(item.getTName());
+        } else {
             holder.team.setVisibility(View.GONE);
+        }
 
-        String[] members = item.getMembers();
+        List<ResultsModel.Member> members = item.getMembers();
         StringBuilder nameStr = new StringBuilder(200);
         nameStr.append("<ul>");
-        for (String name : members) {
+        for (ResultsModel.Member member : members) {
             nameStr.append("<li>");
-            nameStr.append(name);
+            nameStr.append(member.getName());
             nameStr.append("</li>");
         }
         nameStr.append("</ul>");
-        Log.i("blah", "onBindViewHolder: " + nameStr);
 
         holder.names.setText(HtmlCompat.fromHtml(nameStr.toString(), HtmlCompat.FROM_HTML_MODE_COMPACT));
     }

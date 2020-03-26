@@ -61,7 +61,7 @@
             app:popExitAnim="@anim/fade_out" />
         <action
             android:id="@+id/action_events_to_results"
-            app:destination="@id/resultsFragment"
+            app:destination="@id/resultsMainFragment"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
@@ -130,13 +130,13 @@
         android:label="fragment_registration"
         tools:layout="@layout/fragment_placeholder" />
     <fragment
-        android:id="@+id/resultsFragment"
-        android:name="com.edge2.results.ResultsFragment"
+        android:id="@+id/resultsMainFragment"
+        android:name="com.edge2.results.MainScreenFragment"
         android:label="fragment_results"
         tools:layout="@layout/fragment_placeholder">
         <action
-            android:id="@+id/action_results_to_resultsEvents"
-            app:destination="@id/resultsEventsFragment"
+            android:id="@+id/action_resultsMain_to_resultsSubs"
+            app:destination="@id/resultsSubsFragment"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
@@ -166,13 +166,20 @@
         android:label="fragment_ca"
         tools:layout="@layout/fragment_ca" />
     <fragment
-        android:id="@+id/resultsEventsFragment"
-        android:name="com.edge2.results.ResultsEventsFragment"
+        android:id="@+id/resultsSubsFragment"
+        android:name="com.edge2.results.ResultsSubsFragment"
         android:label="fragment_results_events"
         tools:layout="@layout/fragment_results_events">
         <action
-            android:id="@+id/action_resultsEvents_to_details"
+            android:id="@+id/action_resultsSubs_to_details"
             app:destination="@id/resultsDetailsFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_resultsSubs_to_subs"
+            app:destination="@id/resultsSubsFragment"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"

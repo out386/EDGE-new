@@ -30,21 +30,22 @@ import androidx.annotation.NonNull;
 import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.edge2.BuildConfig;
 import com.edge2.R;
-import com.edge2.allevents.models.GroupsModel;
+import com.edge2.results.MainScreenModel.MainScreenItem;
 import com.edge2.views.CustomViewOnClickedListener;
 import com.edge2.views.OnClickListener;
 
 import java.util.List;
 
-public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.EventsViewHolder> {
-    private List<GroupsModel> items;
-    private boolean isIntra;
+public class MainScreenAdapter extends RecyclerView.Adapter<MainScreenAdapter.EventsViewHolder> {
+    private List<MainScreenItem> items;
     private CustomViewOnClickedListener listener;
 
-    public GroupsAdapter(List<GroupsModel> items, boolean isIntra, @NonNull OnClickListener listener) {
+    public MainScreenAdapter(List<MainScreenItem> items, @NonNull OnClickListener listener) {
         this.items = items;
-        this.isIntra = isIntra;
         this.listener = new CustomViewOnClickedListener(listener);
     }
 
@@ -58,25 +59,35 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.EventsView
 
     @Override
     public void onBindViewHolder(@NonNull EventsViewHolder holder, int position) {
-        GroupsModel item = items.get(position);
+        MainScreenItem item = items.get(position);
         View root = holder.rootView;
         TextView name = holder.eventName;
-        TextView count = holder.eventSubCount;
+        TextView desc = holder.desc;
         ImageView imageView = holder.eventImage;
-        holder.eventName.setText(item.getName());
-        String countStr = isIntra ? item.getNumEventsIntra() : item.getNumEventsEdge();
-        holder.eventSubCount.setText(countStr);
-        imageView.setImageResource(item.getImage());
+        name.setText(item.getName());
+        String descStr = item.getDesc();
+        if (descStr == null || "".equals(descStr)) {
+            desc.setVisibility(View.GONE);
+        } else {
+            desc.setVisibility(View.VISIBLE);
+            desc.setText(descStr);
+        }
 
-        ViewCompat.setTransitionName(imageView, "img" + position);
-        ViewCompat.setTransitionName(name, "name" + position);
-        ViewCompat.setTransitionName(root, "root" + position);
+        imageView.setColorFilter(imageView.getContext().getColor(R.color.lIconFillRed));
+        Glide.with(imageView.getContext())
+                .load(item.getIc())
+                .diskCacheStrategy(DiskCacheStrategy.DATA)
+                .into(imageView);
+
+        ViewCompat.setTransitionName(imageView, "mainImg" + position);
+        ViewCompat.setTransitionName(name, "mainName" + position);
+        ViewCompat.setTransitionName(root, "mainRoot" + position);
 
         root.setOnClickListener(view ->
-                listener.onClick(position, root, imageView, name, count, null)
+                listener.onClick(position, root, imageView, name, desc, null)
         );
         holder.eventButton.setOnClickListener(view ->
-                listener.onClick(position, root, imageView, name, count, null)
+                listener.onClick(position, root, imageView, name, desc, null)
         );
     }
 
@@ -90,7 +101,7 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.EventsView
         ImageView eventImage;
         ImageView eventButton;
         TextView eventName;
-        TextView eventSubCount;
+        TextView desc;
 
         EventsViewHolder(View item) {
             super(item);
@@ -98,7 +109,7 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.EventsView
             eventImage = item.findViewById(R.id.event_image);
             eventButton = item.findViewById(R.id.event_button);
             eventName = item.findViewById(R.id.event_name);
-            eventSubCount = item.findViewById(R.id.event_num_sub);
+            desc = item.findViewById(R.id.event_num_sub);
         }
     }
 

@@ -38,6 +38,11 @@
                 tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 tools:spanCount="2" />
 
+            <TextView
+                android:id="@+id/result_msg_view"
+                style="@style/MessageView"
+                tools:visibility="gone"/>
+
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

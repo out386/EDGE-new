@@ -5,6 +5,13 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
-    ]
+    ],
+    "headers": [{
+      "source": "/results/**",
+      "headers": [{
+        "key": "cache-control",
+        "value": "max-age=1800"
+      }]
+    }]
   }
 }

@@ -1,0 +1,11 @@
+{
+  "items": [
+    {
+      "name": "Intra",
+      "dest": "intra.json",
+      "desc": "9 Clubs",
+      "lDesc": "Intra College Fest '20",
+      "ic": "intra.webp"
+    }
+  ]
+}
