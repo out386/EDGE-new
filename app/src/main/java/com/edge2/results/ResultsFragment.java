@@ -108,11 +108,13 @@ public class ResultsFragment extends BaseFragment {
                 setupScrollListener(scrollView, topView.getHeight()));
 
         //if (savedInstanceState != null)
-            topView.showImage(0);
+        topView.showImage(0);
         setupResults();
     }
 
     private void setupResults() {
+        new ResultsModelFinal(getContext());
+
         FragmentActivity activity = getActivity();
         if (activity == null)
             return;

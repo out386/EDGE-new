@@ -27,10 +27,10 @@ import java.util.Map;
 
 class ResultsData {
     // Yes, it physically hurt to write this. Impossible to do it properly on such a short deadline.
-    private Map<String, List<ResultsModel>> results;
+    public Map<String, List<ResultsModel>> results;
     private static ResultsData resultsData;
 
-    private ResultsData() {
+    public ResultsData() {
         results = new HashMap<>();
         List<ResultsModel> list = new LinkedList<>();
 

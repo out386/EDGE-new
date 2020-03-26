@@ -122,7 +122,7 @@ public class DataRepo {
         return dao.getDetails(name);
     }
 
-    LiveData<List<EventCategoryModel>> getCategories(boolean isIntra,
+    public LiveData<List<EventCategoryModel>> getCategories(boolean isIntra,
                                                      String groupName) {
         if (isIntra)
             return dao.getCategoriesIntra(groupName);
@@ -130,7 +130,7 @@ public class DataRepo {
             return dao.getCategoriesEdge(groupName);
     }
 
-    LiveData<List<GroupsModel>> getGroups(boolean isIntra) {
+    public LiveData<List<GroupsModel>> getGroups(boolean isIntra) {
         if (isIntra)
             return dao.getGroupsIntra();
         else

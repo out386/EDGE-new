@@ -28,7 +28,7 @@ public class ResultsModel {
     ResultsModel(int pos, String teamName, String members) {
         this.pos = pos;
         this.teamName = teamName;
-        this.members = members.split("\n");
+        this.members = members.trim().split("\n");
     }
 
     public int getPos() {
