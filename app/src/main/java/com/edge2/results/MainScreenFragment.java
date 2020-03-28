@@ -115,6 +115,8 @@ public class MainScreenFragment extends BaseFragment {
         if (getView() != null) {
             viewModel.getMainScreen()
                     .observe(getViewLifecycleOwner(), res -> {
+                        if(res == null)
+                            return;
                         if (res.isError()) {
                             messageView.setText(getString(R.string.results_fetch_fail));
                             messageView.setVisibility(View.VISIBLE);

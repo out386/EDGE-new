@@ -26,11 +26,13 @@ public class FileDownloaderModel<T> {
     private long timestamp;
     private T data;
     private boolean isError;
+    private String url;
 
-    FileDownloaderModel(T data, boolean isError) {
+    FileDownloaderModel(T data, boolean isError, String url) {
         timestamp = SystemClock.elapsedRealtime();
         this.data = data;
         this.isError = isError;
+        this.url = url;
     }
 
     public long getTimestamp() {
@@ -39,6 +41,10 @@ public class FileDownloaderModel<T> {
 
     public T getData() {
         return data;
+    }
+
+    public String getUrl() {
+        return url;
     }
 
     public boolean isError() {

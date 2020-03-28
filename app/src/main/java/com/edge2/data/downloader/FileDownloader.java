@@ -80,11 +80,11 @@ public class FileDownloader<T> {
 
         request = new StringRequest(Request.Method.GET, url,
                 response -> {
-                    liveData.setValue(new FileDownloaderModel<>(getFromString(response), false));
+                    liveData.setValue(new FileDownloaderModel<>(getFromString(response), false, url));
                     isInProgress = false;
                 },
                 error -> {
-                    liveData.setValue(new FileDownloaderModel<>(null, true)); // Don't care what the error is
+                    liveData.setValue(new FileDownloaderModel<>(null, true, url)); // Don't care what the error is
                     isInProgress = false;
                 });
 

@@ -148,6 +148,10 @@ public class ResultsSubsFragment extends BaseFragment {
 
         if (adapter == null) {
             viewModel.getSubscreens(url).observe(getViewLifecycleOwner(), downloadModel -> {
+                // Implies the json is still being downloaded, and this is just old data
+                if (downloadModel == null || !url.equals(downloadModel.getUrl()))
+                    return;
+
                 if (downloadModel.isError() || downloadModel.getData() == null) {
                     messageView.setText(getString(R.string.results_fetch_fail));
                     messageView.setVisibility(View.VISIBLE);
