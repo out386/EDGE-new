@@ -6,6 +6,12 @@
       "desc": "9 Clubs",
       "lDesc": "Intra College Fest '20",
       "ic": "intra.webp"
+    },{
+      "name": "21 Days Challenge",
+      "dest": "21days.json",
+      "desc": "Posters & Doodles",
+      "lDesc": "Design Digital Posters & Doodles",
+      "ic": "intra.webp"
     }
   ]
 }

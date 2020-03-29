@@ -1,0 +1,34 @@
+{
+  "results": {
+    "part1": [{
+      "members": [{
+        "name": "Samriddhi Mitra",
+        "dept": "BCA",
+        "year": 1
+      }],
+      "rank": 1,
+      "imgs": [
+        "21days/1/samriddhi.webp"
+      ]
+    }, {
+      "members": [{
+        "name": "Arijit Gupta",
+        "dept": "BCA",
+        "year": 1
+      }],
+      "rank": 2,
+      "imgs": [
+        "21days/1/arijit.webp"
+      ]
+    }]
+  },
+  "screens": {
+    "default": [{
+      "desc": "Home",
+      "dest": "part1",
+      "icUrl": "intra.webp",
+      "isNextScreen": false,
+      "name": "Topic 1"
+    }]
+  }
+}
