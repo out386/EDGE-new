@@ -20,8 +20,6 @@ package com.edge2.results;
  *
  */
 
-import android.net.Uri;
-
 import com.edge2.BuildConfig;
 
 import java.util.List;
@@ -66,7 +64,7 @@ public class ResultsModel {
         public String getIconUriString() {
             if (icName != null && !icName.isEmpty()) {
                 return String.format("android.resource://%s/drawable/%s",
-                                BuildConfig.APPLICATION_ID, icName);
+                        BuildConfig.APPLICATION_ID, icName);
             } else if (icUrl != null && !icUrl.isEmpty()) {
                 return BuildConfig.URL_RESULT_PICS + icUrl;
             } else {

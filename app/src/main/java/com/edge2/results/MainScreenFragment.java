@@ -42,12 +42,12 @@ import androidx.transition.Transition;
 
 import com.edge2.BaseFragment;
 import com.edge2.R;
+import com.edge2.results.MainScreenModel.MainScreenItem;
 import com.edge2.results.recycler.ItemDecoration;
 import com.edge2.results.recycler.MainScreenAdapter;
 import com.edge2.transitions.MoveTransition;
 import com.edge2.utils.DimenUtils;
 import com.edge2.views.GeneralHeaderView;
-import com.edge2.results.MainScreenModel.MainScreenItem;
 
 import java.util.List;
 
@@ -115,7 +115,7 @@ public class MainScreenFragment extends BaseFragment {
         if (getView() != null) {
             viewModel.getMainScreen()
                     .observe(getViewLifecycleOwner(), res -> {
-                        if(res == null)
+                        if (res == null)
                             return;
                         if (res.isError()) {
                             messageView.setText(getString(R.string.results_fetch_fail));

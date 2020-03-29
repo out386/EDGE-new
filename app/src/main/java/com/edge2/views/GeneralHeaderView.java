@@ -117,6 +117,7 @@ public class GeneralHeaderView extends ConstraintLayout {
         if (icon != null)
             iconView.setImageDrawable(icon);
     }
+
     public void setData(String name, String desc, Uri iconUri, int iconPlaceholderRes,
                         boolean skipTint) {
         setData(name, desc, iconUri, iconPlaceholderRes, skipTint, false);

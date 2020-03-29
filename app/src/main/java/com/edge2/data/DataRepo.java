@@ -122,7 +122,7 @@ public class DataRepo {
     }
 
     public LiveData<List<EventCategoryModel>> getCategories(boolean isIntra,
-                                                     String groupName) {
+                                                            String groupName) {
         if (isIntra)
             return dao.getCategoriesIntra(groupName);
         else

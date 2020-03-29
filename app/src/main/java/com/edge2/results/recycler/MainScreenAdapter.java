@@ -32,7 +32,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.edge2.BuildConfig;
 import com.edge2.R;
 import com.edge2.results.MainScreenModel.MainScreenItem;
 import com.edge2.views.CustomViewOnClickedListener;
