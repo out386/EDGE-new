@@ -21,7 +21,7 @@ package com.edge2.data.downloader;
  */
 
 import android.app.Application;
-import android.content.Context;
+import android.os.SystemClock;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -36,6 +36,7 @@ import com.squareup.moshi.Moshi;
 import java.io.IOException;
 
 public class FileDownloader<T> {
+    private static final int MAX_AGE = 1860000; // 31 mins
     private static RequestQueue volleyQueue;
 
     private boolean isInProgress;
@@ -66,12 +67,14 @@ public class FileDownloader<T> {
             }
             request.cancel();
         } else {
-            // TODO: Put a time check here to prevent stale data
             if (url.equals(this.url)) {
                 FileDownloaderModel lastModel = liveData.getValue();
-                // If the URL hasn't changed, and the last result wasn't an error, ignore this call
-                if (lastModel != null && !lastModel.isError())
-                    return;
+                if (lastModel != null
+                        && (SystemClock.elapsedRealtime() - lastModel.getTimestamp()) <= MAX_AGE) {
+                    // If the URL hasn't changed, and the last result wasn't an error, ignore this call
+                    if (!lastModel.isError())
+                        return;
+                }
             }
         }
 
