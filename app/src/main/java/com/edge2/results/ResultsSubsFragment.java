@@ -146,40 +146,43 @@ public class ResultsSubsFragment extends BaseFragment {
             recyclerView.setLayoutManager(mainLayoutManager);
         }
 
-        if (adapter == null) {
-            viewModel.getSubscreens(url).observe(getViewLifecycleOwner(), downloadModel -> {
-                // Implies the json is still being downloaded, and this is just old data
-                if (downloadModel == null || !url.equals(downloadModel.getUrl()))
-                    return;
+        viewModel.getSubscreens(url).observe(getViewLifecycleOwner(), downloadModel -> {
+            // Implies the json is still being downloaded, and this is just old data
+            if (downloadModel == null || !url.equals(downloadModel.getUrl()))
+                return;
 
-                if (downloadModel.isError() || downloadModel.getData() == null) {
-                    messageView.setText(getString(R.string.results_fetch_fail));
-                    messageView.setVisibility(View.VISIBLE);
-                    recyclerView.setVisibility(View.GONE);
-                } else {
-                    Map<String, List<ResultsModel.ScreenItem>> eventsList =
-                            downloadModel.getData().getScreens();
+            if (downloadModel.isError() || downloadModel.getData() == null) {
+                messageView.setText(getString(R.string.results_fetch_fail));
+                messageView.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.GONE);
+                return;
+            }
 
-                    if (eventsList == null || eventsList.get(screenName) == null) {
-                        messageView.setText(getString(R.string.results_fetch_fail));
-                        messageView.setVisibility(View.VISIBLE);
-                        recyclerView.setVisibility(View.GONE);
-                    } else {
-                        messageView.setVisibility(View.GONE);
-                        recyclerView.setVisibility(View.VISIBLE);
+            Map<String, List<ResultsModel.ScreenItem>> screensList =
+                    downloadModel.getData().getScreens();
 
-                        screenItems = eventsList.get(screenName);
-                        adapter = new SubsAdapter(screenItems, (p, rv, iv, nv, cv, v5) ->
-                                onEventClicked(p, rv, iv, nv));
-                        recyclerView.setAdapter(adapter);
-                    }
-                }
-            });
-        } else {
-            recyclerView.setVisibility(View.VISIBLE);
-            messageView.setVisibility(View.GONE);
-            recyclerView.setAdapter(adapter);
-        }
+            if (screensList == null || screensList.get(screenName) == null) {
+                messageView.setText(getString(R.string.results_fetch_fail));
+                messageView.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.GONE);
+                return;
+            }
+
+            screenItems = screensList.get(screenName);
+            if (adapter == null || adapter.getItems() == null
+                    || !adapter.getItems().equals(screenItems)) {
+
+                messageView.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+                adapter = new SubsAdapter(screenItems, (p, rv, iv, nv, cv, v5) ->
+                        onEventClicked(p, rv, iv, nv));
+                recyclerView.setAdapter(adapter);
+            } else {
+                recyclerView.setVisibility(View.VISIBLE);
+                messageView.setVisibility(View.GONE);
+                recyclerView.setAdapter(adapter);
+            }
+        });
     }
 
     private void onEventClicked(int position, View rootView, View imageView,

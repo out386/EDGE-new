@@ -96,6 +96,10 @@ public class MainScreenAdapter extends RecyclerView.Adapter<MainScreenAdapter.Ev
         return items.size();
     }
 
+    public List<MainScreenItem> getItems() {
+        return items;
+    }
+
     static class EventsViewHolder extends RecyclerView.ViewHolder {
         View rootView;
         ImageView eventImage;

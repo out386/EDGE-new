@@ -96,6 +96,10 @@ public class SubsAdapter extends RecyclerView.Adapter<SubsAdapter.EventsViewHold
         return items.size();
     }
 
+    public List<ResultsModel.ScreenItem> getItems() {
+        return items;
+    }
+
     static class EventsViewHolder extends RecyclerView.ViewHolder {
         View rootView;
         ImageView screenImage;

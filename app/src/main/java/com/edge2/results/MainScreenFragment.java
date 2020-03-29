@@ -151,7 +151,8 @@ public class MainScreenFragment extends BaseFragment {
             recyclerView.setLayoutManager(mainLayoutManager);
         }
 
-        if (adapter == null) {
+        if (adapter == null || adapter.getItems() == null
+                || !adapter.getItems().equals(mainScreen.getItems())) {
             allEventsList = mainScreen.getItems();
             adapter = new MainScreenAdapter(allEventsList, (p, rv, iv, nv, cv, v5) ->
                     onEventClicked(p, rv, iv, nv));
