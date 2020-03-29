@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="@dimen/margin">
+
+    <TextView
+        android:id="@+id/res_mem_bullet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="● "
+        style="@style/TextBody" />
+
+    <TextView
+        android:id="@+id/res_mem_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/res_mem_bullet"
+        tools:text="Some Long Name"
+        style="@style/TextBody" />
+
+    <TextView
+        android:id="@+id/res_mem_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/res_mem_bullet"
+        tools:text="- Some Long College Name\n- STRM, 1st Year"
+        style="@style/TextSmallSub"
+        android:layout_below="@+id/res_mem_name"
+        android:layout_marginStart="@dimen/margin_large" />
+</RelativeLayout>

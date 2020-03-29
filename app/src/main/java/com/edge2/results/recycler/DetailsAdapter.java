@@ -20,17 +20,19 @@ package com.edge2.results.recycler;
  *
  */
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.text.HtmlCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.edge2.R;
 import com.edge2.results.ResultsModel;
+import com.edge2.utils.Misc;
 
 import java.util.List;
 
@@ -52,7 +54,7 @@ public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.ResultsV
     @Override
     public void onBindViewHolder(@NonNull ResultsViewHolder holder, int position) {
         ResultsModel.Result item = items.get(position);
-        holder.pos.setText(String.valueOf(item.getRank()));
+        holder.pos.setText(Misc.numToStr(item.getRank()));
         if (item.getTName() != null && !item.getTName().isEmpty()) {
             holder.team.setVisibility(View.VISIBLE);
             holder.team.setText(item.getTName());
@@ -61,16 +63,13 @@ public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.ResultsV
         }
 
         List<ResultsModel.Member> members = item.getMembers();
-        StringBuilder nameStr = new StringBuilder(200);
-        nameStr.append("<ul>");
-        for (ResultsModel.Member member : members) {
-            nameStr.append("<li>");
-            nameStr.append(member.getName());
-            nameStr.append("</li>");
-        }
-        nameStr.append("</ul>");
+        Context context = holder.memberHolder.getContext();
+        holder.memberHolder.removeAllViews();
 
-        holder.names.setText(HtmlCompat.fromHtml(nameStr.toString(), HtmlCompat.FROM_HTML_MODE_COMPACT));
+        for (int i = 0; i < members.size(); i++) {
+            MemberView memberView = new MemberView(context, members.get(i));
+            holder.memberHolder.addView(memberView);
+        }
     }
 
     @Override
@@ -81,13 +80,13 @@ public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.ResultsV
     static class ResultsViewHolder extends RecyclerView.ViewHolder {
         TextView pos;
         TextView team;
-        TextView names;
+        LinearLayout memberHolder;
 
         ResultsViewHolder(@NonNull View item) {
             super(item);
             this.pos = item.findViewById(R.id.res_pos);
             this.team = item.findViewById(R.id.res_team);
-            this.names = item.findViewById(R.id.res_names);
+            this.memberHolder = item.findViewById(R.id.res_member_holder);
         }
     }
 
