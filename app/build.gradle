@@ -22,6 +22,7 @@ android {
             buildConfigField('String', 'URL_BANNER_DB_VERSION', url_banner_db_version)
             buildConfigField('String', 'URL_EVENTS_HIDDEN', url_events_hidden)
             buildConfigField('String', 'URL_RESULT_BASE', url_result_base)
+            buildConfigField('String', 'URL_RESULT_ICONS', url_result_icons)
             buildConfigField('String', 'URL_RESULT_PICS', url_result_pics)
         }
         debug {
@@ -33,6 +34,7 @@ android {
             buildConfigField('String', 'URL_BANNER_DB_VERSION', url_banner_db_version_dev)
             buildConfigField('String', 'URL_EVENTS_HIDDEN', url_events_hidden_dev)
             buildConfigField('String', 'URL_RESULT_BASE', url_result_base_dev)
+            buildConfigField('String', 'URL_RESULT_ICONS', url_result_icons_dev)
             buildConfigField('String', 'URL_RESULT_PICS', url_result_pics_dev)
         }
     }

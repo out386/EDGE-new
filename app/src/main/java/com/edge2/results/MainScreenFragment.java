@@ -177,7 +177,7 @@ public class MainScreenFragment extends BaseFragment {
                 .build();
 
         Bundle args = new Bundle();
-        args.putString(ResultsSubsFragment.KEY_DISPLAY_NAME, item.getName());
+        args.putString(ResultsSubsFragment.KEY_DISPLAY_NAME, item.getlDesc()); // No, lDesc here is not a typo
         args.putString(ResultsSubsFragment.KEY_DEST_URL, item.getDest());
         args.putString(ResultsSubsFragment.KEY_DESC, item.getlDesc());
         args.putString(ResultsSubsFragment.KEY_IMAGE, item.getIc());

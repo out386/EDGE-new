@@ -1,4 +1,4 @@
-package com.edge2.results.recycler;
+package com.edge2.results.recycler.views;
 
 /*
  * Copyright (C) 2020 Ritayan Chakraborty <ritayanout@gmail.com>

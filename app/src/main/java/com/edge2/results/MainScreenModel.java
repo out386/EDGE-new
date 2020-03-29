@@ -48,7 +48,7 @@ public class MainScreenModel {
         }
 
         public String getIc() {
-            return BuildConfig.URL_RESULT_PICS + ic;
+            return BuildConfig.URL_RESULT_ICONS + ic;
         }
 
         /**

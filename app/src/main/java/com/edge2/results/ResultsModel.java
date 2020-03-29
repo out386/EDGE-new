@@ -20,6 +20,8 @@ package com.edge2.results;
  *
  */
 
+import androidx.annotation.Nullable;
+
 import com.edge2.BuildConfig;
 
 import java.util.List;
@@ -66,7 +68,7 @@ public class ResultsModel {
                 return String.format("android.resource://%s/drawable/%s",
                         BuildConfig.APPLICATION_ID, icName);
             } else if (icUrl != null && !icUrl.isEmpty()) {
-                return BuildConfig.URL_RESULT_PICS + icUrl;
+                return BuildConfig.URL_RESULT_ICONS + icUrl;
             } else {
                 return null;
             }
@@ -91,6 +93,9 @@ public class ResultsModel {
             return tName;
         }
 
+        /**
+         * List of image URLs, relative to {@link BuildConfig#URL_RESULT_PICS}
+         */
         public List<String> getImgs() {
             return imgs;
         }
@@ -106,10 +111,12 @@ public class ResultsModel {
             return name;
         }
 
+        @Nullable
         public String getClg() {
             return clg;
         }
 
+        @Nullable
         public String getDept() {
             return dept;
         }
