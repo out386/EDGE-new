@@ -16,9 +16,197 @@
         "dept": "BCA",
         "year": 1
       }],
-      "rank": 2,
+      "rank": 1,
       "imgs": [
         "21days/1/arijit.webp"
+      ]
+    }],
+    "part2": [{
+      "members": [{
+        "name": "Samriddhi Mitra",
+        "dept": "BCA",
+        "year": 1
+      }],
+      "rank": 1,
+      "imgs": [
+        "21days/2/samriddhi.webp"
+      ]
+    }, {
+      "members": [{
+        "name": "Arijit Gupta",
+        "dept": "BCA",
+        "year": 1
+      }],
+      "rank": 1,
+      "imgs": [
+        "21days/2/arijit.webp"
+      ]
+    }, {
+      "members": [{
+        "name": "Prottoy Dutta",
+        "dept": "BCA",
+        "year": 2
+      }],
+      "rank": 1,
+      "imgs": [
+        "21days/2/prottoy.webp"
+      ]
+    }, {
+      "members": [{
+        "name": "Soumabha Chakraborty",
+        "dept": "BCA"
+      }],
+      "rank": 1,
+      "imgs": [
+        "21days/2/soumabha.webp"
+      ]
+    }],
+    "part3": [{
+      "members": [{
+        "name": "Akash Chatterjee",
+        "clg": "TMSL",
+        "dept": "FT",
+        "year": 2
+      }],
+      "rank": 1,
+      "imgs": [
+        "21days/3/akash.webp"
+      ]
+    }, {
+      "members": [{
+        "name": "Arijit Gupta",
+        "clg": "TMSL",
+        "dept": "BCA",
+        "year": 1
+      }],
+      "rank": 1,
+      "imgs": [
+        "21days/3/arijit.webp"
+      ]
+    }, {
+      "members": [{
+        "name": "Abhradita Basu",
+        "clg": "TMSL",
+        "dept": "FT",
+        "year": 2
+      }],
+      "rank": 1,
+      "imgs": [
+        "21days/3/abhradita.webp"
+      ]
+    }, {
+      "members": [{
+        "name": "Koshika Raj",
+        "clg": "IEM",
+        "dept": "ECE",
+        "year": 3
+      }],
+      "rank": 1,
+      "imgs": [
+        "21days/3/koshika.webp"
+      ]
+    }, {
+      "members": [{
+        "name": "Sukriti Dhar",
+        "clg": "TMSL",
+        "dept": "BCA",
+        "year": 2
+      }],
+      "rank": 1,
+      "imgs": [
+        "21days/3/sukriti.webp"
+      ]
+    }],
+    "part4": [{
+      "members": [{
+        "name": "Arna Barui",
+        "clg": "MALDA MEDICAL COLLEGE AND HOSPITAL",
+        "dept": "MBBS",
+        "year": 2
+      }],
+      "rank": 1,
+      "imgs": [
+        "21days/4/arna.webp"
+      ]
+    }, {
+      "members": [{
+        "name": "Abhradita Basu",
+        "clg": "TMSL",
+        "dept": "FT",
+        "year": 2
+      }],
+      "rank": 1,
+      "imgs": [
+        "21days/4/abhradita.webp"
+      ]
+    }],
+    "part5": [{
+      "members": [{
+        "name": "Arijit Gupta",
+        "clg": "TMSL",
+        "dept": "BCA",
+        "year": 1
+      }],
+      "rank": 1,
+      "imgs": [
+        "21days/5/arijit.webp"
+      ]
+    }, {
+      "members": [{
+        "name": "Akash Chatterjee",
+        "clg": "TMSL",
+        "dept": "FT",
+        "year": 2
+      }],
+      "rank": 1,
+      "imgs": [
+        "21days/5/akash.webp"
+      ]
+    }],
+    "part6": [{
+      "members": [{
+        "name": "Abhradita Basu",
+        "clg": "TMSL",
+        "dept": "FT",
+        "year": 2
+      }],
+      "rank": 1,
+      "imgs": [
+        "21days/6/abhradita.webp"
+      ]
+    }, {
+      "members": [{
+        "name": "Akash Chatterjee",
+        "clg": "TMSL",
+        "dept": "FT",
+        "year": 2
+      }],
+      "rank": 1,
+      "imgs": [
+        "21days/6/akash.webp"
+      ]
+    }],
+    "part7": [{
+      "members": [{
+        "name": "Arijit Gupta",
+        "clg": "TMSL",
+        "dept": "BCA",
+        "year": 1
+      }],
+      "rank": 1,
+      "imgs": [
+        "21days/7/arijit.webp"
+      ]
+    }, {
+      "members": [{
+        "name": "Swarup Ranjan Paul",
+        "clg": "TMSL",
+        "dept": "EE",
+        "year": 1
+      }],
+      "rank": 1,
+      "imgs": [
+        "21days/7/swarup.webp"
       ]
     }]
   },
@@ -29,6 +217,42 @@
       "icUrl": "21days.webp",
       "isNextScreen": false,
       "name": "Topic 1"
+    }, {
+      "desc": "Favourite Movie",
+      "dest": "part2",
+      "icUrl": "21days.webp",
+      "isNextScreen": false,
+      "name": "Topic 2"
+    }, {
+      "desc": "Favourite Cartoon",
+      "dest": "part3",
+      "icUrl": "21days.webp",
+      "isNextScreen": false,
+      "name": "Topic 3"
+    }, {
+      "desc": "Netflix And Chill",
+      "dest": "part4",
+      "icUrl": "21days.webp",
+      "isNextScreen": false,
+      "name": "Topic 4"
+    }, {
+      "desc": "Peace",
+      "dest": "part5",
+      "icUrl": "21days.webp",
+      "isNextScreen": false,
+      "name": "Topic 5"
+    }, {
+      "desc": "Life",
+      "dest": "part6",
+      "icUrl": "21days.webp",
+      "isNextScreen": false,
+      "name": "Topic 6"
+    }, {
+      "desc": "Hope",
+      "dest": "part7",
+      "icUrl": "21days.webp",
+      "isNextScreen": false,
+      "name": "Topic 7"
     }]
   }
 }
