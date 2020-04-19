@@ -12,6 +12,11 @@
       "desc": "Posters & Doodles",
       "lDesc": "Design Digital Posters & Doodles",
       "ic": "21days.webp"
+    },{
+      "name": "Infocus",
+      "dest": "infocus.json",
+      "lDesc": "Infocus",
+      "ic": "infocus.webp"
     }
   ]
 }

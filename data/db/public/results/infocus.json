@@ -1,0 +1,44 @@
+{
+  "results": {
+    "photostory": [{
+      "members": [{
+        "name": "Sreeparno Dhar",
+        "dept": "IT",
+        "year": 1
+      }],
+      "rank": 1,
+      "imgs": [
+        "photostory/sreeparno1.webp"
+      ]
+    },{
+      "members": [{
+        "name": "Aaratrik Roy",
+        "dept": "FT",
+        "year": 2
+      }],
+      "rank": 2,
+      "imgs": [
+        "photostory/aaratrik1.webp"
+      ]
+    }, {
+      "members": [{
+        "name": "Pratya Nag",
+        "dept": "BMS",
+        "year": 3
+      }],
+      "rank": 3,
+      "imgs": [
+        "photostory/pratya1.webp"
+      ]
+    }]
+  },
+  "screens": {
+    "default": [{
+      "desc": "Photo Story",
+      "dest": "photostory",
+      "icUrl": "photostory.webp",
+      "isNextScreen": false,
+      "name": "A Day in Quarantine"
+    }]
+  }
+}
