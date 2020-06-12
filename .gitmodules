@@ -1,9 +1,9 @@
 [submodule "slider"]
 	path = slider
-	url = git@github.com:ApendIr/slider.git
+	url = git@github.com:out386/slider.git
 [submodule "RecyclerViewSnap"]
 	path = RecyclerViewSnap
 	url = git@github.com:out386/RecyclerViewSnap.git
 [submodule "slice-game"]
 	path = slice-game
-	url = git@github.com:out386/Android-fruit-ninja.git
+	url = git@github.com:out386/shape-slice-game.git
