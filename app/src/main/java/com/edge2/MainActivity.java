@@ -23,6 +23,7 @@ package com.edge2;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
@@ -37,6 +38,7 @@ import androidx.navigation.Navigation;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.edge2.allevents.EventsFragment;
 import com.edge2.ca.CAFragment;
+import com.edge2.registration.RegistrationFragment;
 import com.edge2.utils.DimenUtils;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
@@ -54,7 +56,11 @@ import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends ThemeActivity implements OnFragmentScrollListener,
-        CAFragment.OnAuthStartListener {
+        CAFragment.OnAuthStartListener, RegistrationFragment.ImagePicker {
+
+    private static final int CODE_UPDATE_FLOW = 2;
+    private static final int CODE_LOG_IN = 5;
+    private static final int CODE_PICK_IMAGE = 10;
 
     private BottomNavigationView bottomNav;
     private ConstraintLayout toolbar;
@@ -65,6 +71,7 @@ public class MainActivity extends ThemeActivity implements OnFragmentScrollListe
     private ViewPropertyAnimator bottomNavAnimator;
     private ViewPropertyAnimator toolbarAnimator;
     private AppUpdateManager appUpdateManager;
+    private RegistrationFragment registrationFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +106,7 @@ public class MainActivity extends ThemeActivity implements OnFragmentScrollListe
         try {
             appUpdateManager
                     .startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE,
-                            this, 2);
+                            this, CODE_UPDATE_FLOW);
         } catch (IntentSender.SendIntentException ign) {
             // What do you even want me to do, huh? Open Play? Actually...\
         }
@@ -121,12 +128,12 @@ public class MainActivity extends ThemeActivity implements OnFragmentScrollListe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 2) {
+        if (requestCode == CODE_UPDATE_FLOW) {
             if (resultCode != RESULT_OK) {
                 Toast.makeText(this, getString(R.string.app_update_cancel), Toast.LENGTH_LONG)
                         .show();
             }
-        } else if (requestCode == 5) {
+        } else if (requestCode == CODE_LOG_IN) {
             IdpResponse response = IdpResponse.fromResultIntent(data);
 
             if (resultCode == RESULT_OK) {
@@ -141,6 +148,11 @@ public class MainActivity extends ThemeActivity implements OnFragmentScrollListe
                 }
                 showAuthFailed(message);
             }
+        } else if (resultCode == RESULT_OK && requestCode == CODE_PICK_IMAGE) {
+            if (registrationFragment != null && data != null) {
+                registrationFragment.onImagePicked(data.getData());
+            }
+            registrationFragment = null;
         }
     }
 
@@ -162,7 +174,8 @@ public class MainActivity extends ThemeActivity implements OnFragmentScrollListe
                 new AuthUI.IdpConfig.GoogleBuilder().build());
 
         startActivityForResult(AuthUI.getInstance()
-                .createSignInIntentBuilder().setAvailableProviders(providers).build(), 5);
+                        .createSignInIntentBuilder().setAvailableProviders(providers).build(),
+                CODE_LOG_IN);
     }
 
     private void setupBottomNav() {
@@ -262,5 +275,12 @@ public class MainActivity extends ThemeActivity implements OnFragmentScrollListe
     @Override
     public int getBottomNavHeight() {
         return bottomNav.getHeight();
+    }
+
+    @Override
+    public void pickImage(RegistrationFragment fragment) {
+        this.registrationFragment = fragment;
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        startActivityForResult(intent, CODE_PICK_IMAGE);
     }
 }

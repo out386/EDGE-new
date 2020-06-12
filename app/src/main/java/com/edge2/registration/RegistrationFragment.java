@@ -20,33 +20,45 @@ package com.edge2.registration;
  *
  */
 
+import android.app.Activity;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.transition.Transition;
 
 import com.edge2.BaseFragment;
+import com.edge2.MainActivity;
 import com.edge2.R;
 import com.edge2.transitions.MoveTransition;
 import com.edge2.views.GeneralHeaderView;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class RegistrationFragment extends BaseFragment {
     private OnSharedElementListener sharedElementListener;
     private MoveTransition transition;
     private GeneralHeaderView topView;
+    private RegistrationViewModel viewModel;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         //postponeEnterTransition();
-        View v = inflater.inflate(R.layout.fragment_placeholder, container, false);
+        View v = inflater.inflate(R.layout.fragment_registration, container, false);
         topView = v.findViewById(R.id.top_view);
         transition = new MoveTransition(null);
         setSharedElementEnterTransition(transition);
@@ -57,8 +69,8 @@ public class RegistrationFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        View contentView = view.findViewById(R.id.placeholder_content);
-        NestedScrollView scrollView = view.findViewById(R.id.placeholder_scroll);
+        View contentView = view.findViewById(R.id.reg_content);
+        NestedScrollView scrollView = view.findViewById(R.id.reg_scroll);
 
         topView.setNameTransition(getString(R.string.events_to_quick_title_transition));
         topView.setDescTransition(getString(R.string.events_to_quick_desc_transition));
@@ -81,6 +93,8 @@ public class RegistrationFragment extends BaseFragment {
 
         if (savedInstanceState != null)
             topView.showImage(0);
+
+        setupViewModel();
     }
 
     @Override
@@ -93,6 +107,58 @@ public class RegistrationFragment extends BaseFragment {
         transition.onDestroy();
         transition = null;
         topView = null;
+    }
+
+    private void setupViewModel() {
+        FragmentActivity activity = getActivity();
+        if (!(activity instanceof ImagePicker)) {
+            Log.e("RegFrag", "setupViewModel: activity null");
+            return;
+        }
+        viewModel = new ViewModelProvider(activity).get(RegistrationViewModel.class);
+
+        ((ImagePicker) activity).pickImage(this);
+
+    }
+
+    public void onImagePicked(Uri fileUri) {
+        Log.i("blah", "onImagePicked: " + fileUri);
+        byte [] imageBytes = getImage(fileUri);
+        Log.i("blah", "file data: " + imageBytes);
+
+        if (getView() != null && viewModel != null && imageBytes != null) {
+            Log.i("blah", "onImagePicked: registering");
+            viewModel.register("Test 1", "test1@testmail.com", "none", "1",
+                    "TMSL", "8876543890", "sometestpasss")
+            .observe(getViewLifecycleOwner(), res -> {
+                if (res == null) {
+                    Toast.makeText(getContext(), "Failed to register", Toast.LENGTH_SHORT).show();
+                } else {
+                    Log.i("blah", "register: " + res.toString());
+                }
+            });
+        }
+    }
+
+    private byte[] getImage(Uri imgUri) {
+        Activity activity = getActivity();
+        if (activity == null)
+            return null;
+        try {
+            InputStream inputStream = getActivity().getContentResolver().openInputStream(imgUri);
+            if (inputStream == null)
+                return null;
+
+            ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+            int l;
+            byte[] buffer = new byte[1024];
+
+            while ((l = inputStream.read(buffer)) != -1)
+                byteBuffer.write(buffer, 0, l);
+            return byteBuffer.toByteArray();
+        } catch (IOException e) {
+            return null;
+        }
     }
 
     private class OnSharedElementListener implements Transition.TransitionListener {
@@ -140,5 +206,9 @@ public class RegistrationFragment extends BaseFragment {
         public void onTransitionResume(@NonNull Transition transition) {
 
         }
+    }
+
+    public interface ImagePicker {
+        void pickImage(RegistrationFragment fragment);
     }
 }

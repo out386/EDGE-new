@@ -128,7 +128,7 @@
         android:id="@+id/registrationFragment"
         android:name="com.edge2.registration.RegistrationFragment"
         android:label="fragment_registration"
-        tools:layout="@layout/fragment_placeholder" />
+        tools:layout="@layout/fragment_registration" />
     <fragment
         android:id="@+id/resultsMainFragment"
         android:name="com.edge2.results.MainScreenFragment"
