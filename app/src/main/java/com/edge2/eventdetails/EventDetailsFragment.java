@@ -21,6 +21,8 @@ package com.edge2.eventdetails;
  */
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
@@ -50,6 +52,7 @@ import com.edge2.html.RulesTagHandler;
 import com.edge2.html.ScheduleTagHandler;
 import com.edge2.transitions.MoveTransition;
 import com.edge2.views.ContactsView;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.List;
 
@@ -57,6 +60,7 @@ public class EventDetailsFragment extends BaseFragment {
     public static final String KEY_EVENT_IMAGE = "eventImage";
     public static final String KEY_EVENT_NAME = "eventName";
     public static final String KEY_EVENT_DESC = "eventDesc";
+    public static final String KEY_EVENT_IS_INTRA = "eventIsIntra";
 
     private OnFragmentScrollListener listener;
     private Context context;
@@ -88,12 +92,23 @@ public class EventDetailsFragment extends BaseFragment {
         postponeEnterTransition();
         View rootView = inflater.inflate(R.layout.fragment_event_details, container, false);
         nameTv = rootView.findViewById(R.id.eventdetails_name);
+        setupRegister(rootView);
 
         transition = new MoveTransition(nameTv);
         setSharedElementEnterTransition(transition);
         setSharedElementReturnTransition(transition);
 
         return rootView;
+    }
+
+    private void setupRegister(View root) {
+        MaterialButton registerButton = root.findViewById(R.id.eventdetails_register);
+        Bundle args = getArguments();
+        if (args != null && !args.getBoolean(KEY_EVENT_IS_INTRA)) {
+            registerButton.setOnClickListener(view -> startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("https://register.edg.co.in/home"))));
+            registerButton.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

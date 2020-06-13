@@ -84,7 +84,8 @@
     <string name="accommodation_title">Accommodation</string>
     <string name="accommodation_desc">Accommodation during edge</string>
     <string name="registration_title">Registration</string>
-    <string name="registration_desc">Registrations are not open yet</string>
+    <string name="registration_desc">Register for EDGE</string>
+    <string name="registration_details">To register for EDGE events, visit the site below.</string>
     <string name="results_title">Results</string>
     <string name="results_desc">Results for events under EDGE</string>
     <string name="results_wait">Fetching details</string>
@@ -110,6 +111,7 @@
     </string>
     <string name="ca_register">Register</string>
     <string name="ca_brochure">Read the brochure</string>
+    <string name="eventdetails_register">Register</string>
     <string name="ca_account_no_log">If you are already a Campus Ambassador, log in above with the
         same Google account used to fill the registration form.
     </string>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/windowBackground"
+    android:orientation="vertical"
+    android:transitionName="@string/events_to_quick_root_transition">
+
+    <!--Can't have NestedScrollView as the parent. Causes ScrollView position to be lost.-->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/reg_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.edge2.views.GeneralHeaderView
+                android:id="@+id/top_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:desc="@string/registration_desc"
+                app:flip="true"
+                app:hideImage="true"
+                app:icon="@drawable/ic_reg"
+                app:name="@string/registration_title" />
+
+            <LinearLayout
+                android:id="@+id/reg_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/TextHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="80dp"
+                    android:layout_marginEnd="30dp"
+                    android:gravity="center_horizontal"
+                    android:paddingTop="40dp"
+                    android:paddingBottom="40dp"
+                    android:text="@string/registration_details" />
+
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/registration_register"
+                    style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginTop="@dimen/margin_huge"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    android:backgroundTintMode="src_in"
+                    android:minHeight="45sp"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="12dp"
+                    android:text="@string/eventdetails_register"
+                    android:textAppearance="@style/TextHeader"
+                    android:textColor="@color/colorAccent"
+                    app:backgroundTint="#00000000"
+                    app:cornerRadius="100dp"
+                    app:rippleColor="@color/lIconFillRedTransparent"
+                    app:strokeColor="@color/colorAccent"
+                    app:strokeWidth="1dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

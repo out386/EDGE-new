@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -29,8 +30,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/divider"
-                android:paddingBottom="@dimen/margin_huge"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/margin_huge">
 
                 <TextView
                     android:id="@+id/eventdetails_overview_header"
@@ -81,13 +82,44 @@
                     android:layout_marginEnd="@dimen/margin_large"
                     tools:text="01/20/20, 10:00pm: some round 1\n02/20/20, 10:00pm: some round 2" />
 
-                <View
+                <LinearLayout
                     android:id="@+id/divider2"
                     android:layout_width="match_parent"
-                    android:layout_height="6dp"
-                    android:layout_marginTop="@dimen/margin_huge"
-                    android:layout_marginBottom="@dimen/margin_huge"
-                    android:background="@color/divider" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/eventdetails_register"
+                        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginStart="@dimen/margin_large"
+                        android:layout_marginTop="@dimen/margin_huge"
+                        android:layout_marginEnd="@dimen/margin_large"
+                        android:backgroundTintMode="src_in"
+                        android:minHeight="45sp"
+                        android:paddingStart="15dp"
+                        android:paddingEnd="12dp"
+                        android:text="@string/eventdetails_register"
+                        android:textAppearance="@style/TextHeader"
+                        android:textColor="@color/colorAccent"
+                        android:visibility="gone"
+                        app:backgroundTint="#00000000"
+                        app:cornerRadius="100dp"
+                        app:rippleColor="@color/lIconFillRedTransparent"
+                        app:strokeColor="@color/colorAccent"
+                        app:strokeWidth="1dp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="6dp"
+                        android:layout_marginTop="@dimen/margin_huge"
+                        android:layout_marginBottom="@dimen/margin_huge"
+                        android:background="@color/divider" />
+
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/eventdetails_rules_header"

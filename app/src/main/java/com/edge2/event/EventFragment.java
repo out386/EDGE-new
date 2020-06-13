@@ -210,6 +210,7 @@ public class EventFragment extends BaseFragment {
         args.putString(EventDetailsFragment.KEY_EVENT_NAME, item.getName());
         args.putString(EventDetailsFragment.KEY_EVENT_DESC, item.getDesc());
         args.putInt(EventDetailsFragment.KEY_EVENT_IMAGE, item.getIcon());
+        args.putBoolean(EventDetailsFragment.KEY_EVENT_IS_INTRA, isIntra);
         args.putBoolean(EventsFragment.KEY_IS_INTRA, isIntra);
 
         // To add more shared views here, call "setTransitionName" in the adapter
