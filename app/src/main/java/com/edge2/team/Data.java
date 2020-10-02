@@ -31,36 +31,36 @@ public class Data {
 
     Data() {
         members = new LinkedList<>();
-        members.add(new PeopleModel("Soham Biswas", "Convener", R.drawable.soham,
-                7602760944L));
+        members.add(new PeopleModel("Prattay Raha", "Resource Head", R.drawable.Prattay,
+                8172025890L));
 
-        members.add(new PeopleModel("Rishav Bhattacharyya",
-                "Co Convener & Co Sponsorship Head", R.drawable.rishav, 8335067136L));
+        members.add(new PeopleModel("Anubhav Talukdar",
+                "Co Convener & Co Sponsorship Head", R.drawable.Anubhav, 9531129063L));
 
-        members.add(new PeopleModel("Sayantan Bhattacharya",
-                "Co Convener & Co Signing Authority", R.drawable.sayantan, 9163480278L));
+        members.add(new PeopleModel("Sayak Das",
+                "Co Convener & Co Signing Authority", R.drawable.Sayak, 7685052883L));
 
-        members.add(new PeopleModel("Sroman Guha", "Sponsorship Head", R.drawable.sroman,
-                8981570577L));
+        members.add(new PeopleModel("Sayan Kumar Roy", "Sponsorship Head", R.drawable.Sayan,
+                7595888827L));
 
-        members.add(new PeopleModel("Subhajit Saha", "Treasurer & Signing Authority",
-                R.drawable.subhajit, 9679343204L));
+        members.add(new PeopleModel("Arijit Kar", "Treasurer & Signing Authority",
+                R.drawable.Arijit, 9432903075L));
 
-        members.add(new PeopleModel("Abhishek Jha", "Administrative Head",
-                R.drawable.abhishek, 7654285631L));
+        members.add(new PeopleModel("Alok Ranjan", "Administrative Head",
+                R.drawable.Alok, 7488094037L));
 
-        members.add(new PeopleModel("Suman Ghosh", "Resource Management Head",
-                R.drawable.suman, 9734900238L));
+        members.add(new PeopleModel("Sahasra Banerjee", "Media Strategist",
+                R.drawable.Sahasra, 9830086260L));
 
-        members.add(new PeopleModel("Shibshankar Saha", "Public Relations Coordinator",
-                R.drawable.shibshankar, 9062294021L));
+        members.add(new PeopleModel("Shreya Jaiswal", "Convener",
+                R.drawable.Shreya, 8017195583L));
 
         members.add(new PeopleModel("Sharmistha Pan",
-                "Member Management Head & Editorial Head", R.drawable.sarmistha,
-                8768078258L));
+                "Acquisition Head and Co-Editorial Head", R.drawable.Anyesha,
+                8910817240L));
 
-        members.add(new PeopleModel("Swarnali Talukdar", "Outreach Head",
-                R.drawable.swarnali, 9123334065L));
+        members.add(new PeopleModel("Angana Sen", "Outreach Head & Editorial Head",
+                R.drawable.Angana, 8584805352L));
 
 
     }
