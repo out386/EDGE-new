@@ -208,7 +208,7 @@ public class MainActivity extends ThemeActivity implements OnFragmentScrollListe
             int rightInset = insets.getSystemWindowInsetRight();
             int bottomInset = insets.getSystemWindowInsetBottom();
             ViewGroup.LayoutParams toolbarParams = toolbar.getLayoutParams();
-            int toolbarHeight = DimenUtils.getActionbarHeight(rootView.getContext());
+            int toolbarHeight = DimenUtils.rHeight(rootView.getContext());
 
             toolbarParams.height = toolbarHeight + topInset;
             toolbar.setLayoutParams(toolbarParams);
